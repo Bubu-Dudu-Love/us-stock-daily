@@ -670,5 +670,115 @@ const MARKET_DATA={"GSPC":[["2025-06-11",6049.38,6059.4,6002.32,6022.24,51115500
   if(h&&document.getElementById("page-"+h)){show(h,false);}else{animateBars();}
 })();
 </script>
+<script>
+(function(){
+  var GREEN="#2FB344", RED="#E03B42", ICE="#CADCFC", GOLD="#E8B339", MUTED="#8A93B2";
+  var hasLib = typeof echarts!=="undefined" && typeof MARKET_DATA!=="undefined";
+  var fallback=document.getElementById("klineFallback"), klineEl=document.getElementById("kline");
+  if(!hasLib){
+    if(fallback){fallback.hidden=false;} if(klineEl){klineEl.style.display="none";}
+    return;
+  }
+  var chart=null, gauge=null, current="GSPC";
+  var MARKS={
+    GSPC:[{yAxis:7600,label:"6/2 高点区 ≈7,600"}],
+    SMH:[{yAxis:575,label:"原支撑 $575 · 6/10 跌破"}]
+  };
+  function ma(rows,n){
+    var out=[],s=0;
+    for(var i=0;i<rows.length;i++){
+      s+=rows[i][4]; if(i>=n)s-=rows[i-n][4];
+      out.push(i>=n-1? +(s/n).toFixed(2):"-");
+    }
+    return out;
+  }
+  function option(key){
+    var rows=MARKET_DATA[key];
+    var dates=rows.map(function(r){return r[0];});
+    var k=rows.map(function(r){return [r[1],r[4],r[3],r[2]];});
+    var vol=rows.map(function(r){return {value:r[5],itemStyle:{color:r[4]>=r[1]?"rgba(47,179,68,.45)":"rgba(224,59,66,.45)"}};});
+    var marks=(MARKS[key]||[]).map(function(m){
+      return {yAxis:m.yAxis,lineStyle:{color:GOLD,type:"dashed",width:1.5},
+        label:{formatter:m.label,color:GOLD,fontSize:11,position:"insideEndTop"}};
+    });
+    var zs=Math.max(0,100-90/rows.length*100);
+    return {
+      backgroundColor:"transparent",
+      animation:true,
+      axisPointer:{link:[{xAxisIndex:"all"}]},
+      tooltip:{trigger:"axis",axisPointer:{type:"cross"},
+        backgroundColor:"rgba(16,22,54,.92)",borderColor:"rgba(202,220,252,.3)",
+        textStyle:{color:ICE,fontSize:12},
+        formatter:function(ps){
+          var p=null,i;
+          for(i=0;i<ps.length;i++){if(ps[i].seriesType==="candlestick"){p=ps[i];break;}}
+          if(!p)return "";
+          var d=p.data;
+          var lines=[p.name,"开 "+d[1]+"  收 "+d[2],"低 "+d[3]+"  高 "+d[4]];
+          for(i=0;i<ps.length;i++){if(ps[i].seriesType==="line"&&ps[i].data!=="-")lines.push(ps[i].seriesName+" "+ps[i].data);}
+          return lines.join("<br>");
+        }},
+      legend:{data:["MA50","MA200"],textStyle:{color:MUTED,fontSize:11},top:0,right:8},
+      grid:[{left:64,right:20,top:28,height:330},{left:64,right:20,top:392,height:70}],
+      xAxis:[
+        {type:"category",data:dates,boundaryGap:true,axisLine:{lineStyle:{color:"rgba(202,220,252,.3)"}},axisLabel:{color:MUTED,fontSize:10.5}},
+        {type:"category",gridIndex:1,data:dates,axisLabel:{show:false},axisTick:{show:false},axisLine:{lineStyle:{color:"rgba(202,220,252,.3)"}}}
+      ],
+      yAxis:[
+        {scale:true,splitLine:{lineStyle:{color:"rgba(202,220,252,.12)"}},axisLabel:{color:MUTED,fontSize:10.5}},
+        {gridIndex:1,scale:true,splitNumber:2,axisLabel:{show:false},splitLine:{show:false}}
+      ],
+      dataZoom:[
+        {type:"inside",xAxisIndex:[0,1],start:zs,end:100},
+        {type:"slider",xAxisIndex:[0,1],bottom:6,height:18,start:zs,end:100,
+         borderColor:"rgba(202,220,252,.25)",fillerColor:"rgba(232,179,57,.15)",textStyle:{color:MUTED,fontSize:10}}
+      ],
+      series:[
+        {name:key,type:"candlestick",data:k,
+         itemStyle:{color:GREEN,color0:RED,borderColor:GREEN,borderColor0:RED},
+         markLine:marks.length?{symbol:"none",data:marks}:undefined},
+        {name:"MA50",type:"line",data:ma(rows,50),symbol:"none",lineStyle:{width:1.2,color:ICE},emphasis:{disabled:true}},
+        {name:"MA200",type:"line",data:ma(rows,200),symbol:"none",lineStyle:{width:1.2,color:GOLD},emphasis:{disabled:true}},
+        {name:"成交量",type:"bar",xAxisIndex:1,yAxisIndex:1,data:vol}
+      ]
+    };
+  }
+  function initKline(){
+    if(!klineEl)return;
+    if(!chart){chart=echarts.init(klineEl);}
+    chart.setOption(option(current),true);
+  }
+  document.getElementById("klineTabs").addEventListener("click",function(e){
+    var b=e.target.closest(".ktab"); if(!b)return;
+    current=b.dataset.k;
+    this.querySelectorAll(".ktab").forEach(function(t){t.classList.toggle("active",t===b);});
+    initKline();
+  });
+  function initGauge(){
+    var el=document.getElementById("fgGauge");
+    if(!el||gauge)return;
+    gauge=echarts.init(el);
+    gauge.setOption({series:[{type:"gauge",startAngle:200,endAngle:-20,min:0,max:100,
+      radius:"100%",center:["50%","72%"],
+      axisLine:{lineStyle:{width:10,color:[[0.25,RED],[0.45,"#E8B339"],[0.55,MUTED],[0.75,"#9CC97A"],[1,GREEN]]}},
+      pointer:{length:"58%",width:4,itemStyle:{color:"#1E2761"}},
+      axisTick:{show:false},splitLine:{show:false},
+      axisLabel:{distance:-32,fontSize:9,color:MUTED,formatter:function(v){return {0:"极恐",50:"中性",100:"贪婪"}[v]||"";}},
+      detail:{show:false},
+      data:[{value:29}]}]});
+  }
+  function maybeInit(page){
+    if(page==="market")setTimeout(initKline,60);
+    if(page==="tech")setTimeout(initGauge,60);
+  }
+  document.addEventListener("click",function(e){
+    var b=e.target.closest(".nav-btn"); if(b)maybeInit(b.dataset.page);
+  });
+  maybeInit(location.hash.replace("#",""));
+  window.addEventListener("resize",function(){
+    if(chart)chart.resize(); if(gauge)gauge.resize();
+  });
+})();
+</script>
 </body>
 </html>
