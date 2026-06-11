@@ -780,5 +780,63 @@ const MARKET_DATA={"GSPC":[["2025-06-11",6049.38,6059.4,6002.32,6022.24,51115500
   });
 })();
 </script>
+<script>
+(function(){
+  if(typeof THREE==="undefined")return;
+  var canvas=document.getElementById("heroFx"), hero=document.querySelector(".hero");
+  if(!canvas||!hero)return;
+  var renderer;
+  try{ renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:false}); }
+  catch(e){ return; }
+  var W=hero.clientWidth,H=hero.clientHeight,mobile=W<700;
+  renderer.setSize(W,H,false);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  var scene=new THREE.Scene();
+  var cam=new THREE.PerspectiveCamera(55,W/H,1,400);
+  cam.position.set(0,26,52); cam.lookAt(0,0,0);
+  var COLS=mobile?90:160, ROWS=mobile?38:60, SP=1.6;
+  var N=COLS*ROWS, pos=new Float32Array(N*3), col=new Float32Array(N*3);
+  var ice=[0.55,0.72,0.99], gold=[0.91,0.70,0.22], red=[0.88,0.23,0.26];
+  for(var i=0;i<N;i++){
+    var x=i%COLS, z=Math.floor(i/COLS);
+    pos[i*3]=(x-COLS/2)*SP; pos[i*3+1]=0; pos[i*3+2]=(z-ROWS/2)*SP;
+    var r=Math.random(), c=r>0.985?red:(r>0.94?gold:ice), dim=0.35+0.65*Math.random();
+    col[i*3]=c[0]*dim; col[i*3+1]=c[1]*dim; col[i*3+2]=c[2]*dim;
+  }
+  var geo=new THREE.BufferGeometry();
+  geo.setAttribute("position",new THREE.BufferAttribute(pos,3));
+  geo.setAttribute("color",new THREE.BufferAttribute(col,3));
+  var pts=new THREE.Points(geo,new THREE.PointsMaterial({size:mobile?1.6:1.3,vertexColors:true,transparent:true,opacity:0.85,sizeAttenuation:true}));
+  scene.add(pts);
+  var mx=0,my=0;
+  window.addEventListener("pointermove",function(e){
+    mx=(e.clientX/window.innerWidth-0.5)*2; my=(e.clientY/window.innerHeight-0.5)*2;
+  },{passive:true});
+  var running=true,t=0;
+  new IntersectionObserver(function(es){running=es[0].isIntersecting;},{threshold:0.02}).observe(hero);
+  window.addEventListener("resize",function(){
+    W=hero.clientWidth;H=hero.clientHeight;
+    renderer.setSize(W,H,false);cam.aspect=W/H;cam.updateProjectionMatrix();
+  });
+  (function loop(){
+    requestAnimationFrame(loop);
+    if(!running)return;
+    t+=0.012;
+    var p=geo.attributes.position.array;
+    for(var i=0;i<N;i++){
+      var x=p[i*3],z=p[i*3+2];
+      p[i*3+1]=Math.sin(x*0.18+t)*1.6
+              +Math.cos(z*0.22+t*1.4)*1.4
+              +Math.sin((x+z)*0.08+t*0.7)*2.2
+              +Math.sin(x*0.045-t*0.5)*Math.cos(z*0.05+t*0.3)*2.8;
+    }
+    geo.attributes.position.needsUpdate=true;
+    pts.rotation.y+=(mx*0.12-pts.rotation.y)*0.04;
+    cam.position.y+=((26+my*5)-cam.position.y)*0.04;
+    cam.lookAt(0,0,0);
+    renderer.render(scene,cam);
+  })();
+})();
+</script>
 </body>
 </html>
