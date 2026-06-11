@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-"""拉取 Yahoo Finance 真实日线，截断至 2026-06-10，断言收盘价与日报一致后输出 market_data.js"""
+"""拉取 Yahoo Finance 真实日线，截断至 2026-06-09，断言收盘价与日报一致后输出 market_data.js"""
 import json, os, subprocess, urllib.parse
 from datetime import datetime, timezone, timedelta
 
 TICKERS = [("GSPC", "^GSPC"), ("IXIC", "^IXIC"), ("DJI", "^DJI"), ("SMH", "SMH")]
-EXPECT  = {"GSPC": 7266.99, "IXIC": 25169.50, "DJI": 49918.78, "SMH": 570.91}
-CUTOFF  = "2026-06-10"
+EXPECT  = {"GSPC": 7386.65, "IXIC": 25678.82, "DJI": 50872.11, "SMH": 591.01}
+CUTOFF  = "2026-06-09"
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
 
 out = {}
@@ -33,6 +33,6 @@ for key, sym in TICKERS:
 
 dst = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "market_data.js")
 with open(dst, "w", encoding="utf-8") as f:
-    f.write("// 数据来源：Yahoo Finance v8 chart API · 截至 2026-06-10 收盘 · 构建时断言与日报一致\n")
+    f.write("// 数据来源：Yahoo Finance v8 chart API · 截至 2026-06-09 收盘 · 构建时断言与日报一致\n")
     f.write("const MARKET_DATA=" + json.dumps(out, separators=(",", ":")) + ";\n")
 print("written ->", dst)

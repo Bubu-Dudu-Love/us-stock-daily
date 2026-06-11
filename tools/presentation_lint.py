@@ -40,6 +40,7 @@ def visible_text(src):
     src = re.sub(r"<!--.*?-->", " ", src, flags=re.S)
     titles = re.findall(r'(?:title|alt)="([^"]+)"', src)
     text = re.sub(r"<[^>]+>", " ", src)
+    text = re.sub(r"[ \t]+", " ", text)
     return text + "\n" + "\n".join(titles)
 
 def main(path):
