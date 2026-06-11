@@ -171,6 +171,24 @@ td.nw{white-space:nowrap;}
 .page.active .od-num{animation:odDrop .8s cubic-bezier(.2,.9,.3,1.2) both;}
 @keyframes odDrop{from{opacity:0;transform:translateY(-34px);}to{opacity:1;transform:none;}}
 #orclBullet{flex:1;min-width:300px;height:230px;}
+#cpiBars{flex:1;min-width:300px;height:230px;}
+.gtl{position:relative;margin:4px 0 10px;}
+.gtl::before{content:"";position:absolute;left:8px;top:10px;bottom:10px;width:2px;background:linear-gradient(180deg,rgba(232,179,57,.7),var(--red));}
+.gtl-item{position:relative;padding:7px 0 7px 34px;}
+.gtl-dot{position:absolute;left:3px;top:14px;width:12px;height:12px;border-radius:50%;background:var(--gold);border:2px solid #fff;box-shadow:0 0 0 2px rgba(232,179,57,.4);}
+.gtl-hot .gtl-dot{background:var(--red);box-shadow:0 0 0 3px rgba(224,59,66,.35);animation:cdPulse 1.4s ease infinite;}
+.gtl-time{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink);}
+.gtl-body{font-size:13.5px;color:var(--subink);line-height:1.7;}
+.gtl-hot .gtl-body{color:#8C2328;font-weight:600;}
+.page-head{position:relative;}
+.page-head::after{content:attr(data-no);position:absolute;right:0;top:-26px;font-family:var(--mono);font-size:110px;font-weight:700;color:rgba(30,39,97,.05);line-height:1;pointer-events:none;}
+tbody td.num.up strong{background:var(--green-soft);padding:1px 7px;border-radius:4px;}
+tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radius:4px;}
+.spot-strip{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
+.spot-card{background:var(--navy-dark);border-radius:8px;padding:16px 20px;}
+.spot-card .sp-num{font-family:var(--mono);font-size:34px;font-weight:700;line-height:1.1;}
+.spot-card .sp-cap{font-size:12px;color:var(--ice);margin-top:6px;}
+@media (max-width:700px){.spot-strip{grid-template-columns:1fr;}}
 @media (max-width:980px){.spark-grid,.cockpit-grid{grid-template-columns:repeat(2,1fr);}}
 @media (max-width:700px){.orcl-drop{border-right:none;padding-right:0;flex:1 1 100%;}}
 .bar-row{display:grid;grid-template-columns:150px 1fr 84px;align-items:center;gap:12px;padding:7px 0;}
@@ -383,6 +401,12 @@ td.nw{white-space:nowrap;}
         </tbody>
       </table></div>
 
+      <div class="chart-card" id="sectorCard" hidden>
+        <div class="block-title" style="color:#fff;">板块轮动 · 资金从 AI 成长轮向能源/防御</div>
+        <div id="sectorBars" style="height:200px;"></div>
+        <div class="chart-note">标普行业板块当日表现 · 来源：当日收盘统计</div>
+      </div>
+
       <div class="block">
         <div class="block-title">当日盘面综述</div>
         <p>6 月 10 日是一个<strong>"宏观 × 微观 × 地缘"三线共振的下跌日</strong>。早盘 8:30 ET 公布的 5 月 CPI 头条同比升至 <strong>4.2%</strong>（三年新高），尽管恰好符合预期、核心通胀甚至略低于预期，但"4 字头"读数仍重挫风险偏好；午后至盘后，美伊军事冲突再度升级（美军对伊朗实施第二轮打击），油价走强、通胀预期被进一步推高，"利率更高更久"叙事强化——高估值成长股首当其冲。</p>
@@ -487,6 +511,15 @@ td.nw{white-space:nowrap;}
         <p style="font-size:13.5px;color:var(--subink);margin-top:4px;">头条 4.2% 看似刺激，但市场已完全预期，且核心月环比反低于预期——通胀主要由<strong>能源</strong>驱动（汽油月涨 7%、能源同比 +23.5%，与霍尔木兹战事直接相关），而非需求侧过热。债市因此找到做多理由，<strong>2 年期美债收益率不升反降约 2bp</strong>。</p>
       </div>
 
+      <div class="chart-card" id="cpiCard" hidden>
+        <div class="block-title" style="color:#fff;">CPI · 实际 vs 预期 vs 前值</div>
+        <div class="orcl-flex">
+          <div class="orcl-drop"><div class="od-num">4.2%</div><div class="od-cap">头条 CPI 同比 · 三年新高<br>能源驱动（汽油月涨 7%）<br>核心月环比 +0.2% 反低于预期</div></div>
+          <div id="cpiBars"></div>
+        </div>
+        <div class="chart-note">来源：BLS 官方发布 · 鹰而不慌：读数高但全在预期内</div>
+      </div>
+
       <div class="block">
         <div class="block-title">美联储 / 货币政策</div>
         <ul>
@@ -517,15 +550,12 @@ td.nw{white-space:nowrap;}
 
       <div class="block" style="padding-bottom:8px;">
         <div class="block-title">⚠️ 地缘 · 以色列—伊朗冲突（今日最关键变量）</div>
-        <div class="tbl-wrap" style="border:none;margin-bottom:6px;"><table>
-          <thead><tr><th>时间（ET）</th><th>事件</th><th>状态</th></tr></thead>
-          <tbody>
-            <tr><td>6/9 周一</td><td>伊朗在霍尔木兹击落美军 Apache 直升机（飞行员安全），特朗普宣布将回击</td><td><span class="tag tag-fact">已证实</span></td></tr>
-            <tr><td>6/9 晚</td><td>美军对伊朗"多处目标"实施打击，CENTCOM 确认</td><td><span class="tag tag-fact">已证实</span></td></tr>
-            <tr><td>6/10 凌晨</td><td>伊朗反击巴林、科威特、约旦的美军基地</td><td><span class="tag tag-fact">已证实</span></td></tr>
-            <tr><td><strong>6/10 下午</strong></td><td><strong>美军第二轮多目标打击；特朗普称"伊朗军力已被彻底摧毁"</strong></td><td><span class="tag tag-alert">已证实 ⚠️</span></td></tr>
-          </tbody>
-        </table></div>
+        <div class="gtl">
+          <div class="gtl-item"><span class="gtl-dot"></span><div class="gtl-time">6/9 周一</div><div class="gtl-body">伊朗在霍尔木兹击落美军 Apache 直升机（飞行员安全），特朗普宣布将回击 <span class="tag tag-fact">已证实</span></div></div>
+          <div class="gtl-item"><span class="gtl-dot"></span><div class="gtl-time">6/9 晚</div><div class="gtl-body">美军对伊朗"多处目标"实施打击，CENTCOM 确认 <span class="tag tag-fact">已证实</span></div></div>
+          <div class="gtl-item"><span class="gtl-dot"></span><div class="gtl-time">6/10 凌晨</div><div class="gtl-body">伊朗反击巴林、科威特、约旦的美军基地 <span class="tag tag-fact">已证实</span></div></div>
+          <div class="gtl-item gtl-hot"><span class="gtl-dot"></span><div class="gtl-time">6/10 下午</div><div class="gtl-body">美军第二轮多目标打击；特朗普称"伊朗军力已被彻底摧毁" <span class="tag tag-alert">已证实 ⚠️</span></div></div>
+        </div>
       </div>
 
       <div class="callout callout-navy"><strong>市场影响链条：</strong>美伊互射 → 油价走强（WTI ≈$89.7 / Brent ≈$96）→ 能源通胀预期再升温（叠加 CPI 4.2%）→"利率更高更久"强化 → 高估值成长股承压；同时核电/能源逆势获益（VST +6.9%）。</div>
@@ -547,6 +577,7 @@ td.nw{white-space:nowrap;}
           <div class="orcl-drop"><div class="od-num">−9%</div><div class="od-cap">盘后跌幅（存疑）<br>正常收盘 $201.26（−2.21%）<br>盘后一度 −10%（$180.88）</div></div>
           <div id="orclBullet"></div>
         </div>
+        <div id="ociBars" style="height:96px;margin-top:8px;"></div>
         <div class="chart-note">实际值来源：Oracle 官方公告 · 预期为分析师一致预期 · 横轴为实际相对预期的偏离幅度</div>
       </div>
 
@@ -587,6 +618,11 @@ td.nw{white-space:nowrap;}
         <span class="sec-no">08 / KEY STOCKS</span>
         <h2>重点个股</h2>
         <div class="desc">芯片第二波杀跌 · 核电逆势大涨 · 太空板块承压</div>
+      </div>
+
+      <div class="spot-strip">
+        <div class="spot-card"><div class="sp-num" style="color:var(--green)">+6.9%</div><div class="sp-cap">VST · 核电逆势领涨 <span class="tag tag-doubt">存疑</span> · 能源独立 + AI 电力叙事</div></div>
+        <div class="spot-card"><div class="sp-num" style="color:var(--red)">−3.40%</div><div class="sp-cap">SMH · 芯片第二波杀跌 · $575 支撑已被跌破（收 570.91）</div></div>
       </div>
 
       <div class="stock-card">
@@ -981,6 +1017,11 @@ const MARKET_DATA={"GSPC":[["2025-06-11",6049.38,6059.4,6002.32,6022.24,51115500
       tr.cells[1].innerHTML=b;
     });
   }
+  /* 巨型编号水印 */
+  document.querySelectorAll(".page-head").forEach(function(h){
+    var n=h.querySelector(".sec-no");
+    if(n)h.setAttribute("data-no",n.textContent.trim().slice(0,2));
+  });
   if(typeof echarts==="undefined"||typeof MARKET_DATA==="undefined")return;
   var GREEN="#2FB344",RED="#E03B42",ICE="#CADCFC",GOLD="#E8B339",MUTED="#8A93B2";
   var charts=[];
@@ -1067,11 +1108,62 @@ const MARKET_DATA={"GSPC":[["2025-06-11",6049.38,6059.4,6002.32,6022.24,51115500
           formatter:function(p){return (p.value>=0?"beat +":"miss ")+p.value+"%";}},
         markLine:{symbol:"none",data:[{xAxis:0,lineStyle:{color:GOLD,width:1.5},label:{show:false}}]}}]
     });
+    mk(document.getElementById("ociBars"),{
+      grid:{left:110,right:86,top:6,bottom:22},
+      xAxis:{type:"value",max:100,axisLabel:{color:MUTED,fontSize:10.5,formatter:"{value}%"},splitLine:{lineStyle:{color:"rgba(202,220,252,.12)"}}},
+      yAxis:{type:"category",data:["OCI 增速 YoY"],axisLabel:{color:ICE,fontSize:12,fontWeight:600},axisLine:{lineStyle:{color:"rgba(202,220,252,.3)"}}},
+      tooltip:{trigger:"axis",backgroundColor:"rgba(16,22,54,.92)",borderColor:"rgba(202,220,252,.3)",textStyle:{color:ICE,fontSize:12},valueFormatter:function(v){return "+"+v+"%";}},
+      series:[
+        {name:"实际",type:"bar",barWidth:11,data:[93],itemStyle:{color:GREEN,borderRadius:2},
+         label:{show:true,position:"right",color:GREEN,fontFamily:"SF Mono,Menlo,monospace",fontSize:11.5,fontWeight:700,formatter:"实际 +93%"}},
+        {name:"市场预期",type:"bar",barWidth:11,data:[40],itemStyle:{color:ICE,opacity:.55,borderRadius:2},
+         label:{show:true,position:"right",color:MUTED,fontSize:11,formatter:"预期 +40%"}}
+      ]
+    });
   }
 
+  /* ④ CPI 实际 vs 预期 vs 前值 */
+  var cpiBuilt=false;
+  function buildCpi(){
+    if(cpiBuilt)return; cpiBuilt=true;
+    var card=document.getElementById("cpiCard"); if(!card)return;
+    card.hidden=false;
+    mk(document.getElementById("cpiBars"),{
+      grid:{left:86,right:56,top:30,bottom:24},
+      legend:{data:["实际","预期","前值"],textStyle:{color:MUTED,fontSize:11},top:0,right:0},
+      xAxis:{type:"value",axisLabel:{color:MUTED,fontSize:10.5,formatter:"{value}%"},splitLine:{lineStyle:{color:"rgba(202,220,252,.12)"}}},
+      yAxis:{type:"category",data:["核心 MoM","核心 YoY","头条 MoM","头条 YoY"],axisLabel:{color:ICE,fontSize:12,fontWeight:600},axisLine:{lineStyle:{color:"rgba(202,220,252,.3)"}}},
+      tooltip:{trigger:"axis",backgroundColor:"rgba(16,22,54,.92)",borderColor:"rgba(202,220,252,.3)",textStyle:{color:ICE,fontSize:12},valueFormatter:function(v){return v==null?"—":"+"+v+"%";}},
+      series:[
+        {name:"实际",type:"bar",barWidth:9,data:[0.2,2.9,0.5,4.2],itemStyle:{color:GOLD,borderRadius:2},
+         label:{show:true,position:"right",color:GOLD,fontFamily:"SF Mono,Menlo,monospace",fontSize:11,fontWeight:700,formatter:function(p){return "+"+p.value+"%";}}},
+        {name:"预期",type:"bar",barWidth:9,data:[0.3,2.9,0.5,4.2],itemStyle:{color:ICE,borderRadius:2,opacity:.55}},
+        {name:"前值",type:"bar",barWidth:9,data:[null,2.8,0.6,3.8],itemStyle:{color:MUTED,borderRadius:2,opacity:.45}}
+      ]
+    });
+  }
+  /* ⑤ 板块轮动 */
+  var secBuilt=false;
+  function buildSectors(){
+    if(secBuilt)return; secBuilt=true;
+    var card=document.getElementById("sectorCard"); if(!card)return;
+    card.hidden=false;
+    var data=[["能源",1.7],["非必需消费",-2.0],["科技",-2.3],["基础材料",-2.7],["工业",-3.0]];
+    mk(document.getElementById("sectorBars"),{
+      grid:{left:86,right:60,top:8,bottom:24},
+      xAxis:{type:"value",axisLabel:{color:MUTED,fontSize:10.5,formatter:"{value}%"},splitLine:{lineStyle:{color:"rgba(202,220,252,.12)"}}},
+      yAxis:{type:"category",data:data.map(function(x){return x[0];}),axisLabel:{color:ICE,fontSize:12,fontWeight:600},axisLine:{lineStyle:{color:"rgba(202,220,252,.3)"}}},
+      tooltip:{trigger:"axis",backgroundColor:"rgba(16,22,54,.92)",borderColor:"rgba(202,220,252,.3)",textStyle:{color:ICE,fontSize:12},valueFormatter:function(v){return (v>=0?"+":"")+v+"%";}},
+      series:[{type:"bar",barWidth:14,
+        data:data.map(function(x){return {value:x[1],itemStyle:{color:x[1]>=0?GREEN:RED,borderRadius:3}};}),
+        label:{show:true,position:"right",fontFamily:"SF Mono,Menlo,monospace",fontSize:11.5,fontWeight:700,color:ICE,formatter:function(p){return (p.value>=0?"+":"")+p.value+"%";}},
+        markLine:{symbol:"none",data:[{xAxis:0,lineStyle:{color:GOLD,width:1.5},label:{show:false}}]}}]
+    });
+  }
   function go(page){
-    if(page==="market")setTimeout(buildSparks,80);
+    if(page==="market"){setTimeout(buildSparks,80);setTimeout(buildSectors,80);}
     if(page==="tech")setTimeout(buildCockpit,80);
+    if(page==="macro")setTimeout(buildCpi,80);
     if(page==="earnings")setTimeout(buildOrcl,80);
   }
   document.addEventListener("click",function(e){var b=e.target.closest(".nav-btn");if(b)go(b.dataset.page);});
