@@ -1109,6 +1109,8 @@ const MARKET_DATA={"GSPC":[["2025-06-11",6049.38,6059.4,6002.32,6022.24,51115500
           formatter:function(p){return (p.value>=0?"beat +":"miss ")+p.value+"%";}},
         markLine:{symbol:"none",data:[{xAxis:0,lineStyle:{color:GOLD,width:1.5},label:{show:false}}]}}]
     });
+  }
+
   /* ④ CPI 实际 vs 预期 vs 前值 */
   var cpiBuilt=false;
   function buildCpi(){
