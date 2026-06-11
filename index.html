@@ -100,7 +100,8 @@ a:hover{color:var(--red);border-bottom-color:var(--red);}
 .block ul{list-style:none;}
 .block li{font-size:14px;color:var(--subink);padding:7px 0 7px 18px;position:relative;}
 .block li::before{content:"";position:absolute;left:2px;top:17px;width:6px;height:6px;border-radius:50%;background:var(--gold);}
-.callout{border-radius:8px;padding:16px 20px;margin-bottom:18px;font-size:14px;line-height:1.8;}
+.callout{border-radius:8px;padding:16px 20px;margin-bottom:18px;font-size:14.5px;line-height:1.85;}
+.callout>strong{font-size:16.5px;}
 .callout-red{background:var(--red-soft);border:1px solid rgba(224,59,66,.3);color:#8C2328;}
 .callout-red strong{color:var(--red);}
 .callout-gold{background:var(--gold-soft);border:1px solid rgba(232,179,57,.4);color:#6E5310;}
@@ -188,6 +189,8 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
 .spot-card{background:var(--navy-dark);border-radius:8px;padding:16px 20px;}
 .spot-card .sp-num{font-family:var(--mono);font-size:34px;font-weight:700;line-height:1.1;}
 .spot-card .sp-cap{font-size:12px;color:var(--ice);margin-top:6px;}
+.kpi .kbar{margin-top:7px;display:flex;flex-direction:column;gap:3px;}
+.kpi .kbar span{display:block;height:5px;border-radius:3px;min-width:2px;}
 @media (max-width:700px){.spot-strip{grid-template-columns:1fr;}}
 @media (max-width:980px){.spark-grid,.cockpit-grid{grid-template-columns:repeat(2,1fr);}}
 @media (max-width:700px){.orcl-drop{border-right:none;padding-right:0;flex:1 1 100%;}}
@@ -283,7 +286,7 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
 
 <!-- ============ 摘要 ============ -->
 <section class="summary">
-  <div class="sec-head"><span class="sec-no">02 / SUMMARY</span><h2 class="sec-title">今日摘要</h2></div>
+  <div class="sec-head"><span class="sec-no">SUMMARY</span><h2 class="sec-title">今日摘要</h2></div>
   <div class="sec-sub">TL;DR · 当日最重要的事</div>
   <div class="summary-grid">
     <div class="sum-card" style="--accent:var(--red)">
@@ -318,13 +321,13 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
   <nav class="nav" aria-label="板块导航">
     <div class="nav-label">SECTIONS · 板块</div>
     <ul class="nav-list" id="navList">
-      <li><button class="nav-btn active" data-page="radar"><span class="n">03</span>未来事件雷达</button></li>
-      <li><button class="nav-btn" data-page="market"><span class="n">04</span>大盘总览</button></li>
-      <li><button class="nav-btn" data-page="tech"><span class="n">05</span>技术面与资金面</button></li>
-      <li><button class="nav-btn" data-page="macro"><span class="n">06</span>宏观 · 地缘</button></li>
-      <li><button class="nav-btn" data-page="earnings"><span class="n">07</span>财报 · ORCL</button></li>
-      <li><button class="nav-btn" data-page="stocks"><span class="n">08</span>重点个股</button></li>
-      <li><button class="nav-btn" data-page="people"><span class="n">09</span>关键人物</button></li>
+      <li><button class="nav-btn active" data-page="radar"><span class="n">I</span>未来事件雷达</button></li>
+      <li><button class="nav-btn" data-page="market"><span class="n">II</span>大盘总览</button></li>
+      <li><button class="nav-btn" data-page="tech"><span class="n">III</span>技术面与资金面</button></li>
+      <li><button class="nav-btn" data-page="macro"><span class="n">IV</span>宏观 · 地缘</button></li>
+      <li><button class="nav-btn" data-page="earnings"><span class="n">V</span>财报 · ORCL</button></li>
+      <li><button class="nav-btn" data-page="stocks"><span class="n">VI</span>重点个股</button></li>
+      <li><button class="nav-btn" data-page="people"><span class="n">VII</span>关键人物</button></li>
     </ul>
     <div class="nav-foot">点击标题切换板块</div>
   </nav>
@@ -334,7 +337,7 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
     <!-- ===== 未来事件雷达 ===== -->
     <section class="page active" id="page-radar">
       <div class="page-head">
-        <span class="sec-no">03 / EVENT RADAR</span>
+        <span class="sec-no">I / EVENT RADAR</span>
         <h2>未来事件雷达</h2>
         <div class="desc">未来 1–2 周关键事件 · 全部时间为美东时间（ET）</div>
       </div>
@@ -358,34 +361,21 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
     <!-- ===== 大盘总览 ===== -->
     <section class="page" id="page-market">
       <div class="page-head">
-        <span class="sec-no">04 / MARKET OVERVIEW</span>
+        <span class="sec-no">II / MARKET OVERVIEW</span>
         <h2>大盘总览</h2>
         <div class="desc">三线共振下跌 · 科技领跌 · 能源/核电逆势</div>
       </div>
 
       <div class="spark-grid" id="sparkGrid" hidden></div>
 
-      <div class="chart-card" id="klineCard">
-        <div class="block-title" style="color:#fff;">日线 K 线 · 真实行情</div>
-        <div class="kline-tabs" id="klineTabs">
-          <button class="ktab active" data-k="GSPC">标普 500</button>
-          <button class="ktab" data-k="IXIC">纳斯达克</button>
-          <button class="ktab" data-k="DJI">道琼斯</button>
-          <button class="ktab" data-k="SMH">半导体 SMH</button>
-        </div>
-        <div id="kline" style="height:520px;"></div>
-        <div class="chart-fallback" id="klineFallback" hidden>📡 K 线图需联网加载（图表库未能从 CDN 获取）。本页文字与表格内容不受影响。</div>
-        <div class="chart-note">数据来源：Yahoo Finance · 截至 2026-06-10 收盘 · 拖动下方滑块缩放区间</div>
-      </div>
-
       <div class="chart-card">
         <div class="block-title">主追踪指数当日涨跌（%）</div>
-        <div class="bar-row"><span class="lbl">罗素 2000<span class="tk">^RUT</span></span><span class="bar-track"><span class="bar neg" data-w="22"></span></span><span class="val down">−1.1%</span></div>
-        <div class="bar-row"><span class="lbl">标普 500<span class="tk">^GSPC</span></span><span class="bar-track"><span class="bar neg" data-w="32"></span></span><span class="val down">−1.6%</span></div>
-        <div class="bar-row"><span class="lbl">比特币<span class="tk">BTC/USD</span></span><span class="bar-track"><span class="bar neg" data-w="36"></span></span><span class="val down">≈−1.8%</span></div>
-        <div class="bar-row"><span class="lbl">道琼斯<span class="tk">^DJI</span></span><span class="bar-track"><span class="bar neg" data-w="38"></span></span><span class="val down">−1.9%</span></div>
         <div class="bar-row"><span class="lbl">纳斯达克综合<span class="tk">^IXIC</span></span><span class="bar-track"><span class="bar neg" data-w="40"></span></span><span class="val down">−2.0%</span></div>
+        <div class="bar-row"><span class="lbl">标普 500<span class="tk">^GSPC</span></span><span class="bar-track"><span class="bar neg" data-w="32"></span></span><span class="val down">−1.6%</span></div>
+        <div class="bar-row"><span class="lbl">道琼斯<span class="tk">^DJI</span></span><span class="bar-track"><span class="bar neg" data-w="38"></span></span><span class="val down">−1.9%</span></div>
+        <div class="bar-row"><span class="lbl">罗素 2000<span class="tk">^RUT</span></span><span class="bar-track"><span class="bar neg" data-w="22"></span></span><span class="val down">−1.1%</span></div>
         <div class="bar-row"><span class="lbl">半导体<span class="tk">SMH</span></span><span class="bar-track"><span class="bar neg" data-w="68"></span></span><span class="val down">−3.4%</span></div>
+        <div class="bar-row"><span class="lbl">比特币<span class="tk">BTC/USD</span></span><span class="bar-track"><span class="bar neg" data-w="36"></span></span><span class="val down">≈−1.8%</span></div>
         <div class="chart-note">柱长按 ±5% 标尺缩放；半导体 SMH 跌幅大幅领先大盘，是今日最具信号价值的板块。</div>
       </div>
 
@@ -413,13 +403,26 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
         <p><strong>板块轮动鲜明</strong>：领跌的是工业（−3.0%）、基础材料（−2.7%）、科技（−2.3%）；逆势上涨的是<strong>能源（+1.7%）与核电/防御</strong>——VST 日内大涨约 +6.9%，CEG/OKLO/SMR 跟涨。资金从"AI 成长"明确轮向"能源独立 + 防御"。</p>
         <p><strong>半导体是今日最具信号价值的板块</strong>：SMH −3.4% 跌幅远超纳指，延续 6/3 AVGO 财报"重申而非上调"AI 指引引发的连锁重定价；盘后 ORCL 财报"超预期却暴跌"，把对整个 AI 算力资本开支叙事的质疑推向高潮。</p>
       </div>
+      <div class="chart-card" id="klineCard">
+        <div class="block-title" style="color:#fff;">日线 K 线 · 真实行情</div>
+        <div class="kline-tabs" id="klineTabs">
+          <button class="ktab active" data-k="GSPC">标普 500</button>
+          <button class="ktab" data-k="IXIC">纳斯达克</button>
+          <button class="ktab" data-k="DJI">道琼斯</button>
+          <button class="ktab" data-k="SMH">半导体 SMH</button>
+        </div>
+        <div id="kline" style="height:520px;"></div>
+        <div class="chart-fallback" id="klineFallback" hidden>📡 K 线图需联网加载（图表库未能从 CDN 获取）。本页文字与表格内容不受影响。</div>
+        <div class="chart-note">数据来源：Yahoo Finance · 截至 2026-06-10 收盘 · 拖动下方滑块缩放区间</div>
+      </div>
+
       <p class="src">来源：<a href="http://www.bozemandailychronicle.com/ap_news/business/how-major-us-stock-indexes-fared-wednesday-6-10-2026/article_95e41294-82eb-5ff3-a342-65c1602cebe7.html" target="_blank" rel="noopener">AP 指数收盘 6/10</a> · <a href="https://www.washingtonpost.com/business/2026/06/10/wall-street-stocks-dow-nasdaq/985e3d4c-6509-11f1-bdd4-805ebb99a693_story.html" target="_blank" rel="noopener">Washington Post</a> · <a href="https://stockanalysis.com/etf/smh/" target="_blank" rel="noopener">SMH - StockAnalysis</a></p>
     </section>
 
     <!-- ===== 技术面与资金面 ===== -->
     <section class="page" id="page-tech">
       <div class="page-head">
-        <span class="sec-no">05 / TECHNICALS &amp; FLOWS</span>
+        <span class="sec-no">III / TECHNICALS &amp; FLOWS</span>
         <h2>技术面与资金面</h2>
         <div class="desc">多头未破位，但内部结构持续劣化、情绪转向恐惧</div>
       </div>
@@ -492,7 +495,7 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
     <!-- ===== 宏观·地缘 ===== -->
     <section class="page" id="page-macro">
       <div class="page-head">
-        <span class="sec-no">06 / MACRO &amp; GEOPOLITICS</span>
+        <span class="sec-no">IV / MACRO &amp; GEOPOLITICS</span>
         <h2>宏观 · 地缘</h2>
         <div class="desc">CPI 4.2% 头条吓人、核心可控 · 美伊真实互射推升油价</div>
       </div>
@@ -502,10 +505,10 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
         <div class="tbl-wrap" style="border:none;margin-bottom:6px;"><table>
           <thead><tr><th>指标</th><th>实际</th><th>预期</th><th>前值(4月)</th><th>判定</th></tr></thead>
           <tbody>
-            <tr><td>头条 CPI YoY</td><td class="num"><strong>+4.2%</strong></td><td class="num">+4.2%</td><td class="num">+3.8%</td><td>符合（三年新高）</td></tr>
-            <tr><td>头条 CPI MoM</td><td class="num"><strong>+0.5%</strong></td><td class="num">+0.5%</td><td class="num">+0.6%</td><td>符合</td></tr>
-            <tr><td>核心 CPI YoY</td><td class="num"><strong>+2.9%</strong></td><td class="num">+2.9%</td><td class="num">+2.8%</td><td>符合</td></tr>
-            <tr><td>核心 CPI MoM</td><td class="num"><strong>+0.2%</strong></td><td class="num">+0.3%</td><td class="num">—</td><td>低于预期</td></tr>
+            <tr><td>CPI 年率</td><td class="num"><strong>+4.2%</strong></td><td class="num">+4.2%</td><td class="num">+3.8%</td><td>符合（三年新高）</td></tr>
+            <tr><td>CPI 月率</td><td class="num"><strong>+0.5%</strong></td><td class="num">+0.5%</td><td class="num">+0.6%</td><td>符合</td></tr>
+            <tr><td>核心CPI年率</td><td class="num"><strong>+2.9%</strong></td><td class="num">+2.9%</td><td class="num">+2.8%</td><td>符合</td></tr>
+            <tr><td>核心CPI月率</td><td class="num"><strong>+0.2%</strong></td><td class="num">+0.3%</td><td class="num">—</td><td>低于预期</td></tr>
           </tbody>
         </table></div>
         <p style="font-size:13.5px;color:var(--subink);margin-top:4px;">头条 4.2% 看似刺激，但市场已完全预期，且核心月环比反低于预期——通胀主要由<strong>能源</strong>驱动（汽油月涨 7%、能源同比 +23.5%，与霍尔木兹战事直接相关），而非需求侧过热。债市因此找到做多理由，<strong>2 年期美债收益率不升反降约 2bp</strong>。</p>
@@ -566,7 +569,7 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
     <!-- ===== 财报 ORCL ===== -->
     <section class="page" id="page-earnings">
       <div class="page-head">
-        <span class="sec-no">07 / EARNINGS</span>
+        <span class="sec-no">V / EARNINGS</span>
         <h2>财报 · Oracle Q4 FY2026</h2>
         <div class="desc">史上最强一季 × 史上最猛 capex — beat 却盘后崩约 −9%</div>
       </div>
@@ -577,7 +580,6 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
           <div class="orcl-drop"><div class="od-num">−9%</div><div class="od-cap">盘后跌幅（存疑）<br>正常收盘 $201.26（−2.21%）<br>盘后一度 −10%（$180.88）</div></div>
           <div id="orclBullet"></div>
         </div>
-        <div id="ociBars" style="height:96px;margin-top:8px;"></div>
         <div class="chart-note">实际值来源：Oracle 官方公告 · 预期为分析师一致预期 · 横轴为实际相对预期的偏离幅度</div>
       </div>
 
@@ -587,12 +589,12 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
           <div class="callout callout-red" style="margin:0 0 16px;"><strong>⭐ 核心信号 · beat 却盘后崩（今日最重要的一点）：</strong>Oracle 营收 / EPS / OCI / RPO <strong>全面超预期</strong>，盘后却暴跌约 <b class="num down">−9%</b>。崩盘<strong>不是因为业务不行，而是"AI 重注"吓退了投资者</strong>——① <strong>$200 亿股权增发（ATM）</strong>引发稀释恐慌；② <strong>Capex 失控信号</strong>：FY26 实际 $557 亿已超指引、FY27 再给 $700 亿（约为全年营收的 104%）；③ 现有债务 $1,620 亿、FY26 自由现金流 <b class="num down">−$237 亿</b>，盈利兑现节奏成疑；④ 云收入小幅 miss + 估值透支，好消息"price in"过深。市场正把 Oracle 从"软件现金牛"重定价为"AI 基建重资产股"——这是整个 AI 资本开支叙事被重估的缩影。</div>
           <p><strong>盘后股价</strong>：16:00 ET 正常收盘 <b class="num">$201.26</b>（−2.21%，盘中已因 capex 担忧走弱）；盘后一度跌至约 −10%（$180.88），截至约 20:00 ET 约 <b class="num down">−9%</b> <span class="tag tag-doubt">存疑</span>——方向确认为下跌。</p>
           <div class="kpi-grid">
-            <div class="kpi"><div class="kk">Q4 营收</div><div class="kv">$192亿</div><div class="kd up">+21% · beat $190.9亿</div></div>
-            <div class="kpi"><div class="kk">Non-GAAP EPS</div><div class="kv">$2.11</div><div class="kd up">+24% · beat $1.97</div></div>
-            <div class="kpi"><div class="kk">OCI (IaaS)</div><div class="kv up">+93%</div><div class="kd">$58亿 · 远超 >40% 预期</div></div>
-            <div class="kpi"><div class="kk">RPO 在手订单</div><div class="kv">$6380亿</div><div class="kd up">+363% YoY · 创纪录</div></div>
-            <div class="kpi"><div class="kk">总云收入</div><div class="kv down">$99.1亿</div><div class="kd down">+47% · 略 miss $99.9亿</div></div>
-            <div class="kpi"><div class="kk">FY27 Capex 指引</div><div class="kv down">$700亿</div><div class="kd">约为 FY26 营收 104%</div></div>
+            <div class="kpi"><div class="kk">Q4 营收</div><div class="kv">$192亿</div><div class="kd up">+21% · beat $190.9亿</div><div class="kbar"><span style="width:100%;background:var(--green)" title="实际 $192亿"></span><span style="width:99.4%;background:rgba(202,220,252,.45)" title="预期 $190.9亿"></span></div></div>
+            <div class="kpi"><div class="kk">Non-GAAP EPS</div><div class="kv">$2.11</div><div class="kd up">+24% · beat $1.97</div><div class="kbar"><span style="width:100%;background:var(--green)" title="实际 $2.11"></span><span style="width:93.4%;background:rgba(202,220,252,.45)" title="预期 $1.97"></span></div></div>
+            <div class="kpi"><div class="kk">OCI (IaaS)</div><div class="kv up">+93%</div><div class="kd">$58亿 · 远超 >40% 预期</div><div class="kbar"><span style="width:100%;background:var(--green)" title="实际增速 +93%"></span><span style="width:43%;background:rgba(202,220,252,.45)" title="市场预期 +40%"></span></div></div>
+            <div class="kpi"><div class="kk">RPO 在手订单</div><div class="kv">$6380亿</div><div class="kd up">+363% YoY · 创纪录</div><div class="kbar"><span style="width:100%;background:var(--green)" title="本季 $6380亿"></span><span style="width:21.6%;background:rgba(202,220,252,.45)" title="上年同期（按 +363% 推算约 $1378亿）"></span></div></div>
+            <div class="kpi"><div class="kk">总云收入</div><div class="kv down">$99.1亿</div><div class="kd down">+47% · 略 miss $99.9亿</div><div class="kbar"><span style="width:99.2%;background:var(--red)" title="实际 $99.1亿"></span><span style="width:100%;background:rgba(202,220,252,.45)" title="预期 $99.9亿"></span></div></div>
+            <div class="kpi"><div class="kk">FY27 Capex 指引</div><div class="kv down">$700亿</div><div class="kd">约为 FY26 营收 104%</div><div class="kbar"><span style="width:100%;background:var(--red)" title="FY27 capex $700亿"></span><span style="width:96.3%;background:rgba(202,220,252,.45)" title="FY26 全年营收 $674亿"></span></div></div>
           </div>
           <p><strong>云与订单</strong>：OCI +93% 证明 Oracle 已是 AI 算力赛道真实竞争者；RPO $6,380 亿创史上纪录，其中与 <strong>OpenAI 的 $3,000 亿五年合同</strong>（2027–2031）是主要构成，约 47% RPO 与 OpenAI 绑定，构成"或有"执行风险。Multicloud AI Database 季度增速 <b class="num up">+404%</b>，被称"史上增长最快的业务"。</p>
           <p><strong>FY27 指引（强劲）</strong>：全年营收约 $900 亿（+34%）、Non-GAAP EPS $8.05（+18%）；Q1 营收增速 +27–29%、云收入 +57–64%。重申 FY30 营收 CAGR 31%。</p>
@@ -615,7 +617,7 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
     <!-- ===== 重点个股 ===== -->
     <section class="page" id="page-stocks">
       <div class="page-head">
-        <span class="sec-no">08 / KEY STOCKS</span>
+        <span class="sec-no">VI / KEY STOCKS</span>
         <h2>重点个股</h2>
         <div class="desc">芯片第二波杀跌 · 核电逆势大涨 · 太空板块承压</div>
       </div>
@@ -667,7 +669,6 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
         </div>
       </div>
 
-      <div class="callout callout-navy"><strong>其余关注池</strong>（MSFT / AAPL / GOOGL / AMZN / META / ARM / TSM / ASML / AMAT / LRCX / KLAC / ANET / DELL / SMCI / INTC / CSCO / EQIX / DLR / TLN / BE / NBIS / IREN / WULF）当日无触发阈值的显著异动；CRWV 收约 $94.75（存疑）、APLD +3.34%。</div>
       <div class="callout callout-gold"><strong>📅 板块事件：</strong>6/11 ADBE 财报 · 6/12 SpaceX SPCX 上市 · 6/17 FOMC · 6/18 四巫日 · 6/22 MRVL 纳入标普 500</div>
       <p class="src">来源：<a href="https://www.tipranks.com/news/why-ai-chip-stocks-nvda-mu-amd-intc-are-falling-today-june-10-2026" target="_blank" rel="noopener">芯片股 6/10 - TipRanks</a> · <a href="https://www.nasdaq.com/articles/why-nuclear-stocks-constellation-energy-vistra-and-oklo-all-popped-morning" target="_blank" rel="noopener">核电股大涨 - Nasdaq</a> · <a href="https://finance.yahoo.com/markets/stocks/articles/asts-rklb-rdw-lunr-slip-073823695.html" target="_blank" rel="noopener">太空股承压 - Yahoo</a></p>
     </section>
@@ -675,7 +676,7 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
     <!-- ===== 关键人物 ===== -->
     <section class="page" id="page-people">
       <div class="page-head">
-        <span class="sec-no">09 / KEY VOICES</span>
+        <span class="sec-no">VII / KEY VOICES</span>
         <h2>关键人物</h2>
         <div class="desc">特朗普强硬表态 · 黄仁勋点名 MRVL · Ellison 谈 Stargate</div>
       </div>
@@ -717,7 +718,7 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
     <div class="finale-row">
       <div class="finale-bar"></div>
       <div>
-        <div class="finale-label">10 / THE BOTTOM LINE · 一句话定调</div>
+        <div class="finale-label">THE BOTTOM LINE · 一句话定调</div>
         <div class="finale-title">最强财报配最猛 capex — AI 资本开支叙事遭重估</div>
         <div class="finale-lines">
           <span>三线共振下跌：CPI 4.2%（能源驱动）、美伊真实互射推升油价、ORCL 超预期却盘后崩约 −9%；</span>
@@ -1020,7 +1021,7 @@ const MARKET_DATA={"GSPC":[["2025-06-11",6049.38,6059.4,6002.32,6022.24,51115500
   /* 巨型编号水印 */
   document.querySelectorAll(".page-head").forEach(function(h){
     var n=h.querySelector(".sec-no");
-    if(n)h.setAttribute("data-no",n.textContent.trim().slice(0,2));
+    if(n)h.setAttribute("data-no",n.textContent.trim().split(" /")[0]);
   });
   if(typeof echarts==="undefined"||typeof MARKET_DATA==="undefined")return;
   var GREEN="#2FB344",RED="#E03B42",ICE="#CADCFC",GOLD="#E8B339",MUTED="#8A93B2";
@@ -1108,20 +1109,6 @@ const MARKET_DATA={"GSPC":[["2025-06-11",6049.38,6059.4,6002.32,6022.24,51115500
           formatter:function(p){return (p.value>=0?"beat +":"miss ")+p.value+"%";}},
         markLine:{symbol:"none",data:[{xAxis:0,lineStyle:{color:GOLD,width:1.5},label:{show:false}}]}}]
     });
-    mk(document.getElementById("ociBars"),{
-      grid:{left:110,right:86,top:6,bottom:22},
-      xAxis:{type:"value",max:100,axisLabel:{color:MUTED,fontSize:10.5,formatter:"{value}%"},splitLine:{lineStyle:{color:"rgba(202,220,252,.12)"}}},
-      yAxis:{type:"category",data:["OCI 增速 YoY"],axisLabel:{color:ICE,fontSize:12,fontWeight:600},axisLine:{lineStyle:{color:"rgba(202,220,252,.3)"}}},
-      tooltip:{trigger:"axis",backgroundColor:"rgba(16,22,54,.92)",borderColor:"rgba(202,220,252,.3)",textStyle:{color:ICE,fontSize:12},valueFormatter:function(v){return "+"+v+"%";}},
-      series:[
-        {name:"实际",type:"bar",barWidth:11,data:[93],itemStyle:{color:GREEN,borderRadius:2},
-         label:{show:true,position:"right",color:GREEN,fontFamily:"SF Mono,Menlo,monospace",fontSize:11.5,fontWeight:700,formatter:"实际 +93%"}},
-        {name:"市场预期",type:"bar",barWidth:11,data:[40],itemStyle:{color:ICE,opacity:.55,borderRadius:2},
-         label:{show:true,position:"right",color:MUTED,fontSize:11,formatter:"预期 +40%"}}
-      ]
-    });
-  }
-
   /* ④ CPI 实际 vs 预期 vs 前值 */
   var cpiBuilt=false;
   function buildCpi(){
@@ -1132,7 +1119,7 @@ const MARKET_DATA={"GSPC":[["2025-06-11",6049.38,6059.4,6002.32,6022.24,51115500
       grid:{left:86,right:56,top:30,bottom:24},
       legend:{data:["实际","预期","前值"],textStyle:{color:MUTED,fontSize:11},top:0,right:0},
       xAxis:{type:"value",axisLabel:{color:MUTED,fontSize:10.5,formatter:"{value}%"},splitLine:{lineStyle:{color:"rgba(202,220,252,.12)"}}},
-      yAxis:{type:"category",data:["核心 MoM","核心 YoY","头条 MoM","头条 YoY"],axisLabel:{color:ICE,fontSize:12,fontWeight:600},axisLine:{lineStyle:{color:"rgba(202,220,252,.3)"}}},
+      yAxis:{type:"category",data:["核心CPI月率","核心CPI年率","CPI 月率","CPI 年率"],axisLabel:{color:ICE,fontSize:12,fontWeight:600},axisLine:{lineStyle:{color:"rgba(202,220,252,.3)"}}},
       tooltip:{trigger:"axis",backgroundColor:"rgba(16,22,54,.92)",borderColor:"rgba(202,220,252,.3)",textStyle:{color:ICE,fontSize:12},valueFormatter:function(v){return v==null?"—":"+"+v+"%";}},
       series:[
         {name:"实际",type:"bar",barWidth:9,data:[0.2,2.9,0.5,4.2],itemStyle:{color:GOLD,borderRadius:2},
