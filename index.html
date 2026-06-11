@@ -144,6 +144,35 @@ td.nw{white-space:nowrap;}
 .ktab:hover{background:rgba(202,220,252,.16);}
 .ktab.active{background:var(--gold);border-color:var(--gold);color:var(--navy-dark);}
 .chart-fallback{padding:28px 16px;text-align:center;font-size:13.5px;color:var(--muted);border:1px dashed rgba(202,220,252,.3);border-radius:6px;}
+.spark-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px;}
+.spark-card{background:var(--navy-dark);border-radius:8px;padding:14px 16px 8px;cursor:pointer;transition:transform .2s,box-shadow .2s;}
+.spark-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(16,22,54,.35);}
+.spark-card .sk-name{font-size:12px;color:var(--ice);font-weight:600;}
+.spark-card .sk-close{font-family:var(--mono);font-size:19px;font-weight:700;color:#fff;margin-top:2px;}
+.spark-card .sk-badge{display:inline-block;font-family:var(--mono);font-size:11.5px;font-weight:700;border-radius:4px;padding:2px 7px;margin-left:8px;vertical-align:2px;}
+.spark-card .sk-chart{height:56px;margin-top:6px;}
+.spark-card .sk-cap{font-size:10px;color:var(--muted);margin-top:2px;}
+.cd-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;border-radius:12px;padding:3px 10px;white-space:nowrap;}
+.cd-past{background:#EEF1F8;color:var(--muted);}
+.cd-today{background:rgba(232,179,57,.18);color:#A77B12;border:1px solid rgba(232,179,57,.5);}
+.cd-soon{background:var(--red-soft);color:var(--red);border:1px solid rgba(224,59,66,.3);}
+.cd-future{background:#ECF0FA;color:var(--navy);}
+.cd-dot{width:7px;height:7px;border-radius:50%;background:currentColor;animation:cdPulse 1.4s ease infinite;}
+@keyframes cdPulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.35;transform:scale(.75);}}
+.cockpit-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.cockpit-cell{text-align:center;}
+.cockpit-cell .cp-gauge{height:140px;}
+.cockpit-cell .cp-label{font-size:12px;color:var(--ice);font-weight:600;margin-top:-6px;}
+.cockpit-cell .cp-note{font-size:10.5px;color:var(--muted);}
+.orcl-flex{display:flex;gap:22px;align-items:stretch;flex-wrap:wrap;}
+.orcl-drop{flex:0 0 220px;display:flex;flex-direction:column;justify-content:center;border-right:1px solid rgba(202,220,252,.15);padding-right:18px;}
+.orcl-drop .od-num{font-family:var(--mono);font-size:54px;font-weight:700;color:var(--red);line-height:1;}
+.orcl-drop .od-cap{font-size:12px;color:var(--ice);margin-top:10px;line-height:1.7;}
+.page.active .od-num{animation:odDrop .8s cubic-bezier(.2,.9,.3,1.2) both;}
+@keyframes odDrop{from{opacity:0;transform:translateY(-34px);}to{opacity:1;transform:none;}}
+#orclBullet{flex:1;min-width:300px;height:230px;}
+@media (max-width:980px){.spark-grid,.cockpit-grid{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:700px){.orcl-drop{border-right:none;padding-right:0;flex:1 1 100%;}}
 .bar-row{display:grid;grid-template-columns:150px 1fr 84px;align-items:center;gap:12px;padding:7px 0;}
 .bar-row .lbl{font-size:13px;color:var(--ice);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .bar-row .lbl .tk{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-left:6px;}
@@ -316,6 +345,8 @@ td.nw{white-space:nowrap;}
         <div class="desc">三线共振下跌 · 科技领跌 · 能源/核电逆势</div>
       </div>
 
+      <div class="spark-grid" id="sparkGrid" hidden></div>
+
       <div class="chart-card" id="klineCard">
         <div class="block-title" style="color:#fff;">日线 K 线 · 真实行情</div>
         <div class="kline-tabs" id="klineTabs">
@@ -369,9 +400,19 @@ td.nw{white-space:nowrap;}
         <div class="desc">多头未破位，但内部结构持续劣化、情绪转向恐惧</div>
       </div>
 
+      <div class="chart-card" id="cockpitCard" hidden>
+        <div class="block-title" style="color:#fff;">技术面仪表盘 · 情绪与动能</div>
+        <div class="cockpit-grid">
+          <div class="cockpit-cell"><div class="cp-gauge" id="gFG"></div><div class="cp-label">恐惧贪婪指数</div><div class="cp-note">恐惧区 · 前日 43</div></div>
+          <div class="cockpit-cell"><div class="cp-gauge" id="gRSI"></div><div class="cp-label">标普 RSI(14)</div><div class="cp-note">中性偏弱 · 依真实收盘价计算</div></div>
+          <div class="cockpit-cell"><div class="cp-gauge" id="gVIX"></div><div class="cp-label">VIX（存疑）</div><div class="cp-note">逼近 20 关口</div></div>
+          <div class="cockpit-cell"><div class="cp-gauge" id="gBR"></div><div class="cp-label">站上 50 日线成分股（存疑）</div><div class="cp-note">广度中性偏弱</div></div>
+        </div>
+      </div>
+
       <div class="stat-grid">
         <div class="stat"><div class="k">VIX 恐慌指数</div><div class="v down">19.9</div><div class="d">逼近 20 关口 · 较前日上行，尾部风险定价重建 <span class="tag tag-doubt">存疑</span></div></div>
-        <div class="stat"><div class="k">CNN 恐惧贪婪指数</div><div class="v" style="color:#A77B12">29</div><div class="d">恐惧区 · 自 6/9 的 43 进一步深跌<div id="fgGauge" style="height:150px;margin-top:8px;"></div></div></div>
+        <div class="stat"><div class="k">CNN 恐惧贪婪指数</div><div class="v" style="color:#A77B12">29</div><div class="d">恐惧区 · 自 6/9 的 43 进一步深跌</div></div>
         <div class="stat"><div class="k">标普 RSI(14)</div><div class="v">40.6</div><div class="d">中性偏弱 · 从 5 月末超买区大幅回落 <span class="tag tag-doubt">存疑</span></div></div>
         <div class="stat"><div class="k">站上 50 日均线成分股</div><div class="v">50%</div><div class="d">广度中性偏弱 · 下跌后或进一步收缩 <span class="tag tag-doubt">存疑</span></div></div>
       </div>
@@ -498,6 +539,15 @@ td.nw{white-space:nowrap;}
         <span class="sec-no">07 / EARNINGS</span>
         <h2>财报 · Oracle Q4 FY2026</h2>
         <div class="desc">史上最强一季 × 史上最猛 capex — beat 却盘后崩约 −9%</div>
+      </div>
+
+      <div class="chart-card" id="orclCard" hidden>
+        <div class="block-title" style="color:#fff;">ORCL · 预期 vs 实际 — beat 却盘后崩</div>
+        <div class="orcl-flex">
+          <div class="orcl-drop"><div class="od-num">−9%</div><div class="od-cap">盘后跌幅（存疑）<br>正常收盘 $201.26（−2.21%）<br>盘后一度 −10%（$180.88）</div></div>
+          <div id="orclBullet"></div>
+        </div>
+        <div class="chart-note">实际值来源：Oracle 官方公告 · 预期为分析师一致预期 · 横轴为实际相对预期的偏离幅度</div>
       </div>
 
       <div class="stock-card">
@@ -911,6 +961,122 @@ const MARKET_DATA={"GSPC":[["2025-06-11",6049.38,6059.4,6002.32,6022.24,51115500
       });
     });
   }
+})();
+</script>
+<script>
+(function(){
+  /* 活倒计时：按访问者当天（美东）实时计算 */
+  var tbl=document.querySelector("#page-radar table tbody");
+  if(tbl){
+    var fmt=new Intl.DateTimeFormat("en-CA",{timeZone:"America/New_York"});
+    var today=new Date(fmt.format(new Date())+"T00:00:00");
+    Array.prototype.forEach.call(tbl.rows,function(tr){
+      var m=(tr.cells[0]?tr.cells[0].textContent:"").match(/(\d{1,2})\/(\d{1,2})/);
+      if(!m||!tr.cells[1])return;
+      var d=Math.round((new Date(2026,+m[1]-1,+m[2])-today)/864e5), b;
+      if(d<0)b='<span class="cd-badge cd-past">已过</span>';
+      else if(d===0)b='<span class="cd-badge cd-today"><span class="cd-dot"></span>今日</span>';
+      else if(d<=2)b='<span class="cd-badge cd-soon"><span class="cd-dot"></span>'+(d===1?"明日":"还有 2 天")+'</span>';
+      else b='<span class="cd-badge cd-future">还有 '+d+' 天</span>';
+      tr.cells[1].innerHTML=b;
+    });
+  }
+  if(typeof echarts==="undefined"||typeof MARKET_DATA==="undefined")return;
+  var GREEN="#2FB344",RED="#E03B42",ICE="#CADCFC",GOLD="#E8B339",MUTED="#8A93B2";
+  var charts=[];
+  function mk(el,opt){var c=echarts.init(el);c.setOption(opt);charts.push(c);return c;}
+
+  /* ① 指数 Sparkline 迷你卡（近 30 个交易日真实收盘） */
+  var sparkBuilt=false;
+  function buildSparks(){
+    if(sparkBuilt)return; sparkBuilt=true;
+    var g=document.getElementById("sparkGrid"); if(!g)return;
+    g.hidden=false;
+    var NAMES={GSPC:"标普 500",IXIC:"纳斯达克",DJI:"道琼斯",SMH:"半导体 SMH"};
+    ["GSPC","IXIC","DJI","SMH"].forEach(function(k){
+      var rows=MARKET_DATA[k].slice(-30), a=rows[rows.length-1], b=rows[rows.length-2];
+      var pc=(a[4]-b[4])/b[4]*100, up=pc>=0;
+      var card=document.createElement("div"); card.className="spark-card";
+      card.title="点击查看 "+NAMES[k]+" 日线 K 线";
+      card.innerHTML='<div class="sk-name">'+NAMES[k]+'</div>'
+        +'<div class="sk-close">'+a[4].toLocaleString("en-US")
+        +'<span class="sk-badge" style="background:'+(up?"rgba(47,179,68,.18)":"rgba(224,59,66,.18)")+';color:'+(up?GREEN:RED)+'">'+(up?"+":"")+pc.toFixed(2)+'%</span></div>'
+        +'<div class="sk-chart"></div><div class="sk-cap">近 30 个交易日 · 悬停查价</div>';
+      g.appendChild(card);
+      var col=rows[rows.length-1][4]>=rows[0][4]?GREEN:RED;
+      mk(card.querySelector(".sk-chart"),{
+        grid:{left:0,right:0,top:4,bottom:0},
+        xAxis:{type:"category",show:false,data:rows.map(function(r){return r[0];})},
+        yAxis:{type:"value",show:false,scale:true},
+        tooltip:{trigger:"axis",confine:true,backgroundColor:"rgba(16,22,54,.92)",borderColor:"rgba(202,220,252,.3)",textStyle:{color:ICE,fontSize:11},
+          formatter:function(p){return p[0].name+"<br>收盘 "+p[0].value.toLocaleString("en-US");}},
+        series:[{type:"line",data:rows.map(function(r){return r[4];}),symbol:"none",smooth:true,
+          lineStyle:{width:1.6,color:col},
+          areaStyle:{color:{type:"linear",x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:col+"55"},{offset:1,color:col+"00"}]}}}]
+      });
+      card.addEventListener("click",function(){
+        var tab=document.querySelector('.ktab[data-k="'+k+'"]'); if(tab)tab.click();
+        var kc=document.getElementById("klineCard");
+        if(kc){kc.scrollIntoView({behavior:"smooth",block:"center"});kc.classList.remove("flash");void kc.offsetWidth;kc.classList.add("flash");}
+      });
+    });
+  }
+
+  /* ② 技术面驾驶舱：四联仪表盘 */
+  var cockBuilt=false;
+  function gaugeOpt(val,min,max,zones,suffix){
+    return {series:[{type:"gauge",startAngle:205,endAngle:-25,min:min,max:max,radius:"95%",center:["50%","62%"],
+      axisLine:{lineStyle:{width:9,color:zones}},
+      pointer:{length:"60%",width:4,itemStyle:{color:ICE}},
+      axisTick:{show:false},splitLine:{show:false},axisLabel:{show:false},
+      detail:{valueAnimation:true,fontSize:17,fontWeight:700,fontFamily:"SF Mono,Menlo,monospace",color:"#fff",offsetCenter:[0,"34%"],formatter:"{value}"+suffix},
+      data:[{value:val}]}]};
+  }
+  function buildCockpit(){
+    if(cockBuilt)return; cockBuilt=true;
+    var card=document.getElementById("cockpitCard"); if(!card)return;
+    card.hidden=false;
+    mk(document.getElementById("gFG"), gaugeOpt(29,0,100,[[0.25,RED],[0.45,GOLD],[0.55,MUTED],[0.75,"#9CC97A"],[1,GREEN]],""));
+    mk(document.getElementById("gRSI"),gaugeOpt(40.6,0,100,[[0.3,GREEN],[0.7,MUTED],[1,RED]],""));
+    mk(document.getElementById("gVIX"),gaugeOpt(19.9,0,40,[[0.375,GREEN],[0.5,GOLD],[0.75,RED],[1,"#8C2328"]],""));
+    mk(document.getElementById("gBR"), gaugeOpt(50,0,100,[[0.3,RED],[0.5,GOLD],[0.7,MUTED],[1,GREEN]],"%"));
+  }
+
+  /* ③ ORCL 预期 vs 实际 子弹图（官方实际值） */
+  var orclBuilt=false;
+  function buildOrcl(){
+    if(orclBuilt)return; orclBuilt=true;
+    var card=document.getElementById("orclCard"); if(!card)return;
+    card.hidden=false;
+    var items=[
+      {n:"Q4 营收",a:192,e:190.9,u:"亿美元"},
+      {n:"Non-GAAP EPS",a:2.11,e:1.97,u:"美元"},
+      {n:"云收入",a:99.1,e:99.9,u:"亿美元"}
+    ];
+    var devs=items.map(function(x){return +(((x.a-x.e)/x.e)*100).toFixed(2);});
+    mk(document.getElementById("orclBullet"),{
+      grid:{left:110,right:86,top:10,bottom:24},
+      xAxis:{type:"value",axisLabel:{color:MUTED,fontSize:10.5,formatter:"{value}%"},splitLine:{lineStyle:{color:"rgba(202,220,252,.12)"}}},
+      yAxis:{type:"category",data:items.map(function(x){return x.n;}),axisLabel:{color:ICE,fontSize:12,fontWeight:600},axisLine:{lineStyle:{color:"rgba(202,220,252,.3)"}}},
+      tooltip:{trigger:"axis",backgroundColor:"rgba(16,22,54,.92)",borderColor:"rgba(202,220,252,.3)",textStyle:{color:ICE,fontSize:12},
+        formatter:function(ps){var i=ps[0].dataIndex,x=items[i];
+          return x.n+"<br>实际 "+x.a+" "+x.u+"<br>预期 "+x.e+" "+x.u+"<br>偏离 "+(devs[i]>=0?"+":"")+devs[i]+"%";}},
+      series:[{type:"bar",barWidth:16,
+        data:devs.map(function(v){return {value:v,itemStyle:{color:v>=0?GREEN:RED,borderRadius:3}};}),
+        label:{show:true,position:"right",fontFamily:"SF Mono,Menlo,monospace",fontSize:11.5,fontWeight:700,color:ICE,
+          formatter:function(p){return (p.value>=0?"beat +":"miss ")+p.value+"%";}},
+        markLine:{symbol:"none",data:[{xAxis:0,lineStyle:{color:GOLD,width:1.5},label:{show:false}}]}}]
+    });
+  }
+
+  function go(page){
+    if(page==="market")setTimeout(buildSparks,80);
+    if(page==="tech")setTimeout(buildCockpit,80);
+    if(page==="earnings")setTimeout(buildOrcl,80);
+  }
+  document.addEventListener("click",function(e){var b=e.target.closest(".nav-btn");if(b)go(b.dataset.page);});
+  go(location.hash.replace("#","")||"radar");
+  window.addEventListener("resize",function(){charts.forEach(function(c){c.resize();});});
 })();
 </script>
 </body>
