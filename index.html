@@ -52,7 +52,7 @@ a:hover{color:var(--red);border-bottom-color:var(--red);}
 .hero-date{font-size:clamp(17px,2vw,23px);color:var(--ice);font-weight:400;margin-top:10px;letter-spacing:.12em;}
 .hero-theme{margin-top:42px;opacity:0;animation:rise .7s ease forwards .45s;}
 .hero-theme-label{font-family:var(--mono);font-size:12px;letter-spacing:.28em;color:var(--gold);margin-bottom:12px;}
-.hero-theme-text{font-size:clamp(19px,2.6vw,28px);font-weight:700;color:#FF6B71;line-height:1.5;}
+.hero-theme-text{font-size:clamp(19px,2.6vw,28px);font-weight:700;color:var(--green);line-height:1.5;}
 .hero-meta{margin-top:56px;padding-top:18px;border-top:1px solid rgba(202,220,252,.18);display:flex;flex-wrap:wrap;gap:10px 36px;font-size:12.5px;color:var(--muted);opacity:0;animation:rise .7s ease forwards .6s;}
 #heroFx{position:absolute;inset:0;z-index:1;pointer-events:none;-webkit-mask-image:linear-gradient(to top,rgba(0,0,0,.95) 0%,rgba(0,0,0,.45) 40%,transparent 72%);mask-image:linear-gradient(to top,rgba(0,0,0,.95) 0%,rgba(0,0,0,.45) 40%,transparent 72%);}
 @keyframes rise{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:none;}}
@@ -337,7 +337,7 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
       <h3>🚀 SpaceX 史上最大 IPO 定价</h3>
       <p>$135/股、募资 <b class="num">$750 亿</b>、估值 <b class="num">$1.75 万亿</b>，严重超额认购，6/12 以 SPCX 上市；ASTS/RKLB/LUNR 受上市前情绪提振走高。</p>
     </div>
-    <div class="sum-card" style="--accent:var(--gold)">
+    <div class="sum-card" style="--accent:var(--green)">
       <h3>VIX 大跌 −12.51% 至 19.44</h3>
       <p>重回 20 关口下方，地缘风险溢价快速消退；但恐惧贪婪指数仍处恐惧区——价格已 risk-on，情绪尚未完全转向，结构性谨慎仍在。</p>
     </div>
@@ -396,12 +396,12 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
 
       <div class="chart-card">
         <div class="block-title">主追踪指数当日涨跌（%）</div>
-        <div class="bar-row"><span class="lbl">半导体<span class="tk">SMH</span></span><span class="bar-track"><span class="bar pos" data-w="84"></span></span><span class="val up">+6.75%</span></div>
-        <div class="bar-row"><span class="lbl">罗素 2000<span class="tk">^RUT</span></span><span class="bar-track"><span class="bar pos" data-w="38"></span></span><span class="val up">+3.02%</span></div>
-        <div class="bar-row"><span class="lbl">纳斯达克综合<span class="tk">^IXIC</span></span><span class="bar-track"><span class="bar pos" data-w="32"></span></span><span class="val up">+2.54%</span></div>
-        <div class="bar-row"><span class="lbl">道琼斯<span class="tk">^DJI</span></span><span class="bar-track"><span class="bar pos" data-w="23"></span></span><span class="val up">+1.86%</span></div>
-        <div class="bar-row"><span class="lbl">标普 500<span class="tk">^GSPC</span></span><span class="bar-track"><span class="bar pos" data-w="22"></span></span><span class="val up">+1.75%</span></div>
-        <div class="bar-row"><span class="lbl">比特币<span class="tk">BTC/USD</span></span><span class="bar-track"><span class="bar pos" data-w="18"></span></span><span class="val up">上涨</span></div>
+        <div class="bar-row"><span class="lbl">半导体<span class="tk">SMH</span></span><span class="bar-track"><span class="bar pos" data-w="42.2"></span></span><span class="val up">+6.75%</span></div>
+        <div class="bar-row"><span class="lbl">罗素 2000<span class="tk">^RUT</span></span><span class="bar-track"><span class="bar pos" data-w="18.9"></span></span><span class="val up">+3.02%</span></div>
+        <div class="bar-row"><span class="lbl">纳斯达克综合<span class="tk">^IXIC</span></span><span class="bar-track"><span class="bar pos" data-w="15.9"></span></span><span class="val up">+2.54%</span></div>
+        <div class="bar-row"><span class="lbl">道琼斯<span class="tk">^DJI</span></span><span class="bar-track"><span class="bar pos" data-w="11.6"></span></span><span class="val up">+1.86%</span></div>
+        <div class="bar-row"><span class="lbl">标普 500<span class="tk">^GSPC</span></span><span class="bar-track"><span class="bar pos" data-w="10.9"></span></span><span class="val up">+1.75%</span></div>
+        <div class="bar-row"><span class="lbl">比特币<span class="tk">BTC/USD</span></span><span class="bar-track"><span class="bar pos" data-w="9"></span></span><span class="val up">上涨</span></div>
         <div class="chart-note">柱长按 ±8% 标尺缩放；半导体 SMH +6.75% 大幅领涨，是今日最强引擎。</div>
       </div>
 
@@ -416,12 +416,6 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
           <tr><td>比特币 BTC</td><td class="num">BTC/USD</td><td class="num"><strong>$62,800</strong></td><td class="num up"><strong>上涨</strong></td><td>随风险偏好回升 <span class="tag tag-doubt">存疑</span></td></tr>
         </tbody>
       </table></div>
-
-      <div class="chart-card" id="sectorCard" hidden>
-        <div class="block-title" style="color:#fff;">芯片链反弹 · 个股涨幅</div>
-        <div id="sectorBars" style="height:200px;"></div>
-        <div class="chart-note">半导体板块当日领涨个股 · 真实涨幅（CNBC/Yahoo 核验）</div>
-      </div>
 
       <div class="block">
         <div class="block-title">当日盘面综述</div>
@@ -659,6 +653,12 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
           </table></div>
           <p>核心叙事：ORCL（6/10）$700 亿 FY27 capex 指引 → 市场把 AI 基建资本开支当作芯片股最重要领先指标 → 芯片链整体重定价上行，与地缘缓和共振放大涨幅。</p>
         </div>
+      </div>
+
+      <div class="chart-card" id="sectorCard" hidden>
+        <div class="block-title" style="color:#fff;">芯片链反弹 · 个股涨幅</div>
+        <div id="sectorBars" style="height:200px;"></div>
+        <div class="chart-note">半导体板块当日领涨个股 · 真实涨幅（CNBC/Yahoo 核验）</div>
       </div>
 
       <div class="stock-card">
@@ -1147,10 +1147,11 @@ const MARKET_DATA={"GSPC":[["2025-06-12",6009.9,6045.43,6003.88,6045.26,46695000
     });
   }
   function go(page){
-    if(page==="market"){setTimeout(buildSparks,80);setTimeout(buildSectors,80);}
+    if(page==="market")setTimeout(buildSparks,80);
     if(page==="tech")setTimeout(buildCockpit,80);
     if(page==="macro")setTimeout(buildCpi,80);
     if(page==="earnings")setTimeout(buildOrcl,80);
+    if(page==="stocks")setTimeout(buildSectors,80);
   }
   document.addEventListener("click",function(e){var b=e.target.closest(".nav-btn");if(b)go(b.dataset.page);});
   go(location.hash.replace("#","")||"radar");
