@@ -35,7 +35,7 @@ a:hover{color:var(--red);border-bottom-color:var(--red);}
 .hero-kicker{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:13px;letter-spacing:.32em;color:var(--ice);font-weight:600;opacity:0;animation:rise .7s ease forwards .1s;}
 .hero-kicker::after{content:"";flex:0 0 120px;height:1px;background:linear-gradient(90deg,var(--gold),transparent);}
 .hero-title-row{display:flex;align-items:flex-start;gap:26px;margin-top:30px;opacity:0;animation:rise .7s ease forwards .25s;}
-.hero-bar{flex:0 0 10px;align-self:stretch;background:var(--green);box-shadow:0 0 32px rgba(47,179,68,.55);}
+.hero-bar{flex:0 0 10px;align-self:stretch;background:var(--accent,var(--green));box-shadow:0 0 32px color-mix(in srgb,var(--accent,var(--green)) 55%,transparent);}
 .hero-title{font-size:clamp(52px,7vw,86px);font-weight:700;letter-spacing:.06em;line-height:1.12;}
 .hero-date{font-size:clamp(17px,2vw,23px);color:var(--ice);font-weight:400;margin-top:10px;letter-spacing:.12em;}
 .hero-theme{margin-top:42px;opacity:0;animation:rise .7s ease forwards .45s;}
