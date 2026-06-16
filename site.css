@@ -256,3 +256,9 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
 .cal-day.cur{outline:2px solid #fff;outline-offset:1px;}
 .cal-foot{margin-top:10px;font-size:10.5px;color:var(--muted);line-height:1.7;}
 @media (max-width:700px){.cal-btn{top:auto;bottom:16px;}.cal-panel{top:auto;bottom:64px;}}
+/* ── stock tile grid (个股方块 · 2026-06-15+) ── */
+.stock-tile-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;margin:12px 0;}
+.stock-tile{background:rgba(202,220,252,.07);border:1px solid rgba(202,220,252,.14);border-radius:8px;padding:10px 6px;text-align:center;}
+.st-tkr{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ice);letter-spacing:.5px;margin-bottom:4px;}
+.st-pct{font-size:17px;font-weight:800;margin:2px 0 4px;}
+.st-desc{font-size:10.5px;color:var(--subink);line-height:1.3;}
