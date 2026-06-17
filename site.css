@@ -217,7 +217,7 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
 .finale::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(760px 420px at 22% 10%,rgba(30,39,97,.9),transparent 62%),radial-gradient(620px 380px at 88% 90%,rgba(47,179,68,.10),transparent 60%);}
 .finale-inner{position:relative;z-index:2;max-width:1340px;margin:0 auto;}
 .finale-row{display:flex;gap:24px;}
-.finale-bar{flex:0 0 10px;background:var(--green);box-shadow:0 0 30px rgba(47,179,68,.5);}
+.finale-bar{flex:0 0 10px;background:var(--accent,var(--green));box-shadow:0 0 30px color-mix(in srgb,var(--accent,var(--green)) 55%,transparent);}
 .finale-label{font-family:var(--mono);font-size:12.5px;letter-spacing:.3em;color:var(--ice);font-weight:700;margin-bottom:14px;}
 .finale-title{font-size:clamp(28px,4vw,44px);font-weight:700;line-height:1.35;letter-spacing:.03em;}
 .finale-lines{margin-top:30px;display:flex;flex-direction:column;gap:10px;font-size:15.5px;color:var(--ice);line-height:1.8;}
