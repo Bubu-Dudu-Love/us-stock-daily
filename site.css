@@ -265,29 +265,31 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
 /* 个股深读卡（左栏：标题+技术位可视化 / 右栏：业务分析）2026-06 */
 .deepdive{display:flex;gap:34px;background:var(--navy-dark);border:1px solid rgba(202,220,252,.14);border-radius:12px;padding:28px 32px;margin:22px 0;color:var(--ice);}
 .dd-left{flex:0 0 300px;}
-.dd-head{margin-bottom:18px;}
-.dd-tkr{display:block;font-weight:800;font-size:23px;color:#fff;letter-spacing:.3px;}
-.dd-pct{display:block;font-family:var(--mono);font-weight:700;font-size:23px;margin-top:7px;}
+.dd-head{margin-bottom:16px;line-height:1.45;}
+.dd-tkr{font-weight:800;font-size:20px;color:#fff;letter-spacing:.3px;}
+.dd-pct{font-family:var(--mono);font-weight:700;font-size:18px;margin-left:12px;}
 .dd-body{flex:1;min-width:0;}
 .dd-lead{font-size:15.5px;color:var(--ice);margin-bottom:15px;line-height:1.75;}
 .dd-sec{font-size:14.5px;line-height:1.95;margin-bottom:11px;color:var(--ice);}
 .dd-sec b{color:#fff;}
-.dd-note{font-size:12px;color:var(--muted);margin-top:10px;}
 /* 技术位可视化（替代雷达，纯 CSS）*/
 .dd-viz{font-size:12.5px;}
-.dv-title{font-weight:700;color:#fff;font-size:14px;margin-bottom:14px;}
+.dv-title{font-weight:700;color:#fff;font-size:14px;margin-bottom:8px;}
 .dv-ends{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px;}
-.dv-ruler{position:relative;height:8px;background:rgba(202,220,252,.12);border-radius:4px;margin-bottom:32px;}
+.dv-ruler{position:relative;height:8px;background:rgba(202,220,252,.12);border-radius:4px;margin:26px 0 30px;}
 .dv-now{position:absolute;top:-3px;width:4px;height:14px;background:var(--gold);border-radius:2px;transform:translateX(-50%);box-shadow:0 0 8px var(--gold);}
 .dv-now::after{content:attr(data-l);position:absolute;top:17px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:11px;color:var(--gold);white-space:nowrap;font-weight:700;}
+.dv-ma{position:absolute;top:-2px;width:2px;height:12px;background:var(--ice);opacity:.8;transform:translateX(-50%);}
+.dv-ma::after{content:attr(data-l);position:absolute;bottom:14px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;color:var(--ice);white-space:nowrap;}
 .dv-row{display:flex;align-items:center;gap:9px;margin:9px 0;}
 .dv-k{flex:0 0 50px;font-size:11px;color:var(--muted);}
 .dv-bar{flex:1;height:7px;background:rgba(202,220,252,.12);border-radius:4px;overflow:hidden;}
 .dv-bar i{display:block;height:100%;background:var(--ice);border-radius:4px;}
 .dv-bar i.neg{background:var(--red);}
 .dv-v{flex:0 0 66px;font-family:var(--mono);font-size:10.5px;color:var(--ice);text-align:right;}
-.dv-badges{margin-top:13px;display:flex;flex-wrap:wrap;gap:6px;}
-.dv-bdg{font-size:10.5px;padding:3px 8px;border-radius:5px;background:rgba(47,179,68,.15);color:var(--green);border:1px solid rgba(47,179,68,.3);}
-.dv-bdg.neutral{background:rgba(202,220,252,.1);color:var(--ice);border-color:rgba(202,220,252,.25);}
-.dv-bdg.down{background:rgba(224,59,66,.15);color:var(--red);border-color:rgba(224,59,66,.3);}
+.dv-sigs{margin-top:14px;border-top:1px solid rgba(202,220,252,.13);padding-top:11px;}
+.dv-sig{font-size:11.5px;line-height:1.55;margin:6px 0;color:var(--ice);}
+.dv-sig b{color:#fff;}
+.dv-sig.up b{color:var(--green);}
+.dv-sig.down b{color:var(--red);}
 @media(max-width:680px){.deepdive{flex-direction:column;}.dd-left{flex:none;}}
