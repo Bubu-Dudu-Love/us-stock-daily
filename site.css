@@ -289,4 +289,5 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
 .dv-badges{margin-top:13px;display:flex;flex-wrap:wrap;gap:6px;}
 .dv-bdg{font-size:10.5px;padding:3px 8px;border-radius:5px;background:rgba(47,179,68,.15);color:var(--green);border:1px solid rgba(47,179,68,.3);}
 .dv-bdg.neutral{background:rgba(202,220,252,.1);color:var(--ice);border-color:rgba(202,220,252,.25);}
+.dv-bdg.down{background:rgba(224,59,66,.15);color:var(--red);border-color:rgba(224,59,66,.3);}
 @media(max-width:680px){.deepdive{flex-direction:column;}.dd-left{flex:none;}}
