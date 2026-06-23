@@ -222,12 +222,46 @@
 
       <div class="block">
         <div class="block-title">A · 技术指标（各指数均线与 RSI 读数）</div>
-        <ul>
-          <li><strong>纳斯达克综合（^IXIC）</strong>：收 26,166.60，−1.32%；MA50 25,619.20，MA200 23,551.99；RSI(14) <strong>51.4</strong>（最弱，中性）；近 20 日 swing 支撑约在 MA50（25,619），距 52 周高 27,190 约 −3.76%。</li>
-          <li><strong>半导体 SMH</strong>：收 668.72，<b>+1.34%</b>；MA50 552.36，MA200 413.12，强多头排列；RSI(14) <strong>65.4</strong>（偏热未超买）；距 52 周高 671.83 仅 −0.46%，贴历史高位。</li>
-          <li><strong>标普 500（^GSPC）</strong>：收盘 7,473.20，MA50 7,328.60，MA200 6,907.76，金叉多头排列；RSI(14) <strong>53.3</strong>——中性；失守 7,500 整数关口，短线偏震荡，MA50 支撑 7,328。</li>
-          <li><strong>道琼斯（^DJI）</strong>：收 51,722.68，+0.31%；MA50 50,010.49，MA200 48,185.51；RSI(14) <strong>60.2</strong>（四指数中最强、偏多）；距 52 周高 52,281 约 −1.07%。</li>
-        </ul>
+        <div class="techviz">
+
+          <div class="tcard">
+            <div class="tchart" id="tv-IXIC"></div>
+            <div class="tinfo">
+              <div class="tname">纳斯达克综合 <span class="ttk">^IXIC</span> <span class="tchg down">−1.32%</span></div>
+              <div class="tchips"><span>价 &gt; MA50 &gt; MA200</span><span>金叉 · 多头</span><span>RSI 51.4 最弱</span><span>距高 −3.76%</span></div>
+              <div class="ttxt">收 26,166.60；MA50 25,619.20、MA200 23,551.99，多头排列、金叉延续；RSI(14) 51.4（四指数最弱、中性）；近 20 日 swing 支撑约在 MA50（25,619），距 52 周高 27,190 约 −3.76%。</div>
+            </div>
+          </div>
+
+          <div class="tcard">
+            <div class="tchart" id="tv-SMH"></div>
+            <div class="tinfo">
+              <div class="tname">半导体 <span class="ttk">SMH</span> <span class="tchg up">+1.34%</span></div>
+              <div class="tchips"><span>价 &gt; MA50 &gt; MA200</span><span>强多头</span><span>RSI 65.4 偏热</span><span>距高 −0.46%</span></div>
+              <div class="ttxt">收 668.72；MA50 552.36、MA200 413.12，强多头排列，价距 MA50 高出 21%、短线乖离偏大；RSI(14) 65.4（偏热未超买）；距 52 周高 671.83 仅 −0.46%，贴历史高位。</div>
+            </div>
+          </div>
+
+          <div class="tcard">
+            <div class="tchart" id="tv-GSPC"></div>
+            <div class="tinfo">
+              <div class="tname">标普 500 <span class="ttk">^GSPC</span> <span class="tchg down">−0.37%</span></div>
+              <div class="tchips"><span>价 &gt; MA50 &gt; MA200</span><span>金叉 · 多头</span><span>RSI 53.3 中性</span><span>距高 −1.94%</span></div>
+              <div class="ttxt">收 7,473.20；MA50 7,328.60、MA200 6,907.76，金叉多头排列；RSI(14) 53.3——中性；失守 7,500 整数关口，短线偏震荡，MA50（7,328）为关键支撑。</div>
+            </div>
+          </div>
+
+          <div class="tcard">
+            <div class="tchart" id="tv-DJI"></div>
+            <div class="tinfo">
+              <div class="tname">道琼斯 <span class="ttk">^DJI</span> <span class="tchg up">+0.31%</span></div>
+              <div class="tchips"><span>价 &gt; MA50 &gt; MA200</span><span>金叉 · 多头</span><span>RSI 60.2 最强</span><span>距高 −1.07%</span></div>
+              <div class="ttxt">收 51,722.68；MA50 50,010.49、MA200 48,185.51，多头排列；RSI(14) 60.2（四指数中最强、偏多）；价值/周期占优逆势收涨，距 52 周高 52,281 约 −1.07%。</div>
+            </div>
+          </div>
+
+        </div>
+        <div class="tlegend"><span class="lg-px">━ 收盘价</span><span class="lg-50">━ MA50</span><span class="lg-200">━ MA200</span><span class="lg-cap">· 近 50 个交易日 · 悬停查值</span></div>
       </div>
 
       <div class="block">
@@ -946,6 +980,45 @@
     mk(document.getElementById("gBR"), gaugeOpt(62,0,100,[[0.3,RED],[0.5,GOLD],[0.7,MUTED],[1,GREEN]],"%"));
   }
 
+  /* ④ 技术分析 · 三线小图（收盘价 / MA50 / MA200，近 50 交易日） */
+  var MA200_COL="#7E8FE6", techBuilt=false;
+  function maSeries(close,n){
+    var out=[],sum=0;
+    for(var i=0;i<close.length;i++){
+      sum+=close[i];
+      if(i>=n)sum-=close[i-n];
+      out.push(i>=n-1?sum/n:null);
+    }
+    return out;
+  }
+  function buildTech(){
+    if(techBuilt)return; techBuilt=true;
+    if(typeof MARKET_DATA==="undefined")return;
+    [["IXIC","tv-IXIC"],["SMH","tv-SMH"],["GSPC","tv-GSPC"],["DJI","tv-DJI"]].forEach(function(d){
+      var k=d[0],el=document.getElementById(d[1]); if(!el||!MARKET_DATA[k])return;
+      var rows=MARKET_DATA[k], close=rows.map(function(r){return r[4];});
+      var ma50=maSeries(close,50), ma200=maSeries(close,200);
+      var N=Math.min(50,rows.length), s=rows.length-N;
+      var dates=rows.slice(s).map(function(r){return r[0];});
+      mk(el,{
+        grid:{left:48,right:10,top:10,bottom:18},
+        tooltip:{trigger:"axis",backgroundColor:"rgba(16,22,54,.92)",borderColor:"rgba(202,220,252,.3)",textStyle:{color:ICE,fontSize:11},
+          formatter:function(p){var t=p[0].name;p.forEach(function(x){if(x.value!=null)t+="<br>"+x.marker+x.seriesName+" "+(+x.value).toLocaleString("en-US",{maximumFractionDigits:2});});return t;}},
+        xAxis:{type:"category",data:dates,boundaryGap:false,
+          axisLabel:{color:MUTED,fontSize:9,interval:Math.floor(N/4),formatter:function(v){return v.slice(5);}},
+          axisLine:{lineStyle:{color:"rgba(202,220,252,.2)"}},axisTick:{show:false}},
+        yAxis:{type:"value",scale:true,
+          axisLabel:{color:MUTED,fontSize:9,formatter:function(v){return v>=1000?(v/1000).toFixed(1)+"k":v.toFixed(0);}},
+          splitLine:{lineStyle:{color:"rgba(202,220,252,.1)"}}},
+        series:[
+          {name:"收盘",type:"line",data:close.slice(s),symbol:"none",lineStyle:{width:2,color:ICE},z:3},
+          {name:"MA50",type:"line",data:ma50.slice(s),symbol:"none",smooth:true,lineStyle:{width:1.4,color:GOLD},z:2},
+          {name:"MA200",type:"line",data:ma200.slice(s),symbol:"none",smooth:true,lineStyle:{width:1.4,color:MA200_COL},z:1}
+        ]
+      });
+    });
+  }
+
   /* ③ 零售销售实际 vs 预期 */
   var cpiBuilt=false;
   function buildCpi(){
@@ -969,7 +1042,7 @@
 
   function go(page){
     if(page==="market")setTimeout(buildSparks,80);
-    if(page==="tech")setTimeout(buildCockpit,80);
+    if(page==="tech"){setTimeout(buildCockpit,80);setTimeout(buildTech,90);}
     if(page==="macro")setTimeout(buildCpi,80);
   }
   document.addEventListener("click",function(e){var b=e.target.closest(".nav-btn");if(b)go(b.dataset.page);});
