@@ -128,13 +128,14 @@
 
       <div class="chart-card">
         <div class="block-title">主追踪指数当日涨跌（%）</div>
-        <div class="bar-row"><span class="lbl">半导体<span class="tk">SMH</span></span><span class="bar-track"><span class="bar pos" data-w="8.4"></span></span><span class="val up">+1.34%</span></div>
-        <div class="bar-row"><span class="lbl">罗素 2000<span class="tk">^RUT</span></span><span class="bar-track"><span class="bar pos" data-w="4.8"></span></span><span class="val up">+0.77%</span></div>
-        <div class="bar-row"><span class="lbl">道琼斯<span class="tk">^DJI</span></span><span class="bar-track"><span class="bar pos" data-w="1.9"></span></span><span class="val up">+0.31%</span></div>
-        <div class="bar-row"><span class="lbl">黄金现货<span class="tk">GC=F</span></span><span class="bar-track"><span class="bar neg" data-w="2.9"></span></span><span class="val down">−0.46%</span></div>
-        <div class="bar-row"><span class="lbl">标普 500<span class="tk">^GSPC</span></span><span class="bar-track"><span class="bar neg" data-w="2.3"></span></span><span class="val down">−0.37%</span></div>
-        <div class="bar-row"><span class="lbl">纳斯达克综合<span class="tk">^IXIC</span></span><span class="bar-track"><span class="bar neg" data-w="8.3"></span></span><span class="val down">−1.32%</span></div>
-        <div class="chart-note">柱长按 ±8% 标尺缩放；指数分化明显——SMH/道指/小盘逆势走强，纳指被 Mag7 权重拖累。</div>
+        <!-- 柱宽标尺动态取当日最大|涨跌|向上取整至 1% 或 2%（今日 max 1.34% → ±2%）；data-w = |%| ÷ 2 × 50 = |%| × 25，满格 50% 轨道 -->
+        <div class="bar-row"><span class="lbl">半导体<span class="tk">SMH</span></span><span class="bar-track"><span class="bar pos" data-w="33.5"></span></span><span class="val up">+1.34%</span></div>
+        <div class="bar-row"><span class="lbl">罗素 2000<span class="tk">^RUT</span></span><span class="bar-track"><span class="bar pos" data-w="19.3"></span></span><span class="val up">+0.77%</span></div>
+        <div class="bar-row"><span class="lbl">道琼斯<span class="tk">^DJI</span></span><span class="bar-track"><span class="bar pos" data-w="7.8"></span></span><span class="val up">+0.31%</span></div>
+        <div class="bar-row"><span class="lbl">黄金现货<span class="tk">GC=F</span></span><span class="bar-track"><span class="bar neg" data-w="11.5"></span></span><span class="val down">−0.46%</span></div>
+        <div class="bar-row"><span class="lbl">标普 500<span class="tk">^GSPC</span></span><span class="bar-track"><span class="bar neg" data-w="9.3"></span></span><span class="val down">−0.37%</span></div>
+        <div class="bar-row"><span class="lbl">纳斯达克综合<span class="tk">^IXIC</span></span><span class="bar-track"><span class="bar neg" data-w="33.0"></span></span><span class="val down">−1.32%</span></div>
+        <div class="chart-note">指数分化明显——SMH/道指/小盘逆势走强，纳指被 Mag7 权重拖累。</div>
       </div>
 
       <div class="tbl-wrap"><table>
@@ -152,7 +153,9 @@
 
       <div class="block">
         <div class="block-title">当日盘面综述</div>
-        <p>今日美股最鲜明的特征是<strong>"板块大轮动而非系统性下跌"</strong>：纳指综合 −1.32% 看似疲软，但完全由 Mag7 权重股拖累——<strong>GOOGL −5.02%、AMZN −4.75%、MSFT −3.20%、META −2.32%</strong> 集体走弱；与此同时道指 +0.31%、罗素2000 +0.77% 逆势收涨，半导体 SMH +1.34%、存储与光通信链全面爆发，呈现"权重失血、广度其实尚可"的内部分化。<strong>领跌主线是 Mag7 的"AI 人才出走"叙事</strong>——Google 两位顶级 AI 科学家（Gemini 的 Shazeer、DeepMind 诺奖得主 Jumper）接连转投 OpenAI 与 Anthropic，周末发酵、周一兑现，叠加加州法院不利判决与英国监管收紧，GOOGL 盘中一度跌逾 7%，并通过通信服务（XLC −2.33%）、可选消费（XLY −1.84%）向指数施压。<strong>领涨主线则是存储+光通信+AI 服务器</strong>：Needham 把 MU 目标价大幅上调至 $1,550 点燃存储链，CRDO/COHR/CIEN/FN 等光通信标的在前期 CPO 担忧急跌后强力反弹，SMCI 凭 Vera Rubin 液冷方案暴涨 +15.66%。VIX +7.01% 至 17.55，权重端避险情绪升温，但绝对水平仍属低波动区间。</p>
+        <p>今日美股最鲜明的特征是<strong>"板块大轮动而非系统性下跌"</strong>：纳指综合 −1.32% 看似疲软，但完全由 Mag7 权重股拖累——<strong>GOOGL −5.02%、AMZN −4.75%、MSFT −3.20%、META −2.32%</strong> 集体走弱；与此同时道指 +0.31%、罗素2000 +0.77% 逆势收涨，半导体 SMH +1.34%、存储与光通信链全面爆发，呈现"权重失血、广度其实尚可"的内部分化。</p>
+        <p><strong>领跌主线是 Mag7 的"AI 人才出走"叙事</strong>——Google 两位顶级 AI 科学家（Gemini 的 Shazeer、DeepMind 诺奖得主 Jumper）接连转投 OpenAI 与 Anthropic，周末发酵、周一兑现，叠加加州法院不利判决与英国监管收紧，GOOGL 盘中一度跌逾 7%，并通过通信服务（XLC −2.33%）、可选消费（XLY −1.84%）向指数施压。</p>
+        <p><strong>领涨主线则是存储 + 光通信 + AI 服务器</strong>：Needham 把 MU 目标价大幅上调至 $1,550 点燃存储链，CRDO/COHR/CIEN/FN 等光通信标的在前期 CPO 担忧急跌后强力反弹，SMCI 凭 Vera Rubin 液冷方案暴涨 +15.66%。VIX +7.01% 至 17.55，权重端避险情绪升温，但绝对水平仍属低波动区间。</p>
       </div>
 
       <div class="block">
@@ -218,23 +221,13 @@
       </div>
 
       <div class="block">
-        <div class="block-title">A · 技术指标（逐指数读数 · MA/RSI 快照实算值）</div>
+        <div class="block-title">A · 技术指标（各指数均线与 RSI 读数）</div>
         <ul>
-          <li><strong>标普 500（^GSPC）</strong>：收盘 7,473.20，MA50 7,328.60，MA200 6,907.76，金叉多头排列；RSI(14) <strong>53.3</strong>——中性；失守 7,500 整数关口，短线偏震荡，MA50 支撑 7,328。</li>
           <li><strong>纳斯达克综合（^IXIC）</strong>：收 26,166.60，−1.32%；MA50 25,619.20，MA200 23,551.99；RSI(14) <strong>51.4</strong>（最弱，中性）；近 20 日 swing 支撑约在 MA50（25,619），距 52 周高 27,190 约 −3.76%。</li>
-          <li><strong>道琼斯（^DJI）</strong>：收 51,722.68，+0.31%；MA50 50,010.49，MA200 48,185.51；RSI(14) <strong>60.2</strong>（四指数中最强、偏多）；距 52 周高 52,281 约 −1.07%。</li>
           <li><strong>半导体 SMH</strong>：收 668.72，<b>+1.34%</b>；MA50 552.36，MA200 413.12，强多头排列；RSI(14) <strong>65.4</strong>（偏热未超买）；距 52 周高 671.83 仅 −0.46%，贴历史高位。</li>
+          <li><strong>标普 500（^GSPC）</strong>：收盘 7,473.20，MA50 7,328.60，MA200 6,907.76，金叉多头排列；RSI(14) <strong>53.3</strong>——中性；失守 7,500 整数关口，短线偏震荡，MA50 支撑 7,328。</li>
+          <li><strong>道琼斯（^DJI）</strong>：收 51,722.68，+0.31%；MA50 50,010.49，MA200 48,185.51；RSI(14) <strong>60.2</strong>（四指数中最强、偏多）；距 52 周高 52,281 约 −1.07%。</li>
         </ul>
-      </div>
-
-      <div class="chart-card">
-        <div class="block-title">半导体 SMH · 近期走势 — 逼近历史高</div>
-        <div class="minibar-wrap">
-          <div class="minibar"><span class="pct up">+5.76%</span><span class="col pos" style="height:36px"></span><span class="day">6/18 代工爆发</span></div>
-          <div class="minibar"><span class="pct">—</span><span class="col" style="height:3px;background:var(--border)"></span><span class="day">6/19 休市</span></div>
-          <div class="minibar"><span class="pct up">+1.34%</span><span class="col pos" style="height:8px"></span><span class="day">6/22 存储链</span></div>
-        </div>
-        <div class="chart-note">收 668.72，<b style="color:var(--green)">+1.34%</b>，距 52 周高 671.83 仅 −0.46%；存储/光通信/设备链共振，逼近历史高（柱高按 ±7% 标尺示意）。</div>
       </div>
 
       <div class="block">
@@ -914,7 +907,7 @@
         +'<span class="sk-badge" style="background:'+(up?"rgba(47,179,68,.18)":"rgba(224,59,66,.18)")+';color:'+(up?GREEN:RED)+'">'+(up?"+":"")+pc.toFixed(2)+'%</span></div>'
         +'<div class="sk-chart"></div><div class="sk-cap">近 30 个交易日 · 悬停查价</div>';
       g.appendChild(card);
-      var col=rows[rows.length-1][4]>=rows[0][4]?GREEN:RED;
+      var col=up?GREEN:RED;
       mk(card.querySelector(".sk-chart"),{
         grid:{left:0,right:0,top:4,bottom:0},
         xAxis:{type:"category",show:false,data:rows.map(function(r){return r[0];})},
