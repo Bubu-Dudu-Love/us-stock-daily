@@ -281,8 +281,9 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
 .stock-body .stock-tile{background:var(--navy-dark);border-color:rgba(202,220,252,.18);}
 /* 板块轮动卡片（中文名+涨跌幅+分析，2026-06-23+；深色底+涨跌分行 2026-06-24+） */
 .sector-grid{display:flex;flex-direction:column;gap:10px;margin:10px 0;}
-.sector-row{display:flex;flex-wrap:wrap;gap:10px;}
-.sector-tile{flex:1 1 150px;min-width:140px;background:var(--navy-dark);border-radius:8px;padding:14px 12px;border-top:3px solid var(--accent,var(--green));}
+.sector-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.sector-tile{background:var(--navy-dark);border-radius:8px;padding:14px 12px;border-top:3px solid var(--accent,var(--green));}
+@media(max-width:700px){.sector-row{grid-template-columns:repeat(2,1fr);}}
 .sc-name{font-weight:700;font-size:15px;color:var(--ice);margin-bottom:4px;}
 .sc-pct{font-size:22px;font-weight:800;color:var(--accent,var(--green));margin-bottom:6px;}
 .sc-desc{font-size:12px;color:var(--subink);line-height:1.5;}
