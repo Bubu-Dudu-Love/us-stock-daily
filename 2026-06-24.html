@@ -248,13 +248,14 @@
       <div class="page-head">
         <span class="sec-no">III / TECHNICALS &amp; FLOWS</span>
         <h2>技术面与资金面</h2>
-        <div class="desc">标普 RSI 46.4（实算）· VIX 19.94（+2.31%，未恐慌）· 广度 RSP−SPY +0.85pp（普涨健康）· 纳指跌破 50 日线</div>
+        <div class="desc">标普 RSI 46.4（实算）· VIX 19.94（+2.31%，未恐慌）· 恐惧贪婪 26 恐惧区 · 广度 RSP−SPY +0.85pp（普涨健康）· 纳指跌破 50 日线</div>
       </div>
 
       <div class="chart-card" id="cockpitCard" hidden>
         <div class="block-title" style="color:#fff;">技术面仪表盘 · 情绪与动能</div>
         <div class="cockpit-grid">
           <div class="cockpit-cell"><div class="cp-gauge" id="gVIX"></div><div class="cp-label">VIX</div><div class="cp-note">19.94 · +2.31%，温和警惕、未恐慌</div></div>
+          <div class="cockpit-cell"><div class="cp-gauge" id="gFG"></div><div class="cp-label">恐惧贪婪指数</div><div class="cp-note">26 · 恐惧区</div></div>
           <div class="cockpit-cell"><div class="cp-gauge" id="gRSI"></div><div class="cp-label">标普 RSI(14)</div><div class="cp-note">46.4 中性偏弱，贴近 50 日线</div></div>
           <div class="cockpit-cell"><div class="cp-gauge" id="gBR"></div><div class="cp-label">广度(RSP−SPY)</div><div class="cp-note">+0.85pp · 等权重跑赢，普涨健康</div></div>
         </div>
@@ -262,6 +263,7 @@
 
       <div class="stat-grid">
         <div class="stat"><div class="k">VIX 恐慌指数</div><div class="v" style="color:var(--red)">19.94</div><div class="d">^VIX 6/24 真实收盘，+2.31%；小幅上行至"温和警惕"区间，低于 25 的恐慌阈值——与"板块轮动/拥挤仓位去杠杆"而非系统性危机的叙事一致</div></div>
+        <div class="stat"><div class="k">CNN 恐惧贪婪指数</div><div class="v" style="color:#A77B12">26</div><div class="d">恐惧区（Fear）· 较前日 27.5 略降，延续恐惧区间，与拥挤仓位去杠杆、风险偏好回落的主线一致。来源：CNN 官方接口直取</div></div>
         <div class="stat"><div class="k">标普 RSI(14)</div><div class="v">46.4</div><div class="d">Wilder 法实算 · 中性偏弱，贴近 50 日线（MA50 7,349）；四标的 RSI 全在 40–62 区间，无指数级超买超卖</div></div>
         <div class="stat"><div class="k">广度 RSP−SPY</div><div class="v" style="color:var(--green)">+0.85pp</div><div class="d">等权重 RSP +0.69% 跑赢市值加权 SPY −0.16%，差值正——普遍参与度健康，是少数权重科技股在拖指数，印证"轮动而非普跌"。取数器真实收盘，不存疑</div></div>
       </div>
@@ -314,6 +316,7 @@
         <div class="block-title">B · 波动率与情绪</div>
         <ul>
           <li><strong>VIX</strong>：6/24 收 <strong>19.94</strong>（^VIX 真实收盘，<strong>+2.31%</strong>）——小幅上行至"温和警惕"区间，<strong>低于 25 的恐慌阈值</strong>，与"板块轮动/拥挤仓位去杠杆"而非系统性危机的叙事一致。</li>
+          <li><strong>CNN 恐惧贪婪指数 26（恐惧区）</strong>：较前日 27.5 略降，延续"Fear（恐惧）"区间，与拥挤仓位去杠杆、风险偏好回落的主线一致。</li>
           <li><strong>市场广度（RSP−SPY）</strong>：等权重 RSP +0.69% 跑赢市值加权 SPY −0.16%，差值 <strong>+0.85pp（正）</strong>——普遍参与度健康，是少数权重科技股在拖指数，印证当日"轮动而非普跌"。</li>
         </ul>
       </div>
@@ -894,6 +897,7 @@
            +(up?"+":"")+pc.toFixed(2)+'%</span></span>';
     });
     html+='<span class="tape-item"><span class="tk">VIX</span><span class="num">19.94</span><span class="pc" style="color:#E03B42">+2.31%</span></span>';
+    html+='<span class="tape-item"><span class="tk">恐惧贪婪指数</span><span class="pc" style="color:#E8B339">26 · 恐惧</span></span>';
     track.innerHTML=html+html;
     tape.hidden=false;
   }
@@ -1016,6 +1020,7 @@
     var card=document.getElementById("cockpitCard"); if(!card)return;
     card.hidden=false;
     mk(document.getElementById("gVIX"),gaugeOpt(19.94,0,40,[[0.375,GREEN],[0.5,GOLD],[0.75,RED],[1,"#8C2328"]],""));
+    mk(document.getElementById("gFG"), gaugeOpt(26,0,100,[[0.25,RED],[0.45,GOLD],[0.55,MUTED],[0.75,"#9CC97A"],[1,GREEN]],""));
     mk(document.getElementById("gRSI"),gaugeOpt(46.4,0,100,[[0.3,GREEN],[0.7,MUTED],[1,RED]],""));
     mk(document.getElementById("gBR"), gaugeOpt(0.85,-1.5,1.5,[[0.333,RED],[0.667,GOLD],[1,GREEN]],"pp"));
   }
