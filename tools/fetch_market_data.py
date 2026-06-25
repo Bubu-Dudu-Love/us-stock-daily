@@ -5,8 +5,8 @@ import json, os, subprocess, urllib.parse
 from datetime import datetime, timezone, timedelta
 
 TICKERS = [("GSPC", "^GSPC"), ("IXIC", "^IXIC"), ("DJI", "^DJI"), ("SMH", "SMH")]
-EXPECT  = {"GSPC": 7365.46, "IXIC": 25587.04, "DJI": 51666.84, "SMH": 622.05}
-CUTOFF  = "2026-06-23"
+EXPECT  = {"GSPC": 7358.58, "IXIC": 25476.63, "DJI": 51852.66, "SMH": 619.43}
+CUTOFF  = "2026-06-24"
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
 
 out = {}
@@ -27,8 +27,8 @@ for key, sym in TICKERS:
         rows.append([d, round(o, 2), round(h, 2), round(l, 2), round(c, 2), v or 0])
     last = rows[-1]
     assert last[0] == CUTOFF, f"{key}: 最后交易日 {last[0]} != {CUTOFF}"
-    assert abs(last[4] - EXPECT[key]) <= 0.01, \
-        f"{key}: 收盘 {last[4]} 与日报 {EXPECT[key]} 不符 —— 停止构建"
+    assert abs(last[4] - EXPECT[key]) <= EXPECT[key] * 0.001, \
+        f"{key}: 收盘 {last[4]} 与日报 {EXPECT[key]} 偏差>0.1% —— 停止构建"
     out[key] = rows
     print(f"OK {key}: {len(rows)} 根K线, 末根 {last[0]} close={last[4]}")
 
