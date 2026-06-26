@@ -297,6 +297,14 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
 .dd-lead{font-size:15.5px;color:var(--ice);margin-bottom:15px;line-height:1.75;}
 .dd-sec{font-size:14.5px;line-height:1.95;margin-bottom:11px;color:var(--ice);}
 .dd-sec b{color:#fff;}
+/* 个股深读卡 v2（图表+指标面板上下结构，2026-06-25 起）：加 dd-chart-layout 修饰类才生效，
+   不改 .deepdive 默认规则，旧版卡片（dd-left/dv-ruler 布局）继续按原样渲染，互不影响 */
+.deepdive.dd-chart-layout{flex-direction:column;gap:20px;}
+.dd-top{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px;align-items:start;}
+.dd-chart{height:210px;width:100%;}
+.dd-panel{font-size:12.5px;}
+.dd-legend{display:flex;flex-wrap:wrap;gap:14px;font-size:10.5px;color:var(--muted);margin-top:8px;font-family:var(--mono);}
+@media(max-width:820px){.dd-top{grid-template-columns:1fr;}.dd-chart{height:190px;}}
 /* 技术位可视化（替代雷达，纯 CSS）*/
 .dd-viz{font-size:12.5px;}
 .dv-title{font-weight:700;color:#fff;font-size:14px;margin-bottom:8px;}

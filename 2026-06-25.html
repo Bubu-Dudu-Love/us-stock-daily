@@ -506,13 +506,12 @@
       </div>
 
       <!-- AAPL 深读卡 -->
-      <div class="deepdive">
-        <div class="dd-left">
-          <div class="dd-head"><span class="dd-tkr">AAPL · AI 超大厂/消费电子</span><span class="dd-pct down">−6.13%</span></div>
-          <div class="dd-viz">
+      <div class="deepdive dd-chart-layout">
+        <div class="dd-head"><span class="dd-tkr">AAPL · AI 超大厂/消费电子</span><span class="dd-pct down">−6.13%</span></div>
+        <div class="dd-top">
+          <div class="dd-chart" id="dd-AAPL"></div>
+          <div class="dd-panel">
             <div class="dv-title">技术位</div>
-            <div class="dv-ends"><span>支撑 $273.75</span><span>阻力 $317.40</span></div>
-            <div class="dv-ruler"><i class="dv-ma" data-l="MA50 $291.15" style="left:40%"></i><i class="dv-now" data-l="现价 $275.11" style="left:3%"></i></div>
             <div class="dv-row"><span class="dv-k">RSI</span><span class="dv-bar"><i class="neg" style="width:32%"></i></span><span class="dv-v">32.2 逼近超卖</span></div>
             <div class="dv-row"><span class="dv-k">量能</span><span class="dv-bar"><i style="width:81%"></i></span><span class="dv-v">1.61× 放量下跌</span></div>
             <div class="dv-row"><span class="dv-k">距52高</span><span class="dv-bar"><i class="neg" style="width:13%"></i></span><span class="dv-v">−13.3%</span></div>
@@ -521,6 +520,7 @@
               <div class="dv-sig down"><b>MACD 死叉</b> — DIF −1.59 / DEA 1.2，空头</div>
               <div class="dv-sig"><b>Fib 38.2% $272.27 / 50% $258.33</b> — 现价贴近 38.2% 支撑，跌破则下看 50%</div>
             </div>
+            <div class="dd-legend"><span style="color:#CADCFC">━ 收盘</span><span style="color:#9CC97A">━ MA20</span><span style="color:#E8B339">━ MA50</span><span style="color:#7E8FE6">━ MA200</span></div>
           </div>
         </div>
         <div class="dd-body">
@@ -532,13 +532,12 @@
       </div>
 
       <!-- AMAT 深读卡 -->
-      <div class="deepdive">
-        <div class="dd-left">
-          <div class="dd-head"><span class="dd-tkr">AMAT · 半导体制造设备</span><span class="dd-pct up">+13.42%</span></div>
-          <div class="dd-viz">
+      <div class="deepdive dd-chart-layout">
+        <div class="dd-head"><span class="dd-tkr">AMAT · 半导体制造设备</span><span class="dd-pct up">+13.42%</span></div>
+        <div class="dd-top">
+          <div class="dd-chart" id="dd-AMAT"></div>
+          <div class="dd-panel">
             <div class="dv-title">技术位</div>
-            <div class="dv-ends"><span>支撑 $438.22</span><span>阻力 $669.22</span></div>
-            <div class="dv-ruler"><i class="dv-ma" data-l="MA50 $463.56" style="left:11%"></i><i class="dv-now" data-l="现价 $668.00" style="left:99%"></i></div>
             <div class="dv-row"><span class="dv-k">RSI</span><span class="dv-bar"><i style="width:73%"></i></span><span class="dv-v">72.5 超买</span></div>
             <div class="dv-row"><span class="dv-k">量能</span><span class="dv-bar"><i style="width:72%"></i></span><span class="dv-v">1.44× 放量上涨</span></div>
             <div class="dv-row"><span class="dv-k">距52高</span><span class="dv-bar"><i class="neg" style="width:0%"></i></span><span class="dv-v">−0.2%</span></div>
@@ -547,6 +546,7 @@
               <div class="dv-sig up"><b>MACD 金叉</b> — DIF 50.34 / DEA 42.16，多头</div>
               <div class="dv-sig"><b>逼近 52 周高 $669.22</b> — 近 20 日 swing 阻力同位，短线有超买回踩风险</div>
             </div>
+            <div class="dd-legend"><span style="color:#CADCFC">━ 收盘</span><span style="color:#9CC97A">━ MA20</span><span style="color:#E8B339">━ MA50</span><span style="color:#7E8FE6">━ MA200</span></div>
           </div>
         </div>
         <div class="dd-body">
@@ -617,6 +617,7 @@
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
 <script src="market_data.js"></script>
+<script src="dd-series-2026-06-25.js"></script>
 <script>
 // MARKET_DATA 为共享多年序列，按本页日期截断
 (function(){
@@ -1007,6 +1008,43 @@
     });
   }
 
+  /* ⑤ 个股深读卡：价格 + MA20/MA50/MA200 + 支撑阻力横线，近 50 个交易日 */
+  var ddBuilt=false;
+  function buildDD(){
+    if(ddBuilt)return; ddBuilt=true;
+    if(typeof DD_SERIES==="undefined")return;
+    [["AAPL","dd-AAPL",273.75,317.40],["AMAT","dd-AMAT",438.22,669.22]].forEach(function(d){
+      var sym=d[0],id=d[1],sup=d[2],res=d[3];
+      var el=document.getElementById(id); if(!el||!DD_SERIES[sym])return;
+      var ser=DD_SERIES[sym], close=ser.closes, dates=ser.dates;
+      var ma20=maSeries(close,20), ma50=maSeries(close,50), ma200=maSeries(close,200);
+      var N=Math.min(50,close.length), s=close.length-N;
+      mk(el,{
+        grid:{left:50,right:14,top:10,bottom:18},
+        tooltip:{trigger:"axis",backgroundColor:"rgba(16,22,54,.92)",borderColor:"rgba(202,220,252,.3)",textStyle:{color:ICE,fontSize:11},
+          formatter:function(p){var t=p[0].name;p.forEach(function(x){if(x.value!=null)t+="<br>"+x.marker+x.seriesName+" $"+(+x.value).toLocaleString("en-US",{maximumFractionDigits:2});});return t;}},
+        xAxis:{type:"category",data:dates.slice(s),boundaryGap:false,
+          axisLabel:{color:MUTED,fontSize:9,interval:Math.floor(N/4),formatter:function(v){return v.slice(5);}},
+          axisLine:{lineStyle:{color:"rgba(202,220,252,.2)"}},axisTick:{show:false}},
+        yAxis:{type:"value",scale:true,
+          axisLabel:{color:MUTED,fontSize:9,formatter:function(v){return "$"+v.toFixed(0);}},
+          splitLine:{lineStyle:{color:"rgba(202,220,252,.1)"}}},
+        series:[
+          {name:"收盘",type:"line",data:close.slice(s),symbol:"none",lineStyle:{width:2,color:ICE},z:3,
+            markLine:{symbol:"none",lineStyle:{type:"dashed",width:1},
+              label:{position:"insideStartTop",fontSize:10,fontFamily:"SF Mono,Menlo,monospace"},
+              data:[
+                {yAxis:sup,lineStyle:{color:GREEN},label:{color:GREEN,formatter:"支撑 $"+sup}},
+                {yAxis:res,lineStyle:{color:RED},label:{color:RED,formatter:"阻力 $"+res}}
+              ]}},
+          {name:"MA20",type:"line",data:ma20.slice(s),symbol:"none",smooth:true,lineStyle:{width:1.2,color:"#9CC97A"},z:2},
+          {name:"MA50",type:"line",data:ma50.slice(s),symbol:"none",smooth:true,lineStyle:{width:1.4,color:GOLD},z:2},
+          {name:"MA200",type:"line",data:ma200.slice(s),symbol:"none",smooth:true,lineStyle:{width:1.4,color:MA200_COL},z:1}
+        ]
+      });
+    });
+  }
+
   /* ③ 零售销售实际 vs 预期 */
   var cpiBuilt=false;
   function buildCpi(){
@@ -1032,6 +1070,7 @@
     if(page==="market")setTimeout(buildSparks,80);
     if(page==="tech"){setTimeout(buildCockpit,80);setTimeout(buildTech,90);}
     if(page==="macro")setTimeout(buildCpi,80);
+    if(page==="stocks")setTimeout(buildDD,80);
   }
   document.addEventListener("click",function(e){var b=e.target.closest(".nav-btn");if(b)go(b.dataset.page);});
   go(location.hash.replace("#","")||"radar");
