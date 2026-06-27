@@ -263,7 +263,7 @@
 
       <div class="stat-grid">
         <div class="stat"><div class="k">VIX 恐慌指数</div><div class="v" style="color:var(--green)">18.50</div><div class="d">^VIX 6/26 真实收盘，−2.06%；科技股集中杀跌却不升反降，印证当日是有序板块轮动而非系统性恐慌</div></div>
-        <div class="stat"><div class="k">CNN 恐惧贪婪指数</div><div class="v" style="color:var(--red)">24.7</div><div class="d">CNN 官方接口当日读数，已落入「极度恐惧」区间，与 VIX 的平静形成温差——综合动量/广度/避险等因子的情绪面已偏冷</div></div>
+        <div class="stat"><div class="k">CNN 恐惧贪婪指数</div><div class="v" style="color:var(--red)">24.7</div><div class="d">已落入「极度恐惧」区间，与 VIX 的平静形成温差——综合动量/广度/避险等因子的情绪面已偏冷</div></div>
         <div class="stat"><div class="k">标普 RSI(14)</div><div class="v">46.0</div><div class="d">Wilder 法实算 · 中性偏弱，卡在 MA50（7,363.42）下沿，是短线多空分水岭</div></div>
         <div class="stat"><div class="k">广度 RSP−SPY</div><div class="v" style="color:var(--green)">+0.90pp</div><div class="d">等权重 RSP +0.31% 跑赢市值加权 SPY −0.59%，差值正——平均个股其实在涨，是少数权重科技股在拖指数，印证"轮动而非全面抛售"。取数器真实收盘，不存疑</div></div>
       </div>
@@ -1079,10 +1079,11 @@
     var card=document.getElementById("cpiCard"); if(!card)return;
     card.hidden=false;
     mk(document.getElementById("cpiBars"),{
-      grid:{left:60,right:80,top:30,bottom:24},
+      grid:{left:88,right:80,top:30,bottom:24},
       legend:{data:["实际","预期","前值"],textStyle:{color:MUTED,fontSize:11},top:0,right:0},
       xAxis:{type:"value",axisLabel:{color:MUTED,fontSize:10.5},splitLine:{lineStyle:{color:"rgba(202,220,252,.12)"}}},
-      yAxis:{type:"category",data:["密歇根消费者信心终值"],axisLabel:{color:ICE,fontSize:11.5,fontWeight:600},axisLine:{lineStyle:{color:"rgba(202,220,252,.3)"}}},
+      yAxis:{type:"category",data:["密歇根消费者信心终值"],axisLabel:{color:ICE,fontSize:11.5,fontWeight:600,
+        formatter:function(v){return v.length>6?v.slice(0,6)+"\n"+v.slice(6):v;}},axisLine:{lineStyle:{color:"rgba(202,220,252,.3)"}}},
       tooltip:{trigger:"axis",backgroundColor:"rgba(16,22,54,.92)",borderColor:"rgba(202,220,252,.3)",textStyle:{color:ICE,fontSize:12}},
       series:[
         {name:"实际",type:"bar",barWidth:16,data:[49.5],itemStyle:{color:RED,borderRadius:2},
