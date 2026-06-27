@@ -129,13 +129,13 @@
       <div class="chart-card">
         <div class="block-title">主追踪当日涨跌（%）</div>
         <!-- 柱宽标尺动态取当日最大|涨跌|向上取整（今日 max SMH −3.97% → ±4%）；data-w = |%| ÷ 4 × 50，满格 50% 轨道 -->
-        <div class="bar-row"><span class="lbl">半导体<span class="tk">SMH</span></span><span class="bar-track"><span class="bar neg" data-w="49.6"></span></span><span class="val down">−3.97%</span></div>
         <div class="bar-row"><span class="lbl">黄金现货<span class="tk">GC=F</span></span><span class="bar-track"><span class="bar pos" data-w="18.0"></span></span><span class="val up">+1.44%</span></div>
-        <div class="bar-row"><span class="lbl">罗素 2000<span class="tk">^RUT</span></span><span class="bar-track"><span class="bar neg" data-w="6.0"></span></span><span class="val down">−0.48%</span></div>
-        <div class="bar-row"><span class="lbl">纳斯达克综合<span class="tk">^IXIC</span></span><span class="bar-track"><span class="bar neg" data-w="3.0"></span></span><span class="val down">−0.24%</span></div>
-        <div class="bar-row"><span class="lbl">道琼斯<span class="tk">^DJI</span></span><span class="bar-track"><span class="bar neg" data-w="1.1"></span></span><span class="val down">−0.09%</span></div>
-        <div class="bar-row"><span class="lbl">标普 500<span class="tk">^GSPC</span></span><span class="bar-track"><span class="bar neg" data-w="0.6"></span></span><span class="val down">−0.05%</span></div>
         <div class="bar-row"><span class="lbl">比特币<span class="tk">BTC-USD</span></span><span class="bar-track"><span class="bar pos" data-w="1.0"></span></span><span class="val up">+0.08%</span></div>
+        <div class="bar-row"><span class="lbl">标普 500<span class="tk">^GSPC</span></span><span class="bar-track"><span class="bar neg" data-w="0.6"></span></span><span class="val down">−0.05%</span></div>
+        <div class="bar-row"><span class="lbl">道琼斯<span class="tk">^DJI</span></span><span class="bar-track"><span class="bar neg" data-w="1.1"></span></span><span class="val down">−0.09%</span></div>
+        <div class="bar-row"><span class="lbl">纳斯达克综合<span class="tk">^IXIC</span></span><span class="bar-track"><span class="bar neg" data-w="3.0"></span></span><span class="val down">−0.24%</span></div>
+        <div class="bar-row"><span class="lbl">罗素 2000<span class="tk">^RUT</span></span><span class="bar-track"><span class="bar neg" data-w="6.0"></span></span><span class="val down">−0.48%</span></div>
+        <div class="bar-row"><span class="lbl">半导体<span class="tk">SMH</span></span><span class="bar-track"><span class="bar neg" data-w="49.6"></span></span><span class="val down">−3.97%</span></div>
         <div class="chart-note">半导体 SMH −3.97% 当日重灾区，存储/设备链集体杀跌；三大指数与比特币几乎收平，黄金 +1.44% 受避险买盘支撑——典型的指数平、内部分化剧烈的轮动杀跌日。</div>
       </div>
 
@@ -544,8 +544,8 @@
               <div class="dv-sig down"><b>MACD 死叉</b> — DIF 9.27 / DEA 9.69，空头</div>
               <div class="dv-sig"><b>Fib 23.6% $273.46 已破 / 38.2% $225.31</b> — 近 20 日 swing 支撑 $230.6</div>
             </div>
-            <div class="dd-legend"><span style="color:#CADCFC">━ 收盘</span><span style="color:#9CC97A">━ MA20</span><span style="color:#E8B339">━ MA50</span><span style="color:#7E8FE6">━ MA200</span></div>
           </div>
+          <div class="dd-legend"><span style="color:#CADCFC">━ 收盘</span><span style="color:#9CC97A">━ MA20</span><span style="color:#E8B339">━ MA50</span><span style="color:#7E8FE6">━ MA200</span></div>
         </div>
         <div class="dd-body">
           <div class="dd-lead">个股深读 · 当日最大跌幅，竞品评级上调触发资金轮出</div>
@@ -570,8 +570,8 @@
               <div class="dv-sig down"><b>MACD 死叉</b> — DIF −13.87 / DEA −9.81，空头</div>
               <div class="dv-sig"><b>阻力 MA50 $410.97 / swing $466.32</b> — 下方支撑 swing $349.2</div>
             </div>
-            <div class="dd-legend"><span style="color:#CADCFC">━ 收盘</span><span style="color:#9CC97A">━ MA20</span><span style="color:#E8B339">━ MA50</span><span style="color:#7E8FE6">━ MA200</span></div>
           </div>
+          <div class="dd-legend"><span style="color:#CADCFC">━ 收盘</span><span style="color:#9CC97A">━ MA20</span><span style="color:#E8B339">━ MA50</span><span style="color:#7E8FE6">━ MA200</span></div>
         </div>
         <div class="dd-body">
           <div class="dd-lead">个股深读 · 当日最强逆势标的，超跌反弹 + 空头回补</div>
@@ -1039,7 +1039,7 @@
   function buildDD(){
     if(ddBuilt)return; ddBuilt=true;
     if(typeof DD_SERIES==="undefined")return;
-    [["AAPL","dd-AAPL",273.75,317.40],["AMAT","dd-AMAT",438.22,669.22]].forEach(function(d){
+    [["BE","dd-BE",230.6,273.72],["MSFT","dd-MSFT",349.2,410.97]].forEach(function(d){
       var sym=d[0],id=d[1],sup=d[2],res=d[3];
       var el=document.getElementById(id); if(!el||!DD_SERIES[sym])return;
       var ser=DD_SERIES[sym], close=ser.closes, dates=ser.dates;
