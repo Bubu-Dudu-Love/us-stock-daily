@@ -8,7 +8,7 @@
 <meta property="og:title" content="美股日报 · 2026-06-26">
 <meta property="og:description" content="指数收平、科技独跌的轮动杀跌日：半导体/存储/AI链集体重挫（BE −18.13%、WDC −13.17%）vs 医疗等防御板块走强 · 广度健康、MSFT +5.71%逆势反弹">
 <link rel="icon" href="data:,">
-<link rel="stylesheet" href="site.css?v=2026-06-26">
+<link rel="stylesheet" href="site.css?v=2026-06-27-stance3">
 </head>
 <body>
 <button id="calBtn" class="cal-btn" hidden>📅 <span id="calCur"></span></button>
@@ -42,7 +42,8 @@
 </header>
 <div class="tape" id="tape" hidden><div class="tape-track" id="tapeTrack"></div></div>
 
-<!-- ============ 摘要 ============ -->
+<!-- ============ 摘要 + 今日研判（左右各半）============ -->
+<div class="top-split">
 <section class="summary">
   <div class="sec-head"><span class="sec-no">SUMMARY</span><h2 class="sec-title">今日摘要</h2></div>
   <div class="sec-sub">TL;DR · 当日最重要的事</div>
@@ -73,6 +74,68 @@
     </div>
   </div>
 </section>
+
+<!-- ============ 今日研判 ============ -->
+<section class="stance">
+  <div class="sec-head"><span class="sec-no">STANCE</span><h2 class="sec-title">今日研判</h2></div>
+  <div class="sec-sub stance-sub"><span>⚠️ 分析观点 · 非投资建议</span></div>
+  <div class="stance-card">
+    <div class="stance-body">
+      <div class="stance-tone"><span class="lead">⭐ 定调：</span>AI/存储链集中获利了结 → 防御轮动日。<b>多触发共振，但属「有序换仓」而非「恐慌出逃」</b>——三大指数几乎收平，杀跌高度集中在高估值 AI 基建链，资金撤向防御/价值。本轮是近期拥挤交易的一次集中宣泄。</div>
+      <ul class="stance-attr">
+        <li>三触发同向利空 AI 链：OpenAI 或将 IPO 推迟至 2027（质疑 AI 基建天量资本开支资金可持续性）；亚太存储股暴跌、软银 <span class="down">−11%</span>+；5 月核心 PCE 3.4% + 鹰派点阵图。</li>
+        <li>tape 读「有序」非「踩踏」：VIX 反降至 <span class="up">18.50</span>、指数收平、10Y 回落 4.372%、等权 RSP <span class="up">+0.31%</span> 跑赢市值加权 SPY <span class="down">−0.59%</span>——换边不清仓。逆势：MSFT <span class="up">+5.71%</span>、ASTS <span class="up">+8.88%</span>。</li>
+        <li>技术分化：道指 RSI 61.1 稳居均线上方最强；纳指 RSI 42.3 失守 MA50 最弱；SMH 虽 <span class="down">−3.97%</span> 仍在 MA50/200 上方且金叉，像获利回吐非反转。</li>
+      </ul>
+
+      <div class="crt-title">大盘条件反应表 <span class="tk">^IXIC · 窗口3交易日或至 7/2 非农 · 横盘界 ±1%</span></div>
+      <div class="crt-legend"><i style="background:var(--green)"></i>涨<i style="background:var(--bg);border:1px solid var(--line)"></i>横<i style="background:var(--red)"></i>跌 · 概率为「给定情景下」的反应倾向，非情景发生概率</div>
+      <div class="crt-item">
+        <div class="crt-trigger"><b>A</b> 轮动消化、指数级别企稳（3 日内 VIX 不破 22 且 SMH 收复 MA50、RSP 续 ≥ SPY）</div>
+        <div class="crt-bar"><div class="crt-seg up modal" style="width:55%">55%</div><div class="crt-seg flat" style="width:30%">30%</div><div class="crt-seg down" style="width:15%">15%</div></div>
+      </div>
+      <div class="crt-item">
+        <div class="crt-trigger"><b>B</b> 拉锯整固、指数无方向（AI 链续弱但防御接力、广度维持轮动）</div>
+        <div class="crt-bar"><div class="crt-seg up" style="width:25%">25%</div><div class="crt-seg flat modal" style="width:50%">50%</div><div class="crt-seg down" style="width:25%">25%</div></div>
+      </div>
+      <div class="crt-item">
+        <div class="crt-trigger"><b>C</b> 轮动升级为去杠杆（VIX 上破 22 且纳指连续收于 MA50 下方、防御也回吐、10Y 重新上行）</div>
+        <div class="crt-bar"><div class="crt-seg up" style="width:15%">15%</div><div class="crt-seg flat" style="width:25%">25%</div><div class="crt-seg down modal" style="width:60%">60%</div></div>
+      </div>
+
+      <div class="crt-title">半导体反应表 <span class="tk">SMH · 横盘界 ±2% · 中继 vs 反转</span></div>
+      <div class="crt-item">
+        <div class="crt-trigger"><b>A</b> 获利回吐到位（3 日内守住 MA50 且不再有存储链单日 ≥10% 急杀）</div>
+        <div class="crt-bar"><div class="crt-seg up modal" style="width:50%">50%</div><div class="crt-seg flat" style="width:28%">28%</div><div class="crt-seg down" style="width:22%">22%</div></div>
+      </div>
+      <div class="crt-item">
+        <div class="crt-trigger"><b>B</b> 阴跌磨底（跌破 MA50 但守 MA200、设备/光通信继续渗血）</div>
+        <div class="crt-bar"><div class="crt-seg up" style="width:22%">22%</div><div class="crt-seg flat" style="width:28%">28%</div><div class="crt-seg down modal" style="width:50%">50%</div></div>
+      </div>
+      <div class="crt-item">
+        <div class="crt-trigger"><b>C</b> 趋势转向确认（连续收于 MA50 下方、金叉转死叉风险升温、存储链续创新低）</div>
+        <div class="crt-bar"><div class="crt-seg up" style="width:15%">15%</div><div class="crt-seg flat" style="width:22%">22%</div><div class="crt-seg down modal" style="width:63%">63%</div></div>
+      </div>
+
+      <div class="crt-title">防御/医疗反应表 <span class="tk">XLV · 横盘界 ±2% · 与 AI 链反向联动</span></div>
+      <div class="crt-item">
+        <div class="crt-trigger"><b>A</b> 轮动持续、避险资金续流入（AI 链仍弱、RSP ≥ SPY、VIX 不破 22）</div>
+        <div class="crt-bar"><div class="crt-seg up modal" style="width:52%">52%</div><div class="crt-seg flat" style="width:30%">30%</div><div class="crt-seg down" style="width:18%">18%</div></div>
+      </div>
+      <div class="crt-item">
+        <div class="crt-trigger"><b>B</b> 风险偏好回暖、资金回流成长（SMH 收复 MA50 且科技重新领涨）</div>
+        <div class="crt-bar"><div class="crt-seg up" style="width:20%">20%</div><div class="crt-seg flat" style="width:33%">33%</div><div class="crt-seg down modal" style="width:47%">47%</div></div>
+      </div>
+
+      <div class="stance-extra">
+        <div class="row"><b>关键观察点：</b>① 存储链次日是否仍单日 ≥10% 急杀（WDC/STX/SNDK/MU）；② SMH 的 MA50 攻防（中继 vs 反转最干净的分水岭）；③ VIX 22 与 RSP−SPY 符号；④ 10Y 走向；⑤ 防御盘 XLV 是否同步转跌；⑥ 7/2 非农。</div>
+        <div class="row"><b>跨资产 + 风险：</b>10Y <span class="down">−1.77%</span>、黄金 <span class="up">+1.44%</span>、白银 <span class="up">+1.92%</span>、铜 <span class="up">+1.95%</span> 同涨而原油 <span class="down">−3.43%</span>，债与贵金属被买、增长预期边际转弱，与轮动叙事自洽；DXY 几乎不动 = 内部换仓。<b>最大不确定项：</b>7/2 非农重置利率叙事；恐惧贪婪 24.7 极度恐惧是「超跌反弹」的反向风险；新增 AI 资本开支事实会直接重定价。</div>
+      </div>
+    </div>
+    <div class="stance-disc">本栏为基于公开信息的分析与教育性研究，不构成个性化投资建议；市场有风险，决策需自负。概率为研判的主观判断，用于表达条件下的反应倾向，不预测哪个情景会发生。</div>
+  </div>
+</section>
+</div>
 
 <!-- ============ 主体 ============ -->
 <div class="main">

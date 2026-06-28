@@ -8,7 +8,7 @@
 <meta property="og:title" content="美股日报 · 2026-06-24">
 <meta property="og:description" content="拥挤多头集体平仓日：强美元 + 地缘降级压垮商品 · 白银 −8.35% · 太空崩盘 RKLB −10.21% · MU盘后 +14.2%">
 <link rel="icon" href="data:,">
-<link rel="stylesheet" href="site.css?v=2026-06-24">
+<link rel="stylesheet" href="site.css?v=2026-06-27-stance3">
 </head>
 <body>
 <button id="calBtn" class="cal-btn" hidden>📅 <span id="calCur"></span></button>
@@ -42,7 +42,8 @@
 </header>
 <div class="tape" id="tape" hidden><div class="tape-track" id="tapeTrack"></div></div>
 
-<!-- ============ 摘要 ============ -->
+<!-- ============ 摘要 + 今日研判（左右各半）============ -->
+<div class="top-split">
 <section class="summary">
   <div class="sec-head"><span class="sec-no">SUMMARY</span><h2 class="sec-title">今日摘要</h2></div>
   <div class="sec-sub">TL;DR · 当日最重要的事</div>
@@ -73,6 +74,58 @@
     </div>
   </div>
 </section>
+
+<!-- ============ 今日研判 ============ -->
+<section class="stance">
+  <div class="sec-head"><span class="sec-no">STANCE</span><h2 class="sec-title">今日研判</h2></div>
+  <div class="sec-sub stance-sub"><span>⚠️ 分析观点 · 非投资建议</span></div>
+  <div class="stance-card">
+    <div class="stance-body">
+      <div class="stance-tone"><span class="lead">⭐ 定调：</span>强美元 + 地缘降级双轮，碾压拥挤多头；钱在轮动、没有离场。<b>两条利空同向共振</b>——强美元（DXY 一年多新高）与美伊谅解、霍尔木兹重开压缩的原油地缘溢价，共同打击商品与避险类拥挤仓位；研判重点是盯<b>哪条腿先松动</b>。</div>
+      <ul class="stance-attr">
+        <li>共振链条自洽：商品全线崩塌（白银 <span class="down">−8.35%</span>、黄金 <span class="down">−3.17%</span>）压低长端通胀预期，10Y 逆势走低至 4.402%。</li>
+        <li>轮动而非离场：等权 RSP <span class="up">+0.69%</span> vs 市值加权 SPY <span class="down">−0.16%</span>，资金流入防御（公用/必需消费/医疗）+ 顺周期（工业/可选消费），得制造业 PMI 55.7 支撑。</li>
+        <li>拥挤多头踩踏：高 Beta 投机链独立大跌（RKLB <span class="down">−10.21%</span>、ASTS <span class="down">−6.67%</span>），VIX 19.94 无系统性恐慌。</li>
+      </ul>
+
+      <div class="crt-title">大盘条件反应表 <span class="tk">^IXIC · 窗口3交易日 · 横盘界 ±1%</span></div>
+      <div class="crt-legend"><i style="background:var(--green)"></i>涨<i style="background:var(--bg);border:1px solid var(--line)"></i>横<i style="background:var(--red)"></i>跌 · 概率为「给定情景下」的反应倾向，非情景发生概率</div>
+      <div class="crt-item">
+        <div class="crt-trigger"><b>A</b> 链条被证实·通胀降温（6/26 核心 PCE 环比 ≤0.2%，轮动延续不扩散）</div>
+        <div class="crt-bar"><div class="crt-seg up modal" style="width:55%">55%</div><div class="crt-seg flat" style="width:27%">27%</div><div class="crt-seg down" style="width:18%">18%</div></div>
+      </div>
+      <div class="crt-item">
+        <div class="crt-trigger"><b>B</b> 共振延续无新催化（PCE 大致符合预期，DXY 高位横盘、商品企稳）</div>
+        <div class="crt-bar"><div class="crt-seg up" style="width:33%">33%</div><div class="crt-seg flat modal" style="width:42%">42%</div><div class="crt-seg down" style="width:25%">25%</div></div>
+      </div>
+      <div class="crt-item">
+        <div class="crt-trigger"><b>C</b> 对齐破裂·任一腿翻车（PCE 环比 ≥0.3%，或地缘逆转致油价跳涨 → 切向去风险）</div>
+        <div class="crt-bar"><div class="crt-seg up" style="width:17%">17%</div><div class="crt-seg flat" style="width:25%">25%</div><div class="crt-seg down modal" style="width:58%">58%</div></div>
+      </div>
+
+      <div class="crt-title">美光 MU 财报反应表 <span class="tk">MU · 今晚盘后 FQ3 · 横盘界 ±3%</span></div>
+      <div class="crt-item">
+        <div class="crt-trigger"><b>A</b> Beat + 上修（营收/EPS 超预期且下季指引上修，HBM 量价向好）</div>
+        <div class="crt-bar"><div class="crt-seg up modal" style="width:60%">60%</div><div class="crt-seg flat" style="width:22%">22%</div><div class="crt-seg down" style="width:18%">18%</div></div>
+      </div>
+      <div class="crt-item">
+        <div class="crt-trigger"><b>B</b> Beat 但指引中性（当季超预期、下季平淡，周期见顶疑虑未解）</div>
+        <div class="crt-bar"><div class="crt-seg up" style="width:27%">27%</div><div class="crt-seg flat modal" style="width:40%">40%</div><div class="crt-seg down" style="width:33%">33%</div></div>
+      </div>
+      <div class="crt-item">
+        <div class="crt-trigger"><b>C</b> Miss 或下修（不及预期或指引下修，存储周期转弱被坐实）</div>
+        <div class="crt-bar"><div class="crt-seg up" style="width:12%">12%</div><div class="crt-seg flat" style="width:18%">18%</div><div class="crt-seg down modal" style="width:70%">70%</div></div>
+      </div>
+
+      <div class="stance-extra">
+        <div class="row"><b>关键观察点：</b>① 今晚 MU FQ3 指引（外溢看 STX/WDC/SNDK 次日）；② 6/26 核心 PCE 环比（大盘胜负手）；③ DXY 101.6 能否站稳 + 商品是否止跌；④ 10Y 走向；⑤ VIX 与 RSP−SPY 价差是否转弱。</div>
+        <div class="row"><b>跨资产 + 风险：</b>强美元—弱商品—10Y 下行是同一枚硬币，链条不破则债强与商品弱相互印证。<b>最大不确定项：</b>地缘逆转致油价跳涨、或 6/26 PCE 走热把鹰派重定价为「利率冲击」——任一发生，温和轮动叙事整体失效，应以大盘 C 情景重读。</div>
+      </div>
+    </div>
+    <div class="stance-disc">本栏为基于公开信息的分析与教育性研究，不构成个性化投资建议；市场有风险，决策需自负。概率为研判的主观判断，用于表达条件下的反应倾向，不预测哪个情景会发生。</div>
+  </div>
+</section>
+</div>
 
 <!-- ============ 主体 ============ -->
 <div class="main">
@@ -263,7 +316,7 @@
 
       <div class="stat-grid">
         <div class="stat"><div class="k">VIX 恐慌指数</div><div class="v" style="color:var(--red)">19.94</div><div class="d">^VIX 6/24 真实收盘，+2.31%；小幅上行至"温和警惕"区间，低于 25 的恐慌阈值——与"板块轮动/拥挤仓位去杠杆"而非系统性危机的叙事一致</div></div>
-        <div class="stat"><div class="k">CNN 恐惧贪婪指数</div><div class="v" style="color:#A77B12">26</div><div class="d">恐惧区（Fear）· 较前日 27.5 略降，延续恐惧区间，与拥挤仓位去杠杆、风险偏好回落的主线一致。来源：CNN 官方接口直取</div></div>
+        <div class="stat"><div class="k">CNN 恐惧贪婪指数</div><div class="v" style="color:#A77B12">26</div><div class="d">恐惧区（Fear）· 较前日 27.5 略降，延续恐惧区间，与拥挤仓位去杠杆、风险偏好回落的主线一致。</div></div>
         <div class="stat"><div class="k">标普 RSI(14)</div><div class="v">46.4</div><div class="d">Wilder 法实算 · 中性偏弱，贴近 50 日线（MA50 7,349）；四标的 RSI 全在 40–62 区间，无指数级超买超卖</div></div>
         <div class="stat"><div class="k">广度 RSP−SPY</div><div class="v" style="color:var(--green)">+0.85pp</div><div class="d">等权重 RSP +0.69% 跑赢市值加权 SPY −0.16%，差值正——普遍参与度健康，是少数权重科技股在拖指数，印证"轮动而非普跌"。取数器真实收盘，不存疑</div></div>
       </div>
