@@ -5,8 +5,8 @@ import json, os, subprocess, urllib.parse
 from datetime import datetime, timezone, timedelta
 
 TICKERS = [("GSPC", "^GSPC"), ("IXIC", "^IXIC"), ("DJI", "^DJI"), ("SMH", "SMH")]
-EXPECT  = {"GSPC": 7353.45, "IXIC": 25297.62, "DJI": 51876.11, "SMH": 611.61}
-CUTOFF  = "2026-06-26"
+EXPECT  = {"GSPC": 7483.24, "IXIC": 25832.67, "DJI": 52900.07, "SMH": 592.29}
+CUTOFF  = "2026-07-02"
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
 
 out = {}
