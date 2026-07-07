@@ -57,6 +57,26 @@ def check(date, html_path=None, md_path=None):
     else:
         print(f"（md 文件不存在：{md_path}，跳过 ⑤ 项，不计入失败）")
 
+    # ⑥ 重点个股板块 spot-strip 最大涨幅 ticker 须与 md 5.1 节的最大涨幅 ticker 一致
+    #    （最能命中"整板块复制未改"事故：md 最强是 IREN +13.1%，但 spot-strip 还写着 AAPL +4.84%）
+    if os.path.exists(md_path):
+        md_text = open(md_path, encoding="utf-8").read() if 'md' not in dir() else md
+        # 从 md 5.1 重点个股小节取最大涨幅 ticker
+        md_gains = re.findall(r'\*\*([A-Z]{2,6})\s*\+(\d+\.\d+)%\*\*', md_text)
+        if md_gains:
+            top_md = max(md_gains, key=lambda x: float(x[1]))
+            top_md_tk, top_md_pct = top_md[0], float(top_md[1])
+            # 从 HTML spot-strip 取最大涨幅 ticker
+            sp_gains = re.findall(r'sp-num[^>]*style="color:var\(--green\)"[^>]*>\+(\d+\.\d+)%', html)
+            if not sp_gains:
+                sp_gains = re.findall(r'sp-num.*?\+(\d+\.\d+)%', html)
+            if sp_gains:
+                top_sp_pct = max(float(p) for p in sp_gains)
+                # 允许 0.5pp 容差（数据来源格式化差异）
+                if abs(top_sp_pct - top_md_pct) > 0.5:
+                    bad.append(
+                        f"重点个股 spot-strip 最大涨幅 {top_sp_pct}% 与 md 最大涨幅 {top_md_tk} {top_md_pct}% 不一致（疑似整板块未更新）")
+
     if bad:
         for b in bad:
             print(f"❌ {b}")
