@@ -7,7 +7,7 @@
 个股深读卡/关键人物/页脚仍是前一日内容)在结构/lint/node-check 全通过的情况下被手动发布——
 四件套全是机械检查，没有任何一项验证"内容是不是今天的"，故补此项。
 """
-import re, sys, os
+import re, sys, os, glob
 
 SITE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # 网站/
 
@@ -76,6 +76,28 @@ def check(date, html_path=None, md_path=None):
                 if abs(top_sp_pct - top_md_pct) > 0.5:
                     bad.append(
                         f"重点个股 spot-strip 最大涨幅 {top_sp_pct}% 与 md 最大涨幅 {top_md_tk} {top_md_pct}% 不一致（疑似整板块未更新）")
+
+    # ⑦ finale-title / hero-theme-text 须与前一期不同（防整段复制后未替换文字内容）
+    prev_candidates = sorted(glob.glob(os.path.join(SITE_DIR, "????-??-??.html")))
+    prev_candidates = [p for p in prev_candidates if os.path.basename(p) < f"{date}.html"]
+    if prev_candidates:
+        prev_html = open(prev_candidates[-1], encoding="utf-8").read()
+        prev_label = os.path.basename(prev_candidates[-1]).replace(".html", "")
+        # finale-title（一句话定调标题，纯文字）
+        re_fin = r'finale-title[^>]*>\s*([^<\n]+)'
+        mc = re.search(re_fin, html)
+        mp = re.search(re_fin, prev_html)
+        if mc and mp and mc.group(1).strip() == mp.group(1).strip():
+            bad.append(f"finale-title 与 {prev_label} 完全相同：「{mc.group(1).strip()[:40]}」（疑似一句话定调未更新）")
+        # hero-theme-text（可能含 <br>，先剥 tag 再比较）
+        re_hero = r'hero-theme-text[^>]*>(.*?)</(?:div|p|h\d)>'
+        mch = re.search(re_hero, html, re.DOTALL)
+        mph = re.search(re_hero, prev_html, re.DOTALL)
+        if mch and mph:
+            cur_t = re.sub(r'<[^>]+>', ' ', mch.group(1)).strip()
+            prev_t = re.sub(r'<[^>]+>', ' ', mph.group(1)).strip()
+            if cur_t and prev_t and cur_t == prev_t:
+                bad.append(f"hero-theme-text 与 {prev_label} 完全相同（疑似 Hero 主题句未更新）")
 
     if bad:
         for b in bad:
