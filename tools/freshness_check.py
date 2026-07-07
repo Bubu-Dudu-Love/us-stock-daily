@@ -77,27 +77,34 @@ def check(date, html_path=None, md_path=None):
                     bad.append(
                         f"重点个股 spot-strip 最大涨幅 {top_sp_pct}% 与 md 最大涨幅 {top_md_tk} {top_md_pct}% 不一致（疑似整板块未更新）")
 
-    # ⑦ finale-title / hero-theme-text 须与前一期不同（防整段复制后未替换文字内容）
-    prev_candidates = sorted(glob.glob(os.path.join(SITE_DIR, "????-??-??.html")))
-    prev_candidates = [p for p in prev_candidates if os.path.basename(p) < f"{date}.html"]
-    if prev_candidates:
-        prev_html = open(prev_candidates[-1], encoding="utf-8").read()
-        prev_label = os.path.basename(prev_candidates[-1]).replace(".html", "")
-        # finale-title（一句话定调标题，纯文字）
-        re_fin = r'finale-title[^>]*>\s*([^<\n]+)'
-        mc = re.search(re_fin, html)
-        mp = re.search(re_fin, prev_html)
-        if mc and mp and mc.group(1).strip() == mp.group(1).strip():
-            bad.append(f"finale-title 与 {prev_label} 完全相同：「{mc.group(1).strip()[:40]}」（疑似一句话定调未更新）")
-        # hero-theme-text（可能含 <br>，先剥 tag 再比较）
-        re_hero = r'hero-theme-text[^>]*>(.*?)</(?:div|p|h\d)>'
-        mch = re.search(re_hero, html, re.DOTALL)
-        mph = re.search(re_hero, prev_html, re.DOTALL)
-        if mch and mph:
-            cur_t = re.sub(r'<[^>]+>', ' ', mch.group(1)).strip()
-            prev_t = re.sub(r'<[^>]+>', ' ', mph.group(1)).strip()
-            if cur_t and prev_t and cur_t == prev_t:
-                bad.append(f"hero-theme-text 与 {prev_label} 完全相同（疑似 Hero 主题句未更新）")
+    # ⑦ 关键文字锚点须与前一期不同（倒推：从页面底部往上逐节扫，全部报出、不短路）
+    #    顺序：finale(底) → VI重点个股 → II大盘总览 → hero(顶)
+    #    任意一节相同即说明该节未更新；多节相同可推断 session 在哪一步中断
+    prev_cands = sorted(glob.glob(os.path.join(SITE_DIR, "????-??-??.html")))
+    prev_cands = [p for p in prev_cands if os.path.basename(p) < f"{date}.html"]
+    if prev_cands:
+        prev_html = open(prev_cands[-1], encoding="utf-8").read()
+        prev_label = os.path.basename(prev_cands[-1]).replace(".html", "")
+
+        def _snap(pat, src, strip_tags=False):
+            m = re.search(pat, src, re.DOTALL)
+            if not m:
+                return None
+            s = m.group(1).strip()
+            return re.sub(r'<[^>]+>', ' ', s).strip() if strip_tags else s
+
+        anchors = [
+            # (描述,                         正则,                                                    剥tag)
+            ("finale-title（一句话定调）",    r'finale-title[^>]*>\s*([^<\n]{5,})',                  False),
+            ("VI 重点个股 spot-strip首ticker", r'sp-tk">([A-Z]{2,6})</span>',                         False),
+            ("II 大盘总览 核心读法",           r'核心读法[：:]</strong>(.*?)</div>',                   True),
+            ("hero-theme-text（Hero主题句）",  r'hero-theme-text[^>]*>(.*?)</(?:div|p|h\d)>',         True),
+        ]
+        for name, pat, strip in anchors:
+            cur = _snap(pat, html, strip)
+            prev = _snap(pat, prev_html, strip)
+            if cur and prev and cur == prev:
+                bad.append(f"[⑦倒推] {name} 与 {prev_label} 相同（疑似该节未更新）：「{cur[:50]}」")
 
     if bad:
         for b in bad:
