@@ -1,137 +1,521 @@
 # -*- coding: utf-8 -*-
-"""新鲜度/完整性校验：确认网页是当日真正重建的，而非中断后残留的旧页面拼接。
-与 presentation_lint.py 同等地位，纳入 QA 硬门；只检查"是否是今天的内容"，不检查文风。
-用法: python freshness_check.py <YYYY-MM-DD> [html路径] [md路径]
-退出码非 0 = 不通过。
-背景：2026-06-25 因 session usage limit 致自动续建反复失败，半成品(CUTOFF 误为前一日、
-个股深读卡/关键人物/页脚仍是前一日内容)在结构/lint/node-check 全通过的情况下被手动发布——
-四件套全是机械检查，没有任何一项验证"内容是不是今天的"，故补此项。
 """
-import re, sys, os, glob
+新鲜度/完整性校验 v2.0
+支持全量校验（最终 QA 门）和按节校验（建站时每节写完后即时验证）。
+两种模式共用同一套校验逻辑——freshness_check 是唯一的内容验证器，
+checkpoint 只记"哪节已通过"，不做独立判断。
+
+用法:
+  python freshness_check.py <YYYY-MM-DD>                      # 全量
+  python freshness_check.py <YYYY-MM-DD> --section tape       # 仅跑 tape 节
+  python freshness_check.py <YYYY-MM-DD> --list-sections      # 列出所有节标识
+  --html <path>  覆盖默认 HTML 路径
+  --md  <path>   覆盖默认 md 路径
+
+节标识符（建站顺序，建站时按此顺序处理每节后立即 --section 校验）:
+  meta · head · tape · hero · summary · stance
+  I-radar · II-market · III-tech · IV-macro
+  V-earnings · VI-stocks · VII-people · finale
+
+退出码: 0 = 通过  1 = 有失败项  2 = 用法错误
+
+背景: 2026-06 起因 session 中断，宏观地缘/重点个股/关键人物等节静默继承旧页，
+四件套机械检查均通过；此脚本补覆盖所有节的内容校验，与 checkpoint 机制配合。
+"""
+import re, sys, os, glob, argparse
 
 SITE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # 网站/
 
+# ── 节顺序（建站时按此顺序依次处理，每节完成后即时 --section 校验）─────────────
+SECTION_ORDER = [
+    "meta", "head", "tape", "hero", "summary", "stance",
+    "I-radar", "II-market", "III-tech", "IV-macro",
+    "V-earnings", "VI-stocks", "VII-people", "finale",
+]
 
-def check(date, html_path=None, md_path=None):
+
+# ── 工具函数 ──────────────────────────────────────────────────────────────────
+
+def _snap(pat, src, dotall=True, strip_tags=False):
+    """提取正则第 1 组，可选剥 HTML 标签"""
+    flags = re.DOTALL if dotall else 0
+    m = re.search(pat, src, flags)
+    if not m:
+        return None
+    s = m.group(1).strip()
+    if strip_tags:
+        s = re.sub(r'<[^>]+>', ' ', s).strip()
+    return s
+
+
+def _pct_close(a, b, tol=0.15):
+    """百分比近似比对，容差 tol pp；处理 − (U+2212) vs - 混用及 ⚠️ 等后缀"""
+    def norm(s):
+        s = s.replace('−', '-').replace('%', '').strip()
+        s = re.sub(r'[^\d.\-]', '', s)
+        return float(s)
+    try:
+        return abs(norm(a) - norm(b)) <= tol
+    except Exception:
+        return False
+
+
+def _load_prices(date):
+    """解析 prices_{date}.md → {symbol: {'level': str, 'pct': str}}
+    prices 文件格式: | 中文名 | SYMBOL | 价格/水平 | 涨跌幅 |"""
+    path = os.path.join(SITE_DIR, "..", "自动日报", "data", f"prices_{date}.md")
+    if not os.path.exists(path):
+        return {}
+    result = {}
+    for line in open(path, encoding="utf-8"):
+        # 匹配四列的表格行（跳过分割线和标题）
+        m = re.match(
+            r'\|\s*[^|]+\|\s*([^\s|]+)\s*\|\s*([^|]+?)\s*\|\s*([+\-\d.%⚠️★\s]+?)\s*\|',
+            line
+        )
+        if not m:
+            continue
+        sym = m.group(1).strip()
+        level = m.group(2).strip().strip('*').replace(',', '')
+        pct = re.sub(r'[⚠️★\s].*$', '', m.group(3).strip()).strip('*')
+        if sym and re.match(r'[\^A-Z=\-\.]+', sym):
+            result[sym] = {'level': level, 'pct': pct}
+    return result
+
+
+def _get_prev(date):
+    """返回 (prev_html_text, prev_label)，找不到则返回 (None, None)"""
+    cands = sorted(glob.glob(os.path.join(SITE_DIR, "????-??-??.html")))
+    cands = [p for p in cands if os.path.basename(p) < f"{date}.html"]
+    if not cands:
+        return None, None
+    label = os.path.basename(cands[-1]).replace(".html", "")
+    return open(cands[-1], encoding="utf-8").read(), label
+
+
+# ── 校验函数：fn(date, html, md, prices, prev, prev_label) → None | str ───────
+
+# ——— meta ———
+def _chk_cutoff(date, html, md, prices, prev, plabel):
+    m = re.search(r'var CUTOFF="([\d-]+)"', html)
+    if not m or m.group(1) != date:
+        return f"CUTOFF={m.group(1) if m else '未找到'}，应为 {date}"
+
+def _chk_data_thru(date, html, md, prices, prev, plabel):
+    y, mo, d = date.split("-")
+    expect = f"{y} 年 {int(mo)} 月 {int(d)} 日"
+    errs = []
+    for m in re.finditer(r'数据截至 ([^<]+?)收盘', html):
+        if expect not in m.group(1):
+            errs.append(m.group(1).strip())
+    if errs:
+        return f"「数据截至」含旧日期 {errs}，应含「{expect}」"
+
+# ——— head ———
+def _chk_head_title(date, html, md, prices, prev, plabel):
+    if not prev:
+        return None
+    cur = _snap(r'<title>([^<]+)', html, dotall=False)
+    prv = _snap(r'<title>([^<]+)', prev, dotall=False)
+    if cur and prv and cur.strip() == prv.strip():
+        return f"<title> 与 {plabel} 相同（head 未更新）：「{cur.strip()[:60]}」"
+
+def _chk_head_desc(date, html, md, prices, prev, plabel):
+    if not prev:
+        return None
+    cur = _snap(r'<meta name="description" content="([^"]+)"', html, dotall=False)
+    prv = _snap(r'<meta name="description" content="([^"]+)"', prev, dotall=False)
+    if cur and prv and cur == prv:
+        return f"<meta description> 与 {plabel} 相同（head 未更新）"
+
+# ——— tape ———
+def _chk_tape_date(date, html, md, prices, prev, plabel):
+    m = re.search(r'(\d{4}-\d{2}-\d{2}) 美东收盘', html)
+    if not m or m.group(1) != date:
+        return f"跑马灯日期戳={m.group(1) if m else '未找到'}，应为 {date}"
+
+def _chk_tape_vix(date, html, md, prices, prev, plabel):
+    """跑马灯 VIX 硬编码值 vs 技术面 stat-grid VIX（两者应一致）"""
+    tape = _snap(r'"tk">VIX</span><span class="num">([\d.]+)', html, dotall=False)
+    stat = _snap(r'VIX 恐慌指数</div><div class="v"[^>]*>([\d.]+)', html, dotall=False)
+    if tape and stat and not _pct_close(tape, stat, tol=0.01):
+        return f"跑马灯 VIX {tape} ≠ stat-grid VIX {stat}（跑马灯硬编码未与 stat-grid 同步）"
+
+def _chk_tape_fg(date, html, md, prices, prev, plabel):
+    """跑马灯 F&G 硬编码值 vs 技术面 stat-grid F&G（两者应一致）"""
+    tape = _snap(r'恐惧贪婪指数</span><span[^>]*>([\d.]+)', html, dotall=False)
+    stat = _snap(r'CNN 恐惧贪婪指数</div><div class="v"[^>]*>([\d.]+)', html, dotall=False)
+    if tape and stat and not _pct_close(tape, stat, tol=0.1):
+        return f"跑马灯 F&G {tape} ≠ stat-grid F&G {stat}（跑马灯硬编码未与 stat-grid 同步）"
+
+# ——— hero ———
+def _chk_hero_theme(date, html, md, prices, prev, plabel):
+    if not prev:
+        return None
+    cur = _snap(r'hero-theme-text[^>]*>(.*?)</(?:div|p|h\d)>', html, strip_tags=True)
+    prv = _snap(r'hero-theme-text[^>]*>(.*?)</(?:div|p|h\d)>', prev, strip_tags=True)
+    if cur and prv and cur == prv:
+        return f"hero-theme-text 与 {plabel} 相同（hero 未更新）：「{cur[:60]}」"
+
+def _chk_hero_color(date, html, md, prices, prev, plabel):
+    """方向色：GSPC 跌日 hero-inner 应含 --accent:var(--red)"""
+    gspc_pct = prices.get('^GSPC', {}).get('pct', '')
+    if not gspc_pct:
+        return None
+    try:
+        is_down = float(gspc_pct.replace('%', '').replace('−', '-')) < 0
+    except Exception:
+        return None
+    m = re.search(r'class="hero-inner"[^>]*style="([^"]*)"', html)
+    style = m.group(1) if m else ''
+    if is_down and 'var(--red)' not in style:
+        return f"今日 GSPC {gspc_pct}（跌），hero-inner 未见 var(--red)（方向色未更新）"
+    if not is_down and 'var(--red)' in style:
+        return f"今日 GSPC {gspc_pct}（涨），hero-inner 含 var(--red)（方向色未更新）"
+
+# ——— summary ———
+def _chk_summary(date, html, md, prices, prev, plabel):
+    if not prev:
+        return None
+    cur = _snap(r'class="sum-card"[^>]*>.*?<h3>([^<]+)', html)
+    prv = _snap(r'class="sum-card"[^>]*>.*?<h3>([^<]+)', prev)
+    if cur and prv and cur.strip() == prv.strip():
+        return f"摘要首卡标题与 {plabel} 相同（摘要未更新）：「{cur.strip()[:60]}」"
+
+# ——— stance ———
+def _chk_stance(date, html, md, prices, prev, plabel):
+    if not prev:
+        return None
+    cur = _snap(r'stance-tone[^>]*>(.*?)</div>', html, strip_tags=True)
+    prv = _snap(r'stance-tone[^>]*>(.*?)</div>', prev, strip_tags=True)
+    if cur and prv and cur == prv:
+        return f"研判定调与 {plabel} 相同（今日研判未更新）：「{cur[:60]}」"
+
+# ——— I-radar ———
+def _chk_radar(date, html, md, prices, prev, plabel):
+    if not prev:
+        return None
+    cur = _snap(r'id="page-radar".*?<tbody>(.*?)</tr>', html, strip_tags=True)
+    prv = _snap(r'id="page-radar".*?<tbody>(.*?)</tr>', prev, strip_tags=True)
+    if cur and prv and cur[:80].strip() == prv[:80].strip():
+        return f"事件雷达首条与 {plabel} 相同（I-radar 未更新）"
+
+# ——— II-market ———
+def _chk_market_core(date, html, md, prices, prev, plabel):
+    if not prev:
+        return None
+    cur = _snap(r'核心读法[：:]</strong>(.*?)</div>', html, strip_tags=True)
+    prv = _snap(r'核心读法[：:]</strong>(.*?)</div>', prev, strip_tags=True)
+    if cur and prv and cur == prv:
+        return f"大盘总览核心读法与 {plabel} 相同（II-market 未更新）：「{cur[:60]}」"
+
+def _chk_market_gspc(date, html, md, prices, prev, plabel):
+    pct = prices.get('^GSPC', {}).get('pct', '')
+    if not pct:
+        return None
+    html_pct = _snap(r'标普 500.*?<span class="val[^"]*">([-−+\d.]+%)</span>', html)
+    if html_pct and not _pct_close(html_pct, pct):
+        return f"大盘总览 GSPC 涨跌幅 HTML={html_pct} vs prices={pct}"
+
+def _chk_market_ixic(date, html, md, prices, prev, plabel):
+    pct = prices.get('^IXIC', {}).get('pct', '')
+    if not pct:
+        return None
+    html_pct = _snap(r'纳斯达克综合.*?<span class="val[^"]*">([-−+\d.]+%)</span>', html)
+    if html_pct and not _pct_close(html_pct, pct):
+        return f"大盘总览 IXIC 涨跌幅 HTML={html_pct} vs prices={pct}"
+
+# ——— III-tech ———
+def _chk_tech_vix(date, html, md, prices, prev, plabel):
+    if not prev:
+        return None
+    cur = _snap(r'VIX 恐慌指数</div><div class="v"[^>]*>([\d.]+)', html, dotall=False)
+    prv = _snap(r'VIX 恐慌指数</div><div class="v"[^>]*>([\d.]+)', prev, dotall=False)
+    if cur and prv and cur == prv:
+        return f"技术面 stat-grid VIX {cur} 与 {plabel} 相同（III-tech 未更新）"
+
+def _chk_tech_fg(date, html, md, prices, prev, plabel):
+    if not prev:
+        return None
+    cur = _snap(r'CNN 恐惧贪婪指数</div><div class="v"[^>]*>([\d.]+)', html, dotall=False)
+    prv = _snap(r'CNN 恐惧贪婪指数</div><div class="v"[^>]*>([\d.]+)', prev, dotall=False)
+    if cur and prv and cur == prv:
+        return f"技术面 stat-grid F&G {cur} 与 {plabel} 相同（III-tech 未更新）"
+
+def _chk_tech_gauge_vix(date, html, md, prices, prev, plabel):
+    """仪表盘 VIX gauge JS 指针值 vs cp-note 文字值（复制旧页后 gauge JS 常被遗漏）"""
+    gauge = _snap(r'getElementById\("gVIX"\)\s*,\s*gaugeOpt\(([\d.]+)', html, dotall=False)
+    note  = _snap(r'id="gVIX".*?cp-note">([\d.]+)', html)
+    if gauge and note and not _pct_close(gauge, note, tol=0.01):
+        return f"仪表盘 VIX 指针={gauge} ≠ cp-note={note}（gauge JS 未同步）"
+
+def _chk_tech_gauge_fg(date, html, md, prices, prev, plabel):
+    """仪表盘 F&G gauge JS 指针值 vs cp-note 文字值"""
+    gauge = _snap(r'getElementById\("gFG"\)\s*,\s*gaugeOpt\(([\d.]+)', html, dotall=False)
+    note  = _snap(r'id="gFG".*?cp-note">([\d.]+)', html)
+    if gauge and note and not _pct_close(gauge, note, tol=0.1):
+        return f"仪表盘 F&G 指针={gauge} ≠ cp-note={note}（gauge JS 未同步）"
+
+def _chk_tech_gauge_rsi(date, html, md, prices, prev, plabel):
+    """仪表盘 RSI gauge JS 指针值 vs cp-note 文字值"""
+    gauge = _snap(r'getElementById\("gRSI"\)\s*,\s*gaugeOpt\(([\d.]+)', html, dotall=False)
+    note  = _snap(r'id="gRSI".*?cp-note">([\d.]+)', html)
+    if gauge and note and not _pct_close(gauge, note, tol=0.1):
+        return f"仪表盘 RSI 指针={gauge} ≠ cp-note={note}（gauge JS 未同步）"
+
+def _chk_tech_gauge_br(date, html, md, prices, prev, plabel):
+    """仪表盘广度(BR) gauge JS 指针值 vs cp-note 文字值（可为负；含 U+2212 处理）"""
+    gauge    = _snap(r'getElementById\("gBR"\)\s*,\s*gaugeOpt\(([-\d.]+)', html, dotall=False)
+    note_raw = _snap(r'id="gBR".*?cp-note">([+\-\d.−]+)pp', html)
+    if not gauge or not note_raw:
+        return None
+    note = note_raw.replace('−', '-').replace('+', '')
+    try:
+        if abs(float(gauge) - float(note)) > 0.01:
+            return f"仪表盘广度指针={gauge}pp ≠ cp-note={note_raw}（gauge JS 未同步）"
+    except Exception:
+        pass
+
+# ——— IV-macro ———
+def _chk_macro_desc(date, html, md, prices, prev, plabel):
+    if not prev:
+        return None
+    cur = _snap(r'id="page-macro".*?class="desc">([^<]{10,})', html)
+    prv = _snap(r'id="page-macro".*?class="desc">([^<]{10,})', prev)
+    if cur and prv and cur.strip() == prv.strip():
+        return f"宏观地缘 desc 与 {plabel} 相同（IV-macro 未更新）：「{cur.strip()[:60]}」"
+
+def _chk_macro_wti(date, html, md, prices, prev, plabel):
+    """宏观地缘 WTI 涨跌幅 vs prices 文件"""
+    pct = prices.get('CL=F', {}).get('pct', '')
+    if not pct:
+        return None
+    # 匹配 WTI 表格行中价格列之后的涨跌幅列
+    html_pct = _snap(
+        r'原油 WTI.*?<td class="num[^"]*"><strong>\$[^<]+</strong></td>'
+        r'<td class="num[^"]*"><strong>([+\-\d.]+%)',
+        html
+    )
+    if html_pct and not _pct_close(html_pct, pct):
+        return f"宏观地缘 WTI 涨跌幅 HTML={html_pct} vs prices={pct}"
+
+def _chk_macro_10y(date, html, md, prices, prev, plabel):
+    """宏观地缘 10Y 收益率绝对值 vs prices 文件"""
+    tnx = prices.get('^TNX', {})
+    level = tnx.get('level', '').rstrip('%')
+    if not level:
+        return None
+    html_level = _snap(r'10Y 美债</td><td class="num"><strong>([\d.]+)%', html, dotall=False)
+    if html_level:
+        try:
+            if abs(float(html_level) - float(level)) > 0.005:
+                return f"宏观地缘 10Y HTML={html_level}% vs prices={level}%"
+        except Exception:
+            pass
+
+# ——— V-earnings ———
+def _chk_earnings(date, html, md, prices, prev, plabel):
+    """V-earnings desc 中的日期应为今日 M/D（比首行比对更可靠——无财报日首行相同）"""
+    _, mo, d = date.split("-")
+    expected = f"{int(mo)}/{int(d)}"
+    got = _snap(r'id="page-earnings".*?class="desc">今日（(\d+/\d+)）', html)
+    if got is None:
+        return None
+    if got != expected:
+        return f"V-earnings desc 日期「{got}」≠ 今日「{expected}」（财报节 desc 未更新）"
+
+def _chk_earnings_callout(date, html, md, prices, prev, plabel):
+    """V-earnings callout 内嵌日期应为今日"""
+    got = _snap(r'今日财报排查结论.*?(\d{4}-\d{2}-\d{2}) 重点追踪', html)
+    if got is None:
+        return None
+    if got != date:
+        return f"V-earnings callout 日期「{got}」≠ 今日「{date}」（callout 未更新）"
+
+# ——— VI-stocks ———
+def _chk_stocks_spcap(date, html, md, prices, prev, plabel):
+    if not prev:
+        return None
+    cur = _snap(r'class="sp-cap">([^<]{10,60})', html, dotall=False)
+    prv = _snap(r'class="sp-cap">([^<]{10,60})', prev, dotall=False)
+    if cur and prv and cur.strip() == prv.strip():
+        return f"重点个股聚光灯首条与 {plabel} 相同（VI-stocks 未更新）：「{cur.strip()[:60]}」"
+
+def _chk_stocks_dd_series(date, html, md, prices, prev, plabel):
+    """深读卡容器 id vs dd-series JS ticker 一致性"""
+    m_src = re.search(r'<script src="(dd-series-[\d-]+\.js)">', html)
+    if not m_src:
+        return None
+    dd_path = os.path.join(SITE_DIR, m_src.group(1))
+    if not os.path.exists(dd_path):
+        return None
+    dd_js = open(dd_path, encoding="utf-8").read()
+    series_keys = set(re.findall(r'"([A-Z]{2,6})":\{', dd_js))
+    html_ids = set(re.findall(r'id="dd-([A-Z]{2,6})"', html))
+    if series_keys and html_ids and series_keys != html_ids:
+        return (f"深读卡容器 id {sorted(html_ids)} 与 dd-series JS ticker "
+                f"{sorted(series_keys)} 不一致（深读卡未随 dd-series 同步）")
+
+def _chk_stocks_dd_tickers(date, html, md, prices, prev, plabel):
+    """⑤ 深读卡 ticker vs md「今日 N 只」"""
+    if not md:
+        return None
+    m = re.search(r'个股深读（今日\s*\d+\s*只[：:]\s*([^）)]+)）', md)
+    if not m:
+        return None  # md 无此标题格式，静默跳过
+    ticker_part = m.group(1).split("——")[0]
+    md_tickers = set(re.findall(r'\b[A-Z]{2,6}\b', ticker_part))
+    html_tickers = set(re.findall(r'dd-tkr">([A-Z]{2,6})', html))
+    if md_tickers != html_tickers:
+        return f"深读卡 ticker md={sorted(md_tickers)} html={sorted(html_tickers)}"
+
+# ——— VII-people ———
+def _chk_people_prev_date(date, html, md, prices, prev, plabel):
+    """⑨ 关键人物节不应含前一日 M/D 日期"""
+    if not plabel:
+        return None
+    _, pm, pd = plabel.split("-")
+    prev_mdfmt = f"{int(pm)}/{int(pd)}"
+    section = _snap(r'id="page-people"(.*?)(?=id="page-|</body>)', html)
+    if section and prev_mdfmt in section:
+        return f"关键人物节仍含前一日日期「{prev_mdfmt}」（从 {plabel} 复制后未更新）"
+
+def _chk_people_cur_date(date, html, md, prices, prev, plabel):
+    """关键人物节应含今日 M/D 日期"""
+    y, mo, d = date.split("-")
+    cur_mdfmt = f"{int(mo)}/{int(d)}"
+    section = _snap(r'id="page-people"(.*?)(?=id="page-|</body>)', html)
+    if section and cur_mdfmt not in section:
+        return f"关键人物节未含今日日期「{cur_mdfmt}」（表格日期未更新）"
+
+# ——— finale ———
+def _chk_finale_gen(date, html, md, prices, prev, plabel):
+    m = re.search(r'finale-gen">美股日报 · ([\d-]+) ·', html)
+    if not m or m.group(1) != date:
+        return f"finale-gen 日期={m.group(1) if m else '未找到'}，应为 {date}"
+
+def _chk_finale_title(date, html, md, prices, prev, plabel):
+    if not prev:
+        return None
+    cur = _snap(r'finale-title[^>]*>\s*([^<\n]{5,})', html, dotall=False)
+    prv = _snap(r'finale-title[^>]*>\s*([^<\n]{5,})', prev, dotall=False)
+    if cur and prv and cur.strip() == prv.strip():
+        return f"finale-title 与 {plabel} 相同（finale 未更新）：「{cur.strip()[:60]}」"
+
+
+# ── 校验项注册表（建站顺序） ───────────────────────────────────────────────────
+# (section_id, check_name, fn)
+CHECKS = [
+    # section        name                              fn
+    ("meta",         "① CUTOFF 变量",                 _chk_cutoff),
+    ("meta",         "④ 数据截至日期",                 _chk_data_thru),
+    ("head",         "head <title> ≠ 前一期",          _chk_head_title),
+    ("head",         "head meta-description ≠ 前一期", _chk_head_desc),
+    ("tape",         "③ 跑马灯日期戳",                 _chk_tape_date),
+    ("tape",         "跑马灯 VIX vs stat-grid",        _chk_tape_vix),
+    ("tape",         "跑马灯 F&G vs stat-grid",        _chk_tape_fg),
+    ("hero",         "hero 主题句 ≠ 前一期",            _chk_hero_theme),
+    ("hero",         "hero 方向色与 GSPC 涨跌一致",     _chk_hero_color),
+    ("summary",      "摘要首卡标题 ≠ 前一期",           _chk_summary),
+    ("stance",       "研判定调 ≠ 前一期",               _chk_stance),
+    ("I-radar",      "事件雷达首条 ≠ 前一期",           _chk_radar),
+    ("II-market",    "大盘总览核心读法 ≠ 前一期",        _chk_market_core),
+    ("II-market",    "大盘总览 GSPC 涨跌幅 vs prices",  _chk_market_gspc),
+    ("II-market",    "大盘总览 IXIC 涨跌幅 vs prices",  _chk_market_ixic),
+    ("III-tech",     "技术面 VIX stat-grid ≠ 前一期",       _chk_tech_vix),
+    ("III-tech",     "技术面 F&G stat-grid ≠ 前一期",       _chk_tech_fg),
+    ("III-tech",     "仪表盘 VIX gauge JS vs cp-note",      _chk_tech_gauge_vix),
+    ("III-tech",     "仪表盘 F&G gauge JS vs cp-note",      _chk_tech_gauge_fg),
+    ("III-tech",     "仪表盘 RSI gauge JS vs cp-note",      _chk_tech_gauge_rsi),
+    ("III-tech",     "仪表盘广度(BR) gauge JS vs cp-note",  _chk_tech_gauge_br),
+    ("IV-macro",     "宏观地缘 desc ≠ 前一期",           _chk_macro_desc),
+    ("IV-macro",     "宏观地缘 WTI 涨跌幅 vs prices",    _chk_macro_wti),
+    ("IV-macro",     "宏观地缘 10Y 收益率 vs prices",    _chk_macro_10y),
+    ("V-earnings",   "财报节 desc 日期 = 今日",            _chk_earnings),
+    ("V-earnings",   "财报节 callout 日期 = 今日",         _chk_earnings_callout),
+    ("VI-stocks",    "重点个股聚光灯首条 ≠ 前一期",       _chk_stocks_spcap),
+    ("VI-stocks",    "⑧ 深读卡 id vs dd-series",        _chk_stocks_dd_series),
+    ("VI-stocks",    "⑤ 深读卡 ticker vs md",            _chk_stocks_dd_tickers),
+    ("VII-people",   "⑨ 关键人物无前一日日期",            _chk_people_prev_date),
+    ("VII-people",   "关键人物含今日日期",                _chk_people_cur_date),
+    ("finale",       "② finale-gen 日期",               _chk_finale_gen),
+    ("finale",       "finale-title ≠ 前一期",            _chk_finale_title),
+]
+
+
+# ── 主入口 ────────────────────────────────────────────────────────────────────
+
+def run(date, html_path=None, md_path=None, section_filter=None):
     html_path = html_path or os.path.join(SITE_DIR, f"{date}.html")
     md_path = md_path or os.path.join(
         os.path.dirname(SITE_DIR), "美股日报", f"美股日报_{date}.md")
 
+    if not os.path.exists(html_path):
+        print(f"❌ HTML 文件不存在：{html_path}")
+        return 1
+
     html = open(html_path, encoding="utf-8").read()
+    md = open(md_path, encoding="utf-8").read() if os.path.exists(md_path) else ""
+    prices = _load_prices(date)
+    prev, plabel = _get_prev(date)
+
+    if not prices:
+        print(f"（prices_{date}.md 未找到，跳过 prices 比对项，不计入失败）")
+    if not md:
+        print(f"（md 文件未找到，跳过 md 比对项，不计入失败）")
+    if not prev:
+        print("（无前一期 HTML，跳过所有「≠ 前一期」校验，不计入失败）")
+
+    # 过滤当前节的校验项
+    active = [(sec, name, fn) for sec, name, fn in CHECKS
+              if section_filter is None or sec == section_filter]
+
+    if section_filter and not active:
+        print(f"未知节标识「{section_filter}」，可用: {', '.join(SECTION_ORDER)}")
+        return 2
+
     bad = []
+    for sec, name, fn in active:
+        try:
+            err = fn(date, html, md, prices, prev, plabel)
+        except Exception as e:
+            err = f"校验异常: {e}"
+        if err:
+            label = f"[{sec}] {name}"
+            bad.append(f"{label}：{err}")
 
-    # ① CUTOFF JS 变量（决定 MARKET_DATA 截断到哪一天，错了图表会全部停在前一日）
-    m = re.search(r'var CUTOFF="([\d-]+)"', html)
-    if not m or m.group(1) != date:
-        bad.append(f"CUTOFF 变量={m.group(1) if m else '未找到'}，应为 {date}")
-
-    # ② 页脚「美股日报 · 日期 · Claude Code 生成」
-    m = re.search(r'finale-gen">美股日报 · ([\d-]+) ·', html)
-    if not m or m.group(1) != date:
-        bad.append(f"finale-gen 日期戳={m.group(1) if m else '未找到'}，应为 {date}")
-
-    # ③ 跑马灯「YYYY-MM-DD 美东收盘」
-    m = re.search(r'(\d{4}-\d{2}-\d{2}) 美东收盘', html)
-    if not m or m.group(1) != date:
-        bad.append(f"跑马灯日期标签={m.group(1) if m else '未找到'}，应为 {date}")
-
-    # ④ 「数据截至 ... 收盘」文字日期
-    y, mo, d = date.split("-")
-    expect_cn = f"{y} 年 {int(mo)} 月 {int(d)} 日"
-    for m in re.finditer(r'数据截至 ([^<]+?)收盘', html):
-        if expect_cn not in m.group(1):
-            bad.append(f"「数据截至」日期={m.group(1).strip()}收盘，应含「{expect_cn}」")
-
-    # ⑤ 个股深读卡 ticker 集合 vs md「今日 N 只：X · Y」标题（最能命中"整段抄前一天"事故）
-    if os.path.exists(md_path):
-        md = open(md_path, encoding="utf-8").read()
-        m = re.search(r'个股深读（今日\s*\d+\s*只[：:]\s*([^）)]+)）', md)
-        if m:
-            ticker_part = m.group(1).split("——")[0]  # 「——主线两端」之类的描述语在右侧，先切掉避免误抓
-            md_tickers = set(re.findall(r'\b[A-Z]{2,6}\b', ticker_part))
-            html_tickers = set(re.findall(r'dd-tkr">([A-Z]{2,6})', html))
-            if md_tickers != html_tickers:
-                bad.append(f"个股深读卡 ticker 不一致：md={sorted(md_tickers)} html={sorted(html_tickers)}")
-        else:
-            print("（md 未找到「个股深读（今日 N 只」标题，跳过 ⑤ 项，不计入失败）")
-    else:
-        print(f"（md 文件不存在：{md_path}，跳过 ⑤ 项，不计入失败）")
-
-    # ⑥ 重点个股 spot-strip 首条涨幅 % 须与前一期不同
-    #    旧版只看 md 最大涨幅 ticker（跌日无 **TICKER +X%** 格式则整段跳过），改为直接比对 HTML 前后期
-    #    此处只校验 sp-num 中第一个涨跌数字与前一期不同即可；完整 ticker 校验见 ⑦ 倒推锚点
-    # （不再从 md 提取 md_gains，避免因跌日 md 无 bold-gain 格式而整项静默跳过）
-
-    # ⑦ 关键文字锚点须与前一期不同（倒推：从页面底部往上逐节扫，全部报出、不短路）
-    #    顺序：finale(底) → VI重点个股 → II大盘总览 → hero(顶)
-    #    任意一节相同即说明该节未更新；多节相同可推断 session 在哪一步中断
-    prev_cands = sorted(glob.glob(os.path.join(SITE_DIR, "????-??-??.html")))
-    prev_cands = [p for p in prev_cands if os.path.basename(p) < f"{date}.html"]
-    if prev_cands:
-        prev_html = open(prev_cands[-1], encoding="utf-8").read()
-        prev_label = os.path.basename(prev_cands[-1]).replace(".html", "")
-
-        def _snap(pat, src, strip_tags=False):
-            m = re.search(pat, src, re.DOTALL)
-            if not m:
-                return None
-            s = m.group(1).strip()
-            return re.sub(r'<[^>]+>', ' ', s).strip() if strip_tags else s
-
-        anchors = [
-            # (描述,                              正则,                                                   剥tag)
-            ("finale-title（一句话定调）",         r'finale-title[^>]*>\s*([^<\n]{5,})',                  False),
-            # 修复：旧版用 sp-tk 类（不存在），改为 sp-cap 抓第一个聚光灯描述文字
-            ("VI 聚光灯首条（sp-cap）",            r'class="sp-cap">([^<]{10,60})',                       False),
-            ("IV 宏观地缘 page-head desc",         r'id="page-macro".*?class="desc">([^<]{10,})',         False),
-            ("II 大盘总览 核心读法",                r'核心读法[：:]</strong>(.*?)</div>',                   True),
-            ("hero-theme-text（Hero主题句）",       r'hero-theme-text[^>]*>(.*?)</(?:div|p|h\d)>',        True),
-        ]
-        for name, pat, strip in anchors:
-            cur = _snap(pat, html, strip)
-            prev = _snap(pat, prev_html, strip)
-            if cur and prev and cur == prev:
-                bad.append(f"[⑦倒推] {name} 与 {prev_label} 相同（疑似该节未更新）：「{cur[:60]}」")
-
-    # ⑧ 深读卡容器 id vs dd-series JS ticker 一致性
-    #    场景：dd-series-YYYY-MM-DD.js 已更新为新日期标的，但 HTML 容器 id 仍是旧 ticker
-    #    → buildDD() 调用 getElementById 找不到容器，图表静默不渲染
-    m_src = re.search(r'<script src="(dd-series-[\d-]+\.js)">', html)
-    if m_src:
-        dd_js_path = os.path.join(SITE_DIR, m_src.group(1))
-        if os.path.exists(dd_js_path):
-            dd_js = open(dd_js_path, encoding="utf-8").read()
-            series_keys = set(re.findall(r'"([A-Z]{2,6})":\{', dd_js))
-            html_dd_ids = set(re.findall(r'id="dd-([A-Z]{2,6})"', html))
-            if series_keys and html_dd_ids and series_keys != html_dd_ids:
-                bad.append(
-                    f"⑧ 深读卡容器 id {sorted(html_dd_ids)} 与 dd-series JS ticker "
-                    f"{sorted(series_keys)} 不一致（深读卡未随 dd-series 一起更新）")
-
-    # ⑨ 关键人物节（#page-people）不应出现前一日的 M/D 日期格式
-    #    场景：从上一期模板复制后只改了正文，关键人物表格里的「7/2」仍为前一日
-    if prev_cands:
-        prev_date_str = os.path.basename(prev_cands[-1]).replace(".html", "")
-        _, prev_mo2, prev_d2 = prev_date_str.split("-")
-        prev_md_fmt = f"{int(prev_mo2)}/{int(prev_d2)}"   # e.g. "7/2"
-        people_m = re.search(r'id="page-people"(.*?)(?=id="page-|</body>)', html, re.DOTALL)
-        if people_m and prev_md_fmt in people_m.group(1):
-            bad.append(
-                f"⑨ 关键人物节仍含前一日日期「{prev_md_fmt}」（疑似从 {prev_label} 模板复制后未更新日期）")
-
+    prefix = f"[--section {section_filter}] " if section_filter else ""
     if bad:
         for b in bad:
             print(f"❌ {b}")
-        print(f"\n新鲜度校验: {len(bad)} 处疑似残留旧内容")
+        print(f"\n{prefix}新鲜度校验: {len(bad)} 处疑似残留旧内容")
         return 1
-    print("新鲜度校验: 0 处疑似残留旧内容")
+
+    print(f"{prefix}新鲜度校验: 0 处疑似残留旧内容")
     return 0
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("用法: python freshness_check.py <YYYY-MM-DD> [html路径] [md路径]")
+    parser = argparse.ArgumentParser(
+        description="美股日报网页新鲜度校验 v2.0")
+    parser.add_argument("date", nargs="?", help="YYYY-MM-DD")
+    parser.add_argument("--html", help="覆盖默认 HTML 路径")
+    parser.add_argument("--md",   help="覆盖默认 md 路径")
+    parser.add_argument("--section", help="只跑该节的校验项")
+    parser.add_argument("--list-sections", action="store_true",
+                        help="列出所有节标识符和对应校验项")
+    args = parser.parse_args()
+
+    if args.list_sections:
+        for sec in SECTION_ORDER:
+            checks = [(name, fn.__name__) for s, name, fn in CHECKS if s == sec]
+            print(f"\n[{sec}]")
+            for name, _ in checks:
+                print(f"  · {name}")
+        sys.exit(0)
+
+    if not args.date:
+        parser.print_help()
         sys.exit(2)
-    sys.exit(check(sys.argv[1],
-                    sys.argv[2] if len(sys.argv) > 2 else None,
-                    sys.argv[3] if len(sys.argv) > 3 else None))
+
+    sys.exit(run(args.date, args.html, args.md, args.section))
