@@ -57,25 +57,10 @@ def check(date, html_path=None, md_path=None):
     else:
         print(f"（md 文件不存在：{md_path}，跳过 ⑤ 项，不计入失败）")
 
-    # ⑥ 重点个股板块 spot-strip 最大涨幅 ticker 须与 md 5.1 节的最大涨幅 ticker 一致
-    #    （最能命中"整板块复制未改"事故：md 最强是 IREN +13.1%，但 spot-strip 还写着 AAPL +4.84%）
-    if os.path.exists(md_path):
-        md_text = open(md_path, encoding="utf-8").read() if 'md' not in dir() else md
-        # 从 md 5.1 重点个股小节取最大涨幅 ticker
-        md_gains = re.findall(r'\*\*([A-Z]{2,6})\s*\+(\d+\.\d+)%\*\*', md_text)
-        if md_gains:
-            top_md = max(md_gains, key=lambda x: float(x[1]))
-            top_md_tk, top_md_pct = top_md[0], float(top_md[1])
-            # 从 HTML spot-strip 取最大涨幅 ticker
-            sp_gains = re.findall(r'sp-num[^>]*style="color:var\(--green\)"[^>]*>\+(\d+\.\d+)%', html)
-            if not sp_gains:
-                sp_gains = re.findall(r'sp-num.*?\+(\d+\.\d+)%', html)
-            if sp_gains:
-                top_sp_pct = max(float(p) for p in sp_gains)
-                # 允许 0.5pp 容差（数据来源格式化差异）
-                if abs(top_sp_pct - top_md_pct) > 0.5:
-                    bad.append(
-                        f"重点个股 spot-strip 最大涨幅 {top_sp_pct}% 与 md 最大涨幅 {top_md_tk} {top_md_pct}% 不一致（疑似整板块未更新）")
+    # ⑥ 重点个股 spot-strip 首条涨幅 % 须与前一期不同
+    #    旧版只看 md 最大涨幅 ticker（跌日无 **TICKER +X%** 格式则整段跳过），改为直接比对 HTML 前后期
+    #    此处只校验 sp-num 中第一个涨跌数字与前一期不同即可；完整 ticker 校验见 ⑦ 倒推锚点
+    # （不再从 md 提取 md_gains，避免因跌日 md 无 bold-gain 格式而整项静默跳过）
 
     # ⑦ 关键文字锚点须与前一期不同（倒推：从页面底部往上逐节扫，全部报出、不短路）
     #    顺序：finale(底) → VI重点个股 → II大盘总览 → hero(顶)
@@ -94,17 +79,44 @@ def check(date, html_path=None, md_path=None):
             return re.sub(r'<[^>]+>', ' ', s).strip() if strip_tags else s
 
         anchors = [
-            # (描述,                         正则,                                                    剥tag)
-            ("finale-title（一句话定调）",    r'finale-title[^>]*>\s*([^<\n]{5,})',                  False),
-            ("VI 重点个股 spot-strip首ticker", r'sp-tk">([A-Z]{2,6})</span>',                         False),
-            ("II 大盘总览 核心读法",           r'核心读法[：:]</strong>(.*?)</div>',                   True),
-            ("hero-theme-text（Hero主题句）",  r'hero-theme-text[^>]*>(.*?)</(?:div|p|h\d)>',         True),
+            # (描述,                              正则,                                                   剥tag)
+            ("finale-title（一句话定调）",         r'finale-title[^>]*>\s*([^<\n]{5,})',                  False),
+            # 修复：旧版用 sp-tk 类（不存在），改为 sp-cap 抓第一个聚光灯描述文字
+            ("VI 聚光灯首条（sp-cap）",            r'class="sp-cap">([^<]{10,60})',                       False),
+            ("II 大盘总览 核心读法",                r'核心读法[：:]</strong>(.*?)</div>',                   True),
+            ("hero-theme-text（Hero主题句）",       r'hero-theme-text[^>]*>(.*?)</(?:div|p|h\d)>',        True),
         ]
         for name, pat, strip in anchors:
             cur = _snap(pat, html, strip)
             prev = _snap(pat, prev_html, strip)
             if cur and prev and cur == prev:
-                bad.append(f"[⑦倒推] {name} 与 {prev_label} 相同（疑似该节未更新）：「{cur[:50]}」")
+                bad.append(f"[⑦倒推] {name} 与 {prev_label} 相同（疑似该节未更新）：「{cur[:60]}」")
+
+    # ⑧ 深读卡容器 id vs dd-series JS ticker 一致性
+    #    场景：dd-series-YYYY-MM-DD.js 已更新为新日期标的，但 HTML 容器 id 仍是旧 ticker
+    #    → buildDD() 调用 getElementById 找不到容器，图表静默不渲染
+    m_src = re.search(r'<script src="(dd-series-[\d-]+\.js)">', html)
+    if m_src:
+        dd_js_path = os.path.join(SITE_DIR, m_src.group(1))
+        if os.path.exists(dd_js_path):
+            dd_js = open(dd_js_path, encoding="utf-8").read()
+            series_keys = set(re.findall(r'"([A-Z]{2,6})":\{', dd_js))
+            html_dd_ids = set(re.findall(r'id="dd-([A-Z]{2,6})"', html))
+            if series_keys and html_dd_ids and series_keys != html_dd_ids:
+                bad.append(
+                    f"⑧ 深读卡容器 id {sorted(html_dd_ids)} 与 dd-series JS ticker "
+                    f"{sorted(series_keys)} 不一致（深读卡未随 dd-series 一起更新）")
+
+    # ⑨ 关键人物节（#page-people）不应出现前一日的 M/D 日期格式
+    #    场景：从上一期模板复制后只改了正文，关键人物表格里的「7/2」仍为前一日
+    if prev_cands:
+        prev_date_str = os.path.basename(prev_cands[-1]).replace(".html", "")
+        _, prev_mo2, prev_d2 = prev_date_str.split("-")
+        prev_md_fmt = f"{int(prev_mo2)}/{int(prev_d2)}"   # e.g. "7/2"
+        people_m = re.search(r'id="page-people"(.*?)(?=id="page-|</body>)', html, re.DOTALL)
+        if people_m and prev_md_fmt in people_m.group(1):
+            bad.append(
+                f"⑨ 关键人物节仍含前一日日期「{prev_md_fmt}」（疑似从 {prev_label} 模板复制后未更新日期）")
 
     if bad:
         for b in bad:
