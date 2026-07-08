@@ -83,6 +83,7 @@ def check(date, html_path=None, md_path=None):
             ("finale-title（一句话定调）",         r'finale-title[^>]*>\s*([^<\n]{5,})',                  False),
             # 修复：旧版用 sp-tk 类（不存在），改为 sp-cap 抓第一个聚光灯描述文字
             ("VI 聚光灯首条（sp-cap）",            r'class="sp-cap">([^<]{10,60})',                       False),
+            ("IV 宏观地缘 page-head desc",         r'id="page-macro".*?class="desc">([^<]{10,})',         False),
             ("II 大盘总览 核心读法",                r'核心读法[：:]</strong>(.*?)</div>',                   True),
             ("hero-theme-text（Hero主题句）",       r'hero-theme-text[^>]*>(.*?)</(?:div|p|h\d)>',        True),
         ]
