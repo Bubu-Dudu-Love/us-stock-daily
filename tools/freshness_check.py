@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
 """
-新鲜度/完整性校验 v2.0
+新鲜度/完整性校验 v2.2
 支持全量校验（最终 QA 门）和按节校验（建站时每节写完后即时验证）。
 两种模式共用同一套校验逻辑——freshness_check 是唯一的内容验证器，
 checkpoint 只记"哪节已通过"，不做独立判断。
 
+共 32 项检查 / 14 节（含 prices_{date}.md 数值交叉验证）：
+  meta(2) · head(2) · tape(3) · hero(2) · summary(1) · stance(1)
+  I-radar(1) · II-market(3) · III-tech(6) · IV-macro(3)
+  V-earnings(2) · VI-stocks(3) · VII-people(2) · finale(2)
+
 用法:
-  python freshness_check.py <YYYY-MM-DD>                      # 全量
-  python freshness_check.py <YYYY-MM-DD> --section tape       # 仅跑 tape 节
-  python freshness_check.py <YYYY-MM-DD> --list-sections      # 列出所有节标识
+  python freshness_check.py <YYYY-MM-DD>                      # 全量（最终 QA 门）
+  python freshness_check.py <YYYY-MM-DD> --section IV-macro   # 单节（建站写完即验）
+  python freshness_check.py <YYYY-MM-DD> --list-sections      # 列出所有节与检查项
   --html <path>  覆盖默认 HTML 路径
   --md  <path>   覆盖默认 md 路径
 
@@ -18,6 +23,13 @@ checkpoint 只记"哪节已通过"，不做独立判断。
   V-earnings · VI-stocks · VII-people · finale
 
 退出码: 0 = 通过  1 = 有失败项  2 = 用法错误
+
+变更史:
+  v2.2 (2026-07-09): 修 _load_prices 正则——「⚠️触发」中文后缀致 CL=F/BZ=F pct
+        静默取空，改为 [^|]+? + re.search，现能正确解析所有触发标的。
+  v2.1 (2026-07-08): 加 4 项仪表盘 gauge JS vs cp-note 校验（III-tech 共 6 项）；
+        V-earnings 改用 desc 日期比对（取代首行比对，无财报日不再误报）；加 callout 日期校验。
+  v2.0 (2026-07-07): 初版，14 节 28 项，支持 --section，加 prices 交叉验证。
 
 背景: 2026-06 起因 session 中断，宏观地缘/重点个股/关键人物等节静默继承旧页，
 四件套机械检查均通过；此脚本补覆盖所有节的内容校验，与 checkpoint 机制配合。
