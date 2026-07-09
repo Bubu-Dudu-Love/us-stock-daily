@@ -69,15 +69,18 @@ def _load_prices(date):
     result = {}
     for line in open(path, encoding="utf-8"):
         # 匹配四列的表格行（跳过分割线和标题）
+        # 第4列允许任意非管道字符，再单独提取 [+-]数字% 以兼容「⚠️触发」中文后缀
         m = re.match(
-            r'\|\s*[^|]+\|\s*([^\s|]+)\s*\|\s*([^|]+?)\s*\|\s*([+\-\d.%⚠️★\s]+?)\s*\|',
+            r'\|\s*[^|]+\|\s*([^\s|]+)\s*\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|',
             line
         )
         if not m:
             continue
         sym = m.group(1).strip()
         level = m.group(2).strip().strip('*').replace(',', '')
-        pct = re.sub(r'[⚠️★\s].*$', '', m.group(3).strip()).strip('*')
+        raw_pct = m.group(3).strip()
+        pm = re.search(r'([+\-]\d+\.?\d*%)', raw_pct)
+        pct = pm.group(1) if pm else ''
         if sym and re.match(r'[\^A-Z=\-\.]+', sym):
             result[sym] = {'level': level, 'pct': pct}
     return result
