@@ -350,7 +350,7 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
 .crt-item{margin:8px 0;}
 .crt-trigger{font-size:11.5px;color:var(--subink);line-height:1.5;margin-bottom:3px;}
 .crt-trigger b{color:var(--ink);font-weight:700;}
-.crt-bar{display:flex;height:20px;border-radius:3px;overflow:hidden;border:1px solid var(--line);}
+.crt-bar{display:flex;height:20px;border-radius:3px;overflow:hidden;border:1px solid var(--line);max-width:250px;}
 .crt-seg{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10.5px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;min-width:0;}
 .crt-seg.up{background:var(--green);}
 .crt-seg.down{background:var(--red);}
@@ -362,8 +362,17 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
 .stance-disc{font-size:10.5px;color:var(--muted);line-height:1.6;margin:12px 20px 14px;padding-top:9px;border-top:1px dashed var(--line);}
 @media(max-width:680px){.stance{padding:0 16px 14px;}.crt-trigger{font-size:11px;}}
 
-/* 摘要 + 今日研判 左右各半（只作用于包了 .top-split 的页面，不影响其它页的独立摘要）*/
-.top-split{max-width:1340px;margin:0 auto;padding:72px 28px 16px;display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:start;}
+/* 摘要 + 今日研判 上下结构（2026-07-14 起：摘要在上两列，研判在下同宽；只作用于包了 .top-split 的页面）*/
+.top-split{max-width:1340px;margin:0 auto;padding:72px 28px 16px;display:block;}
 .top-split .summary,.top-split .stance{max-width:none;margin:0;padding:0;}
-.top-split .summary-grid{grid-template-columns:1fr;}
-@media(max-width:980px){.top-split{grid-template-columns:1fr;gap:10px;padding-top:48px;}}
+.top-split .summary{margin-bottom:34px;}
+.top-split .summary-grid{grid-template-columns:1fr 1fr;}
+@media(max-width:980px){.top-split{padding-top:48px;}.top-split .summary-grid{grid-template-columns:1fr;}}
+
+/* 研判块内部网格（2026-07-14 起：归因 2×2 · 三张反应表并列 · 观察点两列）*/
+.stance-attr.cols2{display:grid;grid-template-columns:1fr 1fr;gap:2px 30px;align-items:start;}
+.stance-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px;align-items:start;}
+.stance-grid3 .stance-tbl{min-width:0;}
+.stance-grid3 .crt-title{margin-top:14px;}
+.obs-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 30px;font-size:13.5px;color:var(--subink);line-height:1.72;padding-left:18px;margin:0;}
+@media(max-width:980px){.stance-attr.cols2,.obs-grid{grid-template-columns:1fr;}.stance-grid3{grid-template-columns:1fr;}}
