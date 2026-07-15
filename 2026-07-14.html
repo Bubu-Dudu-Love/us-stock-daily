@@ -1116,7 +1116,7 @@
   function buildDD(){
     if(ddBuilt)return; ddBuilt=true;
     if(typeof DD_SERIES==="undefined")return;
-    [["ORCL","dd-ORCL",131.35,195.32],["SNDK","dd-SNDK",1485.02,2354.39]].forEach(function(d){
+    [["AAOI","dd-AAOI",109.21,196.5],["NBIS","dd-NBIS",192.67,223.99]].forEach(function(d){
       var sym=d[0],id=d[1],sup=d[2],res=d[3];
       var el=document.getElementById(id); if(!el||!DD_SERIES[sym])return;
       var ser=DD_SERIES[sym], close=ser.closes, dates=ser.dates;

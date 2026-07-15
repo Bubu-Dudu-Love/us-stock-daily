@@ -5,10 +5,10 @@
 两种模式共用同一套校验逻辑——freshness_check 是唯一的内容验证器，
 checkpoint 只记"哪节已通过"，不做独立判断。
 
-共 32 项检查 / 14 节（含 prices_{date}.md 数值交叉验证）：
+共 33 项检查 / 14 节（含 prices_{date}.md 数值交叉验证）：
   meta(2) · head(2) · tape(3) · hero(2) · summary(1) · stance(1)
   I-radar(1) · II-market(3) · III-tech(6) · IV-macro(3)
-  V-earnings(2) · VI-stocks(3) · VII-people(2) · finale(2)
+  V-earnings(2) · VI-stocks(4) · VII-people(2) · finale(2)
 
 用法:
   python freshness_check.py <YYYY-MM-DD>                      # 全量（最终 QA 门）
@@ -25,6 +25,10 @@ checkpoint 只记"哪节已通过"，不做独立判断。
 退出码: 0 = 通过  1 = 有失败项  2 = 用法错误
 
 变更史:
+  v2.3 (2026-07-15): 修 _chk_stocks_dd_series：dd-series 文件缺失/日期错配曾静默跳过；
+        新增 _chk_stocks_dd_build 校验 buildDD() 硬编码 ticker 数组 vs HTML 容器 id
+        （07-14 事故根因：buildDD 仍写旧标的，HTML 容器已换新标的，图表全部空白）。
+        VI-stocks 增至 4 项，总计 33 项。
   v2.2 (2026-07-09): 修 _load_prices 正则——「⚠️触发」中文后缀致 CL=F/BZ=F pct
         静默取空，改为 [^|]+? + re.search，现能正确解析所有触发标的。
   v2.1 (2026-07-08): 加 4 项仪表盘 gauge JS vs cp-note 校验（III-tech 共 6 项）；
@@ -357,19 +361,32 @@ def _chk_stocks_spcap(date, html, md, prices, prev, plabel):
         return f"重点个股聚光灯首条与 {plabel} 相同（VI-stocks 未更新）：「{cur.strip()[:60]}」"
 
 def _chk_stocks_dd_series(date, html, md, prices, prev, plabel):
-    """深读卡容器 id vs dd-series JS ticker 一致性"""
-    m_src = re.search(r'<script src="(dd-series-[\d-]+\.js)">', html)
+    """深读卡 dd-series JS：① 存在 ② 日期匹配今日 ③ ticker 与 HTML 容器一致"""
+    m_src = re.search(r'<script src="(dd-series-([\d-]+)\.js)">', html)
     if not m_src:
         return None
-    dd_path = os.path.join(SITE_DIR, m_src.group(1))
+    fname, file_date = m_src.group(1), m_src.group(2)
+    if file_date != date:
+        return f"dd-series 引用日期 {file_date} ≠ 今日 {date}（复制上一期后未更新 src）"
+    dd_path = os.path.join(SITE_DIR, fname)
     if not os.path.exists(dd_path):
-        return None
+        return f"dd-series-{date}.js 文件缺失（HTML 引用存在但文件未生成/未提交）"
     dd_js = open(dd_path, encoding="utf-8").read()
     series_keys = set(re.findall(r'"([A-Z]{2,6})":\{', dd_js))
     html_ids = set(re.findall(r'id="dd-([A-Z]{2,6})"', html))
     if series_keys and html_ids and series_keys != html_ids:
         return (f"深读卡容器 id {sorted(html_ids)} 与 dd-series JS ticker "
                 f"{sorted(series_keys)} 不一致（深读卡未随 dd-series 同步）")
+
+def _chk_stocks_dd_build(date, html, md, prices, prev, plabel):
+    """buildDD() 硬编码 ticker 数组 vs HTML 容器 id（错配→图表空白，07-14 事故根因）"""
+    build_tickers = set(re.findall(r'\["([A-Z]{2,6})","dd-[A-Z]{2,6}",[\d.]+,[\d.]+\]', html))
+    html_ids = set(re.findall(r'id="dd-([A-Z]{2,6})"', html))
+    if not build_tickers or not html_ids:
+        return None
+    if build_tickers != html_ids:
+        return (f"buildDD() 硬编码标的 {sorted(build_tickers)} ≠ HTML 深读容器 {sorted(html_ids)}"
+                f"（图表将空白——复制上一期后未更新 buildDD 数组）")
 
 def _chk_stocks_dd_tickers(date, html, md, prices, prev, plabel):
     """⑤ 深读卡 ticker vs md「今日 N 只」"""
@@ -448,9 +465,10 @@ CHECKS = [
     ("IV-macro",     "宏观地缘 10Y 收益率 vs prices",    _chk_macro_10y),
     ("V-earnings",   "财报节 desc 日期 = 今日",            _chk_earnings),
     ("V-earnings",   "财报节 callout 日期 = 今日",         _chk_earnings_callout),
-    ("VI-stocks",    "重点个股聚光灯首条 ≠ 前一期",       _chk_stocks_spcap),
-    ("VI-stocks",    "⑧ 深读卡 id vs dd-series",        _chk_stocks_dd_series),
-    ("VI-stocks",    "⑤ 深读卡 ticker vs md",            _chk_stocks_dd_tickers),
+    ("VI-stocks",    "重点个股聚光灯首条 ≠ 前一期",          _chk_stocks_spcap),
+    ("VI-stocks",    "⑧ 深读卡 dd-series 文件/日期/ticker", _chk_stocks_dd_series),
+    ("VI-stocks",    "buildDD() 硬编码 ticker vs HTML 容器", _chk_stocks_dd_build),
+    ("VI-stocks",    "⑤ 深读卡 ticker vs md",              _chk_stocks_dd_tickers),
     ("VII-people",   "⑨ 关键人物无前一日日期",            _chk_people_prev_date),
     ("VII-people",   "关键人物含今日日期",                _chk_people_cur_date),
     ("finale",       "② finale-gen 日期",               _chk_finale_gen),
