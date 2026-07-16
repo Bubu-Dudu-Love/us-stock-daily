@@ -217,17 +217,15 @@
 
       <div class="chart-card">
         <div class="block-title">主追踪当日涨跌（%）</div>
-        <!-- 柱宽标尺：当日最大|涨跌| SMH +2.49% → 标尺 ±3%；data-w = |%| ÷ 3 × 50 -->
-        <div class="bar-row"><span class="lbl">半导体<span class="tk">SMH</span></span><span class="bar-track"><span class="bar pos" data-w="41.5"></span></span><span class="val up">+2.49%</span></div>
-        <div class="bar-row"><span class="lbl">科技<span class="tk">XLK</span></span><span class="bar-track"><span class="bar pos" data-w="21.0"></span></span><span class="val up">+1.26%</span></div>
-        <div class="bar-row"><span class="lbl">纳斯达克<span class="tk">^IXIC</span></span><span class="bar-track"><span class="bar pos" data-w="15.0"></span></span><span class="val up">+0.90%</span></div>
-        <div class="bar-row"><span class="lbl">标普 500<span class="tk">^GSPC</span></span><span class="bar-track"><span class="bar pos" data-w="6.3"></span></span><span class="val up">+0.38%</span></div>
-        <div class="bar-row"><span class="lbl">能源<span class="tk">XLE</span></span><span class="bar-track"><span class="bar pos" data-w="6.7"></span></span><span class="val up">+0.40%</span></div>
+        <!-- 只放 7 项主追踪、与下方主追踪表一致；板块 ETF 属「板块轮动」区、不混入。柱宽标尺：当日最大|涨跌| BTC +3.70% → 标尺 ±4%；data-w = |%| ÷ 4 × 50 -->
+        <div class="bar-row"><span class="lbl">比特币<span class="tk">BTC</span></span><span class="bar-track"><span class="bar pos" data-w="46.3"></span></span><span class="val up">+3.70%</span></div>
+        <div class="bar-row"><span class="lbl">半导体<span class="tk">SMH</span></span><span class="bar-track"><span class="bar pos" data-w="31.1"></span></span><span class="val up">+2.49%</span></div>
+        <div class="bar-row"><span class="lbl">黄金<span class="tk">GC=F</span></span><span class="bar-track"><span class="bar pos" data-w="19.3"></span></span><span class="val up">+1.54%</span></div>
+        <div class="bar-row"><span class="lbl">纳斯达克综合<span class="tk">^IXIC</span></span><span class="bar-track"><span class="bar pos" data-w="11.3"></span></span><span class="val up">+0.90%</span></div>
+        <div class="bar-row"><span class="lbl">罗素 2000<span class="tk">^RUT</span></span><span class="bar-track"><span class="bar pos" data-w="4.9"></span></span><span class="val up">+0.39%</span></div>
+        <div class="bar-row"><span class="lbl">标普 500<span class="tk">^GSPC</span></span><span class="bar-track"><span class="bar pos" data-w="4.8"></span></span><span class="val up">+0.38%</span></div>
         <div class="bar-row"><span class="lbl">道琼斯<span class="tk">^DJI</span></span><span class="bar-track"><span class="bar pos" data-w="0.3"></span></span><span class="val up">+0.02%</span></div>
-        <div class="bar-row"><span class="lbl">地产<span class="tk">XLRE</span></span><span class="bar-track"><span class="bar neg" data-w="8.2"></span></span><span class="val down">−0.49%</span></div>
-        <div class="bar-row"><span class="lbl">必需消费<span class="tk">XLP</span></span><span class="bar-track"><span class="bar neg" data-w="23.5"></span></span><span class="val down">−1.41%</span></div>
-        <div class="bar-row"><span class="lbl">医疗<span class="tk">XLV</span></span><span class="bar-track"><span class="bar neg" data-w="32.2"></span></span><span class="val down">−1.93%</span></div>
-        <div class="chart-note">科技/半导体独强（CPI 降温解除久期压力），防御 XLV/XLP 领跌（risk-on 反向轮动），道指因防御股拖累几乎平收。</div>
+        <div class="chart-note">7 项主追踪全线收涨——BTC、半导体领涨（CPI 降温、风险偏好回补），黄金随实际利率下行创新高；道指因防御股拖累几乎平收。</div>
       </div>
 
       <div class="tbl-wrap"><table>
