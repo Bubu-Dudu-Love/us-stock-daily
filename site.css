@@ -333,18 +333,18 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
 .stance-sub{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#9A6F0F;font-weight:700;}
 .stance-sub .score{font-weight:600;color:var(--muted);}
 .stance-card{background:var(--card);border:1px solid rgba(232,179,57,.55);border-radius:10px;overflow:hidden;box-shadow:0 6px 20px rgba(16,22,54,.06);}
-.stance-card h3{font-size:16.5px;font-weight:700;color:var(--ink);margin:0 0 10px;}
+.stance-card h3{font-size:18px;font-weight:700;color:var(--ink);margin:0 0 10px;}
 .stance-ribbon{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--gold-soft);color:#9A6F0F;font-size:11.5px;font-weight:700;padding:7px 18px;border-bottom:1px solid rgba(232,179,57,.4);}
 .stance-ribbon .score{font-weight:600;color:#A77B12;opacity:.85;}
 .stance-body{padding:16px 20px 4px;}
-.stance-tone{font-size:15px;font-weight:700;color:var(--ink);line-height:1.72;margin-bottom:9px;}
+.stance-tone{font-size:16.5px;font-weight:700;color:var(--ink);line-height:1.72;margin-bottom:9px;}
 .stance-tone .lead{color:var(--gold);}
-.stance-attr{font-size:13.5px;color:var(--subink);line-height:1.7;margin:0 0 4px;}
+.stance-attr{font-size:15px;color:var(--subink);line-height:1.7;margin:0 0 4px;}
 .stance-attr li{margin:3px 0;list-style:none;position:relative;padding-left:13px;}
 .stance-attr li::before{content:"·";position:absolute;left:3px;color:var(--muted);font-weight:700;}
-.crt-title{font-size:13.5px;font-weight:700;color:var(--ink);margin:15px 0 2px;}
-.crt-title .tk{font-family:var(--mono);font-size:10px;color:var(--muted);font-weight:400;margin-left:5px;}
-.crt-legend{font-size:10.5px;color:var(--muted);margin:3px 0 9px;}
+.crt-title{font-size:15px;font-weight:700;color:var(--ink);margin:15px 0 2px;}
+.crt-title .tk{font-family:var(--mono);font-size:11px;color:var(--muted);font-weight:400;margin-left:5px;}
+.crt-legend{font-size:11.5px;color:var(--muted);margin:3px 0 9px;}
 .crt-legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin:0 4px 0 12px;vertical-align:-1px;}
 .crt-legend i:first-child{margin-left:0;}
 .crt-item{margin:8px 0;}
@@ -359,7 +359,7 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
 .stance-extra{font-size:13.5px;color:var(--subink);line-height:1.72;margin-top:14px;padding-top:11px;border-top:1px solid var(--line);}
 .stance-extra b{color:var(--ink);}
 .stance-extra .row{margin:5px 0;}
-.stance-disc{font-size:10.5px;color:var(--muted);line-height:1.6;margin:12px 20px 14px;padding-top:9px;border-top:1px dashed var(--line);}
+.stance-disc{font-size:11.5px;color:var(--muted);line-height:1.6;margin:12px 20px 14px;padding-top:9px;border-top:1px dashed var(--line);}
 @media(max-width:680px){.stance{padding:0 16px 14px;}.crt-trigger{font-size:11px;}}
 
 /* 摘要 + 今日研判 上下结构（2026-07-14 起：摘要在上两列，研判在下同宽；只作用于包了 .top-split 的页面）*/
@@ -374,5 +374,5 @@ tbody td.num.down strong{background:var(--red-soft);padding:1px 7px;border-radiu
 .stance-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px;align-items:start;}
 .stance-grid3 .stance-tbl{min-width:0;}
 .stance-grid3 .crt-title{margin-top:14px;}
-.obs-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 30px;font-size:13.5px;color:var(--subink);line-height:1.72;padding-left:18px;margin:0;}
+.obs-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 30px;font-size:15px;color:var(--subink);line-height:1.72;padding-left:18px;margin:0;}
 @media(max-width:980px){.stance-attr.cols2,.obs-grid{grid-template-columns:1fr;}.stance-grid3{grid-template-columns:1fr;}}

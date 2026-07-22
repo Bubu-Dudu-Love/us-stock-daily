@@ -3,6 +3,13 @@
 用法: python presentation_lint.py <html文件>
 规则来源: US Stock Market/CLAUDE.md 呈现规则。退出码非 0 = 不通过。
 只检查读者可见文本（正文 + title/alt 属性），跳过 <script>/<style> 与注释。
+
+写作原则（人工守 + 部分机检）：
+- **不要直接翻译英语**：英文金融词直译成中文常常生硬（如 hedge leg→"对冲腿"、rerate→"重定价腿"），
+  一律改成符合中文阅读习惯的专业表述（如 hedge leg→"宏观逆风/利空面"、long/short leg→"多头方/空头方"）。
+  下方 HARD 里已收录发生过的直译词，发现新的直译请补进去。
+- **一句话定调（finale-title）= 单一 headline**：只写当日最重要的**一个**方面，**不放数字/涨跌幅**，单句不堆砌
+  （规则见 每日建站指南.md 用户偏好清单）。本 lint 已对 finale-title 做机检（禁数字、限长），见下 check_finale。
 """
 import re, sys
 
@@ -36,6 +43,7 @@ HARD = [  # 出现即不通过
     (r"官方接口(直取|当日读数)?|来源[：:　]\s*\S*接口", "内部取数接口备注（数据来源说明属建站口径，不面向读者）"),
     (r"雷达综合评分", "已弃用的雷达综合评分（雷达图 06-17 已弃用）"),
     (r"窗口边界|窗口外|超本扫描窗口|本扫描窗口", "事件雷达内部扫描窗口备注（应直接写事件本身，不点名雷达覆盖范围）"),
+    (r"对冲腿|多头腿|空头腿", "英文直译（leg→腿）：换成符合中文习惯的专业词，如 宏观逆风/利空面/多头方/空头方"),
 ]
 WARN = [  # 提示人工复核
     (r"\d+(\.\d+)?\s*[–—-]\s*\d+(\.\d+)?%", "疑似数值区间（日期窗口描述可豁免）"),
@@ -60,8 +68,20 @@ def visible_text(src):
     text = re.sub(r"[ \t]+", " ", text)
     return text + "\n" + "\n".join(titles)
 
+def check_finale(raw):
+    """finale-title 专项机检：一句话定调 = 单一 headline，禁数字/涨跌幅，宜短单句。"""
+    out = []
+    for m in re.finditer(r'class="finale-title"[^>]*>(.*?)</div>', raw, re.S):
+        t = re.sub(r"<[^>]+>", "", m.group(1)).strip()
+        if re.search(r"\d", t):
+            out.append(("一句话定调禁含数字（只写当日最重要的一个方面、不放涨跌幅）", t))
+        if len(t) > 34:
+            out.append((f"一句话定调过长（{len(t)}字，应为单句 headline、只讲一个方面）", t))
+    return out
+
 def main(path):
-    text = visible_text(open(path, encoding="utf-8").read())
+    raw = open(path, encoding="utf-8").read()
+    text = visible_text(raw)
     for a in ALLOW:
         text = re.sub(a, " ", text)
     lines = [l.strip() for l in text.split("\n") if l.strip()]
@@ -71,6 +91,9 @@ def main(path):
             for m in re.finditer(pat, l):
                 bad += 1
                 print(f"❌ [{why}] …{l[max(0,m.start()-18):m.end()+18]}…")
+    for why, t in check_finale(raw):
+        bad += 1
+        print(f"❌ [{why}] …{t[:44]}…")
     for pat, why in WARN:
         for l in lines:
             for m in re.finditer(pat, l):
