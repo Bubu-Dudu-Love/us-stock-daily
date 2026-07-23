@@ -5,10 +5,10 @@
 两种模式共用同一套校验逻辑——freshness_check 是唯一的内容验证器，
 checkpoint 只记"哪节已通过"，不做独立判断。
 
-共 34 项检查 / 14 节（含 prices_{date}.md 数值交叉验证）：
+共 36 项检查 / 14 节（含 prices_{date}.md 数值交叉验证）：
   meta(2) · head(2) · tape(3) · hero(2) · summary(1) · stance(1)
   I-radar(1) · II-market(3) · III-tech(6) · IV-macro(3)
-  V-earnings(2) · VI-stocks(5) · VII-people(2) · finale(2)
+  V-earnings(4) · VI-stocks(5) · VII-people(2) · finale(2)
 
 用法:
   python freshness_check.py <YYYY-MM-DD>                      # 全量（最终 QA 门）
@@ -25,6 +25,10 @@ checkpoint 只记"哪节已通过"，不做独立判断。
 退出码: 0 = 通过  1 = 有失败项  2 = 用法错误
 
 变更史:
+  v2.5 (2026-07-23): V-earnings 新增 2 项（总计36，V-earnings 共4项）：
+        _chk_earnings_d0_desc（md 有 D0 分析时 desc 不应写"无一发布财报"）+
+        _chk_earnings_d0_coverage（md 第四部分每个 D0 公司须在 #page-earnings 有
+        完整分析表，含「财报时间」行；07-22 事故：GOOGL/TSLA/GEV D0 全部缺失）。
   v2.4 (2026-07-22): 加 _chk_stocks_tile_fidelity（VI-stocks 第5项，总计34）：网页每个 st-tkr
         方块的 ticker 必须都在 md 5.1 表里，根治「建站按叙事凭空塞入/挪错板块」整类问题
         （07-22 AVGO 事故：AI 超大厂卡塞入非成员 AVGO、挤掉常驻 AMZN）。通用数据驱动、不硬编码卡成员。
@@ -354,6 +358,50 @@ def _chk_earnings_callout(date, html, md, prices, prev, plabel):
     if got != date:
         return f"V-earnings callout 日期「{got}」≠ 今日「{date}」（callout 未更新）"
 
+def _chk_earnings_d0_desc(date, html, md, prices, prev, plabel):
+    """md 有 D0 财报分析时，desc 不应写「无一发布财报」（07-22 事故：GOOGL/TSLA 已报但 desc 未更新）"""
+    if not md:
+        return None
+    has_d0 = bool(re.search(r'###\s*[^\n]*?[A-Z]{2,6}[^\n]*?盘[前后]', md))
+    if not has_d0:
+        return None
+    html_desc = _snap(r'id="page-earnings".*?class="desc">([^<]+)', html)
+    if html_desc and '无一发布财报' in html_desc:
+        return "V-earnings desc 写「无一发布财报」但 md 第四部分有 D0 分析（Phase2 后 desc 未更新）"
+
+def _chk_earnings_d0_coverage(date, html, md, prices, prev, plabel):
+    """md 第四部分每个 D0 公司须在 HTML #page-earnings 有完整分析表（含「财报时间」行）
+    callout/日历预告行不算——07-22 事故：GOOGL/TSLA/GEV D0 分析全部缺失"""
+    if not md:
+        return None
+    # 提取 md 第四部分（财报节）
+    sec = re.search(r'## 第四部分[^\n]*\n(.*?)(?=\n## 第|$)', md, re.DOTALL)
+    if not sec:
+        return None
+    earnings_md = sec.group(1)
+    # D0 公司：### 标题行含「盘前」或「盘后」
+    d0_tickers = re.findall(r'###\s*[^\n]*?([A-Z]{2,6})[^\n]*?盘[前后]', earnings_md)
+    if not d0_tickers:
+        return None
+    # HTML 财报节全文
+    html_sec = _snap(r'id="page-earnings"(.*?)(?=id="page-|</body>)', html)
+    if not html_sec:
+        return "HTML 未找到 #page-earnings 节（结构异常）"
+    # 「财报时间」行是 D0 分析表的专属标记（日历预告表无此行）
+    # 每次「财报时间」出现，检查其前后 2000 字符内是否含该 ticker
+    analysis_anchors = [m.start() for m in re.finditer(r'财报时间', html_sec)]
+    missing = []
+    for tkr in d0_tickers:
+        found = any(
+            tkr in html_sec[max(0, pos - 500): pos + 2000]
+            for pos in analysis_anchors
+        )
+        if not found:
+            missing.append(tkr)
+    if missing:
+        return (f"md D0 财报 {sorted(d0_tickers)} → HTML #page-earnings 缺少 "
+                f"{sorted(missing)} 的完整分析表（Phase2 后财报节未重建，仅 callout/日历行不算）")
+
 # ——— VI-stocks ———
 def _chk_stocks_spcap(date, html, md, prices, prev, plabel):
     if not prev:
@@ -485,8 +533,10 @@ CHECKS = [
     ("IV-macro",     "宏观地缘 desc ≠ 前一期",           _chk_macro_desc),
     ("IV-macro",     "宏观地缘 WTI 涨跌幅 vs prices",    _chk_macro_wti),
     ("IV-macro",     "宏观地缘 10Y 收益率 vs prices",    _chk_macro_10y),
-    ("V-earnings",   "财报节 desc 日期 = 今日",            _chk_earnings),
-    ("V-earnings",   "财报节 callout 日期 = 今日",         _chk_earnings_callout),
+    ("V-earnings",   "财报节 desc 日期 = 今日",              _chk_earnings),
+    ("V-earnings",   "财报节 callout 日期 = 今日",           _chk_earnings_callout),
+    ("V-earnings",   "V-earnings desc 无「无一发布」矛盾",   _chk_earnings_d0_desc),
+    ("V-earnings",   "md D0 公司 → HTML 财报节有完整分析表", _chk_earnings_d0_coverage),
     ("VI-stocks",    "重点个股聚光灯首条 ≠ 前一期",          _chk_stocks_spcap),
     ("VI-stocks",    "⑧ 深读卡 dd-series 文件/日期/ticker", _chk_stocks_dd_series),
     ("VI-stocks",    "buildDD() 硬编码 ticker vs HTML 容器", _chk_stocks_dd_build),
