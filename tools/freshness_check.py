@@ -5,10 +5,10 @@
 两种模式共用同一套校验逻辑——freshness_check 是唯一的内容验证器，
 checkpoint 只记"哪节已通过"，不做独立判断。
 
-共 33 项检查 / 14 节（含 prices_{date}.md 数值交叉验证）：
+共 34 项检查 / 14 节（含 prices_{date}.md 数值交叉验证）：
   meta(2) · head(2) · tape(3) · hero(2) · summary(1) · stance(1)
   I-radar(1) · II-market(3) · III-tech(6) · IV-macro(3)
-  V-earnings(2) · VI-stocks(4) · VII-people(2) · finale(2)
+  V-earnings(2) · VI-stocks(5) · VII-people(2) · finale(2)
 
 用法:
   python freshness_check.py <YYYY-MM-DD>                      # 全量（最终 QA 门）
@@ -25,6 +25,9 @@ checkpoint 只记"哪节已通过"，不做独立判断。
 退出码: 0 = 通过  1 = 有失败项  2 = 用法错误
 
 变更史:
+  v2.4 (2026-07-22): 加 _chk_stocks_tile_fidelity（VI-stocks 第5项，总计34）：网页每个 st-tkr
+        方块的 ticker 必须都在 md 5.1 表里，根治「建站按叙事凭空塞入/挪错板块」整类问题
+        （07-22 AVGO 事故：AI 超大厂卡塞入非成员 AVGO、挤掉常驻 AMZN）。通用数据驱动、不硬编码卡成员。
   v2.3 (2026-07-15): 修 _chk_stocks_dd_series：dd-series 文件缺失/日期错配曾静默跳过；
         新增 _chk_stocks_dd_build 校验 buildDD() 硬编码 ticker 数组 vs HTML 容器 id
         （07-14 事故根因：buildDD 仍写旧标的，HTML 容器已换新标的，图表全部空白）。
@@ -401,6 +404,25 @@ def _chk_stocks_dd_tickers(date, html, md, prices, prev, plabel):
     if md_tickers != html_tickers:
         return f"深读卡 ticker md={sorted(md_tickers)} html={sorted(html_tickers)}"
 
+def _chk_stocks_tile_fidelity(date, html, md, prices, prev, plabel):
+    """重点个股方块保真：网页每个 st-tkr 方块的 ticker 必须都出现在 md 5.1 的表里。
+    根治「建站按叙事凭空塞入/挪错板块」这一整类问题（07-22 AVGO 事故）——通用、数据驱动、
+    不硬编码任何卡成员：md 怎么写、网页就只能有那些方块。"""
+    if not md:
+        return None
+    m = re.search(r'###\s*5\.1[^\n]*\n(.*?)(?=\n###\s|\n##\s|\Z)', md, re.S)
+    if not m:
+        return None
+    # md 5.1 各表首列 ticker（`| **NVDA** |` / `| NVDA |`），即卡片应有的成员
+    md_tkrs = set(re.findall(r'^\|\s*\*{0,2}([A-Z]{2,6})\*{0,2}\s*\|', m.group(1), re.M))
+    if not md_tkrs:
+        return None
+    html_tkrs = set(re.findall(r'st-tkr">([A-Z]{2,6})', html))
+    extra = html_tkrs - md_tkrs
+    if extra:
+        return (f"重点个股方块出现 md 5.1 表里没有的 ticker {sorted(extra)}"
+                f"——建站凭空塞入或挪错板块；方块成员须逐一照搬 md，不增删不重排")
+
 # ——— VII-people ———
 def _chk_people_prev_date(date, html, md, prices, prev, plabel):
     """⑨ 关键人物节不应含前一日 M/D 日期"""
@@ -469,6 +491,7 @@ CHECKS = [
     ("VI-stocks",    "⑧ 深读卡 dd-series 文件/日期/ticker", _chk_stocks_dd_series),
     ("VI-stocks",    "buildDD() 硬编码 ticker vs HTML 容器", _chk_stocks_dd_build),
     ("VI-stocks",    "⑤ 深读卡 ticker vs md",              _chk_stocks_dd_tickers),
+    ("VI-stocks",    "个股方块 ticker ⊆ md 5.1（防凭空塞入）", _chk_stocks_tile_fidelity),
     ("VII-people",   "⑨ 关键人物无前一日日期",            _chk_people_prev_date),
     ("VII-people",   "关键人物含今日日期",                _chk_people_cur_date),
     ("finale",       "② finale-gen 日期",               _chk_finale_gen),

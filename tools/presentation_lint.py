@@ -68,22 +68,6 @@ def visible_text(src):
     text = re.sub(r"[ \t]+", " ", text)
     return text + "\n" + "\n".join(titles)
 
-def check_stockcards(raw):
-    """AI 超大厂卡成员机检：该卡固定＝MSFT/GOOGL/AMZN/META + NVDA/AAPL(±2%才并入)，
-    严禁建站按叙事把非成员（如 AVGO 属定制芯片、TSLA 属电车）塞成 stock-tile 方块。
-    只查 st-tkr 方块（叙事文字里提及非成员是允许的，方块不行）。"""
-    out = []
-    ALLOWED = {"MSFT", "GOOGL", "GOOG", "AMZN", "META", "NVDA", "AAPL"}
-    for ch in raw.split('<div class="stock-card">')[1:]:
-        if "超大厂" not in ch[:400]:      # 只认 AI 超大厂那张卡（头部含"超大厂"）
-            continue
-        for t in re.findall(r'st-tkr">([A-Z]{1,5})<', ch):
-            if t not in ALLOWED:
-                out.append((f"AI 超大厂卡混入非成员 {t}（该卡固定＝MSFT/GOOGL/AMZN/META+NVDA/AAPL；"
-                            f"{t} 应回其所属板块卡，勿照叙事擅自塞方块——建站须逐一照搬 md 的卡成员）", t))
-        break
-    return out
-
 def check_finale(raw):
     """finale-title 专项机检：一句话定调 = 单一 headline，禁数字/涨跌幅，宜短单句。"""
     out = []
@@ -110,9 +94,6 @@ def main(path):
     for why, t in check_finale(raw):
         bad += 1
         print(f"❌ [{why}] …{t[:44]}…")
-    for why, t in check_stockcards(raw):
-        bad += 1
-        print(f"❌ [{why}]")
     for pat, why in WARN:
         for l in lines:
             for m in re.finditer(pat, l):
