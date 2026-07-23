@@ -8,7 +8,7 @@
 <meta property="og:title" content="美股日报 · 2026-06-22">
 <meta property="og:description" content="板块大轮动 · GOOGL-5.02% AI人才出走 · SMCI+15.66% · MU+6.82% · CRDO+11.29% · SMH+1.34% · VIX+7.01%">
 <link rel="icon" href="data:,">
-<link rel="stylesheet" href="site.css?v=2026-06-22">
+<link rel="stylesheet" href="../../site.css?v=2026-06-22">
 </head>
 <body>
 <button id="calBtn" class="cal-btn" hidden>📅 <span id="calCur"></span></button>
@@ -629,7 +629,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
-<script src="market_data.js"></script>
+<script src="../../market_data.js"></script>
 <script>
 // MARKET_DATA 为共享多年序列，按本页日期截断
 (function(){
@@ -1050,7 +1050,7 @@
   window.addEventListener("resize",function(){charts.forEach(function(c){c.resize();});});
 })();
 </script>
-<script src="dates.js"></script>
+<script src="../../dates.js"></script>
 <script>
 (function(){
   if(typeof REPORT_DATES==="undefined"||!REPORT_DATES.length)return;
@@ -1075,7 +1075,7 @@
       e.className="cal-day"+(has.has(iso)?" has":"")+(iso===PAGE_DATE?" cur":"");
       e.textContent=d;
       if(has.has(iso)){
-        (function(iso){e.addEventListener("click",function(){location.href=iso+".html";});})(iso);
+        (function(iso){e.addEventListener("click",function(){location.href=pageURL(iso);});})(iso);
         e.title="查看 "+iso+" 日报";
       }
       grid.appendChild(e);

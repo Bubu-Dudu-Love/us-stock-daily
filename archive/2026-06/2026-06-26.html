@@ -8,7 +8,7 @@
 <meta property="og:title" content="美股日报 · 2026-06-26">
 <meta property="og:description" content="指数收平、科技独跌的轮动杀跌日：半导体/存储/AI链集体重挫（BE −18.13%、WDC −13.17%）vs 医疗等防御板块走强 · 广度健康、MSFT +5.71%逆势反弹">
 <link rel="icon" href="data:,">
-<link rel="stylesheet" href="site.css?v=2026-06-27-stance3">
+<link rel="stylesheet" href="../../site.css?v=2026-06-27-stance3">
 </head>
 <body>
 <button id="calBtn" class="cal-btn" hidden>📅 <span id="calCur"></span></button>
@@ -720,7 +720,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
-<script src="market_data.js"></script>
+<script src="../../market_data.js"></script>
 <script src="dd-series-2026-06-26.js"></script>
 <script>
 // MARKET_DATA 为共享多年序列，按本页日期截断
@@ -1184,7 +1184,7 @@
   window.addEventListener("resize",function(){charts.forEach(function(c){c.resize();});});
 })();
 </script>
-<script src="dates.js"></script>
+<script src="../../dates.js"></script>
 <script>
 (function(){
   if(typeof REPORT_DATES==="undefined"||!REPORT_DATES.length)return;
@@ -1209,7 +1209,7 @@
       e.className="cal-day"+(has.has(iso)?" has":"")+(iso===PAGE_DATE?" cur":"");
       e.textContent=d;
       if(has.has(iso)){
-        (function(iso){e.addEventListener("click",function(){location.href=iso+".html";});})(iso);
+        (function(iso){e.addEventListener("click",function(){location.href=pageURL(iso);});})(iso);
         e.title="查看 "+iso+" 日报";
       }
       grid.appendChild(e);

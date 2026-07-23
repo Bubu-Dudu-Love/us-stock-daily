@@ -511,15 +511,15 @@
 
       <!-- AI 超大厂 -->
       <div class="stock-card">
-        <div class="stock-head"><span class="name">🏛️ AI 超大厂 · 云与 capex 巨头<span>财报前集体降仓；NVDA/AVGO 随 SMCI 硬件链逆势偏强</span></span></div>
+        <div class="stock-head"><span class="name">🏛️ AI 超大厂 · 云与 capex 巨头<span>财报前集体降仓；NVDA 随 SMCI 硬件链逆势偏强</span></span></div>
         <div class="stock-body">
-          <div class="callout callout-navy" style="margin:0 0 16px;"><strong>核心：</strong>今日 Mag7 中 AI capex 权重股财报前主动降仓——<strong class="down">META −2.59%</strong>（capex $1,250–1,450 亿 ROI 最不透明、7/29 财报前）、<strong class="down">MSFT −1.84%</strong>（7/29 财报前）、<strong class="down">GOOGL −1.47%</strong>（今晚盘后财报前观望）、<strong class="down">TSLA −1.30%</strong>（今晚盘后财报前）、<strong class="down">AMZN −1.12%</strong>；但 <strong class="up">NVDA +2.28%</strong>/<strong class="up">AVGO +2.69%</strong> 随 SMCI 硬件链强势逆势收红，半导体硬件链与 AI 软件/平台层出现明显分化。</div>
+          <div class="callout callout-navy" style="margin:0 0 16px;"><strong>核心：</strong>今日 Mag7 中 AI capex 权重股财报前主动降仓——<strong class="down">META −2.59%</strong>（capex $1,250–1,450 亿 ROI 最不透明、7/29 财报前）、<strong class="down">MSFT −1.84%</strong>（7/29 财报前）、<strong class="down">GOOGL −1.47%</strong>（今晚盘后财报前观望）、<strong class="down">AMZN −1.12%</strong>；但 <strong class="up">NVDA +2.28%</strong> 随 SMCI 硬件链强势逆势收红，半导体硬件链与 AI 软件/平台层出现明显分化。</div>
           <div class="stock-tile-grid">
             <div class="stock-tile"><div class="st-tkr">META</div><div class="st-pct down">−2.59%</div><div class="st-desc">AI/社交</div></div>
             <div class="stock-tile"><div class="st-tkr">MSFT</div><div class="st-pct down">−1.84%</div><div class="st-desc">云/Azure</div></div>
             <div class="stock-tile"><div class="st-tkr">GOOGL</div><div class="st-pct down">−1.47%</div><div class="st-desc">搜索/云</div></div>
+            <div class="stock-tile"><div class="st-tkr">AMZN</div><div class="st-pct down">−1.12%</div><div class="st-desc">云/AWS</div></div>
             <div class="stock-tile"><div class="st-tkr">NVDA</div><div class="st-pct up">+2.28%</div><div class="st-desc">AI GPU</div></div>
-            <div class="stock-tile"><div class="st-tkr">AVGO</div><div class="st-pct up">+2.69%</div><div class="st-desc">AI 网络/定制</div></div>
           </div>
         </div>
       </div>
@@ -1168,7 +1168,7 @@
       e.className="cal-day"+(has.has(iso)?" has":"")+(iso===PAGE_DATE?" cur":"");
       e.textContent=d;
       if(has.has(iso)){
-        (function(iso){e.addEventListener("click",function(){location.href=iso+".html";});})(iso);
+        (function(iso){e.addEventListener("click",function(){location.href=pageURL(iso);});})(iso);
         e.title="查看 "+iso+" 日报";
       }
       grid.appendChild(e);

@@ -1199,7 +1199,7 @@
       e.className="cal-day"+(has.has(iso)?" has":"")+(iso===PAGE_DATE?" cur":"");
       e.textContent=d;
       if(has.has(iso)){
-        (function(iso){e.addEventListener("click",function(){location.href=iso+".html";});})(iso);
+        (function(iso){e.addEventListener("click",function(){location.href=pageURL(iso);});})(iso);
         e.title="查看 "+iso+" 日报";
       }
       grid.appendChild(e);
