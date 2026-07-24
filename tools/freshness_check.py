@@ -5,10 +5,10 @@
 两种模式共用同一套校验逻辑——freshness_check 是唯一的内容验证器，
 checkpoint 只记"哪节已通过"，不做独立判断。
 
-共 36 项检查 / 14 节（含 prices_{date}.md 数值交叉验证）：
+共 37 项检查 / 14 节（含 prices_{date}.md 数值交叉验证）：
   meta(2) · head(2) · tape(3) · hero(2) · summary(1) · stance(1)
   I-radar(1) · II-market(3) · III-tech(6) · IV-macro(3)
-  V-earnings(4) · VI-stocks(5) · VII-people(2) · finale(2)
+  V-earnings(4) · VI-stocks(5) · VII-people(2) · finale(3)
 
 用法:
   python freshness_check.py <YYYY-MM-DD>                      # 全量（最终 QA 门）
@@ -25,6 +25,8 @@ checkpoint 只记"哪节已通过"，不做独立判断。
 退出码: 0 = 通过  1 = 有失败项  2 = 用法错误
 
 变更史:
+  v2.6 (2026-07-23): 加 _chk_finale_accent：finale-inner --accent 须与 hero-inner 一致
+        （07-22 事故：hero 红/finale 绿，竖线颜色与标题方向色不一致）；finale 共3项，总37。
   v2.5 (2026-07-23): V-earnings 新增 2 项（总计36，V-earnings 共4项）：
         _chk_earnings_d0_desc（md 有 D0 分析时 desc 不应写"无一发布财报"）+
         _chk_earnings_d0_coverage（md 第四部分每个 D0 公司须在 #page-earnings 有
@@ -504,6 +506,19 @@ def _chk_finale_title(date, html, md, prices, prev, plabel):
     if cur and prv and cur.strip() == prv.strip():
         return f"finale-title 与 {plabel} 相同（finale 未更新）：「{cur.strip()[:60]}」"
 
+def _chk_finale_accent(date, html, md, prices, prev, plabel):
+    """finale-inner --accent 须与 hero-inner --accent 一致（竖线颜色跟随标题方向色）"""
+    hero = _snap(r'class="hero-inner"[^>]*style="([^"]*)"', html, dotall=False)
+    fin  = _snap(r'class="finale-inner"[^>]*style="([^"]*)"', html, dotall=False)
+    if not hero or not fin:
+        return None
+    def _accent(s):
+        m = re.search(r'--accent:\s*(var\(--(?:red|green)\))', s)
+        return m.group(1) if m else None
+    h, f = _accent(hero), _accent(fin)
+    if h and f and h != f:
+        return f"finale-inner --accent={f} ≠ hero-inner --accent={h}（竖线颜色与标题方向色不一致）"
+
 
 # ── 校验项注册表（建站顺序） ───────────────────────────────────────────────────
 # (section_id, check_name, fn)
@@ -546,6 +561,7 @@ CHECKS = [
     ("VII-people",   "关键人物含今日日期",                _chk_people_cur_date),
     ("finale",       "② finale-gen 日期",               _chk_finale_gen),
     ("finale",       "finale-title ≠ 前一期",            _chk_finale_title),
+    ("finale",       "finale 竖线色 = hero 方向色",       _chk_finale_accent),
 ]
 
 
