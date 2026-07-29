@@ -186,18 +186,25 @@ def _chk_hero_theme(date, html, md, prices, prev, plabel):
         return f"hero-theme-text 与 {plabel} 相同（hero 未更新）：「{cur[:60]}」"
 
 def _chk_hero_color(date, html, md, prices, prev, plabel):
-    """方向色：GSPC 跌日 hero-inner 应含 --accent:var(--red)"""
+    """方向色：分裂日（GSPC/IXIC 方向相异）取 IXIC 为准，否则取 GSPC。
+    规则：GSPC 与 IXIC 方向一致时以 GSPC 为主；分裂时以 IXIC（纳指）为准（建站指南第10条）。"""
     gspc_pct = prices.get('^GSPC', {}).get('pct', '')
+    ixic_pct = prices.get('^IXIC', {}).get('pct', '')
     if not gspc_pct:
         return None
     try:
-        is_down = float(gspc_pct.replace('%', '').replace('−', '-')) < 0
+        gspc_val = float(gspc_pct.replace('%', '').replace('−', '-'))
+        ixic_val = float(ixic_pct.replace('%', '').replace('−', '-')) if ixic_pct else gspc_val
     except Exception:
         return None
+    # 分裂日：GSPC 和 IXIC 方向不同，取 IXIC 方向
+    gspc_down = gspc_val < 0
+    ixic_down = ixic_val < 0
+    is_down = ixic_down if (gspc_down != ixic_down) else gspc_down
     m = re.search(r'class="hero-inner"[^>]*style="([^"]*)"', html)
     style = m.group(1) if m else ''
     if is_down and 'var(--red)' not in style:
-        return f"今日 GSPC {gspc_pct}（跌），hero-inner 未见 var(--red)（方向色未更新）"
+        return f"今日 IXIC/GSPC 分裂，以 IXIC {ixic_pct} 为准（跌），hero-inner 未见 var(--red)（方向色未更新）"
     if not is_down and 'var(--red)' in style:
         return f"今日 GSPC {gspc_pct}（涨），hero-inner 含 var(--red)（方向色未更新）"
 
@@ -465,6 +472,8 @@ def _chk_stocks_tile_fidelity(date, html, md, prices, prev, plabel):
         return None
     # md 5.1 各表首列 ticker（`| **NVDA** |` / `| NVDA |`），即卡片应有的成员
     md_tkrs = set(re.findall(r'^\|\s*\*{0,2}([A-Z]{2,6})\*{0,2}\s*\|', m.group(1), re.M))
+    # 同时提取行业异动文字段里"TICKER **±X%**"或"TICKER −X.XX%"格式的 ticker
+    md_tkrs |= set(re.findall(r'\b([A-Z]{2,6})\s+\*{0,2}[−−+][0-9]', m.group(1)))
     if not md_tkrs:
         return None
     html_tkrs = set(re.findall(r'st-tkr">([A-Z]{2,6})', html))
