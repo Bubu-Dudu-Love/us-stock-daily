@@ -8,7 +8,7 @@
 <meta property="og:title" content="美股日报 · 2026-07-28">
 <meta property="og:description" content="结构撕裂日：中国半导体自主×AI capex ROI 质疑双引擎第二日，从半导体扩散至全 AI 链，但道指 +1.03% 逆势创阶段新高、等权 RSP +0.94pp 广度健康；BE 盘后财报双 beat 盘中跌转盘后 V 型逆转 +12.08%；明日 FOMC+MSFT/META capex 双裁决。">
 <link rel="icon" href="data:,">
-<link rel="stylesheet" href="site.css?v=2026-07-28b">
+<link rel="stylesheet" href="site.css?v=2026-07-28c">
 </head>
 <body>
 <button id="calBtn" class="cal-btn" hidden>📅 <span id="calCur"></span></button>
@@ -588,6 +588,7 @@
       <!-- MU 深读卡 -->
       <div class="deepdive dd-chart-layout">
         <div class="dd-head"><span class="dd-tkr">MU · 存储/HBM</span><span class="dd-pct down">−8.89%</span></div>
+        <div class="dd-fullname">Micron Technology, Inc. · 美光科技</div>
         <div class="dd-top">
           <div class="dd-chart" id="dd-MU"></div>
           <div class="dd-panel">
@@ -636,6 +637,7 @@
       <!-- COHR 深读卡 -->
       <div class="deepdive dd-chart-layout">
         <div class="dd-head"><span class="dd-tkr">COHR · 光通信</span><span class="dd-pct down">−10.31%</span></div>
+        <div class="dd-fullname">Coherent Corp. · 相干公司</div>
         <div class="dd-top">
           <div class="dd-chart" id="dd-COHR"></div>
           <div class="dd-panel">
@@ -1136,16 +1138,16 @@
           axisLabel:{color:MUTED,fontSize:9,formatter:function(v){return "$"+v.toFixed(0);}},
           splitLine:{lineStyle:{color:"rgba(202,220,252,.1)"}}},
         series:[
-          {name:"收盘",type:"line",data:close.slice(s),symbol:"none",lineStyle:{width:2,color:ICE},z:3,
+          {name:"收盘",type:"line",data:close.slice(s),symbol:"none",lineStyle:{width:2,color:ICE},itemStyle:{color:ICE},z:3,
             markLine:{symbol:"none",lineStyle:{type:"dashed",width:1},
               label:{position:"insideStartTop",fontSize:10,fontFamily:"SF Mono,Menlo,monospace"},
               data:[
                 {yAxis:sup,lineStyle:{color:GREEN},label:{color:GREEN,formatter:"支撑 $"+sup}},
                 {yAxis:res,lineStyle:{color:RED},label:{color:RED,formatter:"阻力 $"+res}}
               ]}},
-          {name:"MA20",type:"line",data:ma20.slice(s),symbol:"none",smooth:true,lineStyle:{width:1.2,color:"#9CC97A"},z:2},
-          {name:"MA50",type:"line",data:ma50.slice(s),symbol:"none",smooth:true,lineStyle:{width:1.4,color:GOLD},z:2},
-          {name:"MA200",type:"line",data:ma200.slice(s),symbol:"none",smooth:true,lineStyle:{width:1.4,color:MA200_COL},z:1}
+          {name:"MA20",type:"line",data:ma20.slice(s),symbol:"none",smooth:true,lineStyle:{width:1.2,color:"#9CC97A"},itemStyle:{color:"#9CC97A"},z:2},
+          {name:"MA50",type:"line",data:ma50.slice(s),symbol:"none",smooth:true,lineStyle:{width:1.4,color:GOLD},itemStyle:{color:GOLD},z:2},
+          {name:"MA200",type:"line",data:ma200.slice(s),symbol:"none",smooth:true,lineStyle:{width:1.4,color:MA200_COL},itemStyle:{color:MA200_COL},z:1}
         ]
       });
     });
