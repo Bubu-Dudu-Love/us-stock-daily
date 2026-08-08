@@ -473,7 +473,15 @@ def _chk_stocks_tile_fidelity(date, html, md, prices, prev, plabel):
     # md 5.1 各表首列 ticker（`| **NVDA** |` / `| NVDA |`），即卡片应有的成员
     md_tkrs = set(re.findall(r'^\|\s*\*{0,2}([A-Z]{2,6})\*{0,2}\s*\|', m.group(1), re.M))
     # 同时提取行业异动文字段里"TICKER **±X%**"或"TICKER −X.XX%"格式的 ticker
-    md_tkrs |= set(re.findall(r'\b([A-Z]{2,6})\s+\*{0,2}[−−+][0-9]', m.group(1)))
+    # [\s(] 兼容"TICKER -X%"和"TICKER(-X%)"两种格式；[−−+\-] 兼容 Unicode/ASCII 减号
+    md_tkrs |= set(re.findall(r'\b([A-Z]{2,6})[\s(]\*{0,2}[−−+\-][0-9]', m.group(1)))
+    # 提取公司名批注里的 ticker，如"Atlassian(TEAM)"、"The Trade Desk(TTD)"
+    md_tkrs |= set(re.findall(r'\(([A-Z]{2,6})\)', m.group(1)))
+    # 同时搜索"补充·列表外"节（紧随 5.1 之后，也属第五部分可显示在 VI 方块）
+    m2 = re.search(r'###\s*补充[^\n]*列表外主题[^\n]*\n(.*?)(?=\n###\s|\n##\s|\Z)', md, re.S)
+    if m2:
+        md_tkrs |= set(re.findall(r'\(([A-Z]{2,6})\)', m2.group(1)))
+        md_tkrs |= set(re.findall(r'\b([A-Z]{2,6})[\s(]\*{0,2}[−−+\-][0-9]', m2.group(1)))
     if not md_tkrs:
         return None
     html_tkrs = set(re.findall(r'st-tkr">([A-Z]{2,6})', html))
