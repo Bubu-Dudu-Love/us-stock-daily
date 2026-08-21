@@ -477,6 +477,8 @@ def _chk_stocks_tile_fidelity(date, html, md, prices, prev, plabel):
     md_tkrs |= set(re.findall(r'\b([A-Z]{2,6})[\s(]\*{0,2}[−−+\-][0-9]', m.group(1)))
     # 兼容 bullet list 格式"**TICKER** ±X%"（md 5.1 非表格写法）
     md_tkrs |= set(re.findall(r'\*\*([A-Z]{2,6})\*\*\s*[−−+\-][0-9]', m.group(1)))
+    # 兼容中文括号格式"**TICKER（Company）｜±X%**"（md v2.9 触发式行业卡写法）
+    md_tkrs |= set(re.findall(r'\*\*([A-Z]{2,6})（', m.group(1)))
     # 提取公司名批注里的 ticker，如"Atlassian(TEAM)"、"The Trade Desk(TTD)"
     md_tkrs |= set(re.findall(r'\(([A-Z]{2,6})\)', m.group(1)))
     # 同时搜索"补充·列表外"节（紧随 5.1 之后，也属第五部分可显示在 VI 方块）
