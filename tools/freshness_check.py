@@ -456,7 +456,8 @@ def _chk_stocks_dd_tickers(date, html, md, prices, prev, plabel):
     if not m:
         return None  # md 无此标题格式，静默跳过
     ticker_part = m.group(1).split("——")[0]
-    md_tickers = set(re.findall(r'\b[A-Z]{2,6}\b', ticker_part))
+    _NON_TICKERS = {"AI", "CEO", "CFO", "CTO", "COO", "IPO", "ETF", "API", "CDN", "CDO"}
+    md_tickers = set(re.findall(r'\b[A-Z]{2,6}\b', ticker_part)) - _NON_TICKERS
     html_tickers = set(re.findall(r'dd-tkr">([A-Z]{2,6})', html))
     if md_tickers != html_tickers:
         return f"深读卡 ticker md={sorted(md_tickers)} html={sorted(html_tickers)}"
@@ -502,7 +503,10 @@ def _chk_people_prev_date(date, html, md, prices, prev, plabel):
     _, pm, pd = plabel.split("-")
     prev_mdfmt = f"{int(pm)}/{int(pd)}"
     section = _snap(r'id="page-people"(.*?)(?=id="page-|</body>)', html)
-    if section and prev_mdfmt in section:
+    y, mo, d = date.split("-")
+    cur_mdfmt = f"{int(mo)}/{int(d)}"
+    # 若今日日期也存在，则前一日日期属于合法历史事件引用（如前日备忘录），不报警
+    if section and prev_mdfmt in section and cur_mdfmt not in section:
         return f"关键人物节仍含前一日日期「{prev_mdfmt}」（从 {plabel} 复制后未更新）"
 
 def _chk_people_cur_date(date, html, md, prices, prev, plabel):
