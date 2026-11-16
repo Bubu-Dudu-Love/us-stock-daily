@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>美股日报 · 2026-11-16 · AI 价值链共振式杀跌</title>
+<meta name="description" content="美股日报 2026-11-16：出口管制落地 + 英伟达 CEO 真空 + 财报前避险三利空净同向，AI 价值链全链杀跌——纳指 −2.49%、半导体 SMH −5.16%、VIX 单日 +24.04% 至 23.94，追踪标的 61 只里 42 只跌≥5%。但等权 RSP −1.04% 明显跑赢市值权 SPY −1.97%，失血锁在少数超大权重龙头内、非全面恐慌；仅必需消费 XLP +0.29%、公用事业 XLU +0.17% 翻红。10Y 美债 5.121% 高位压制估值。NVDA 11/17 盘后财报（Kress 代理首份）、Anthropic 11/19 IPO 在即。">
+<meta property="og:title" content="美股日报 · 2026-11-16">
+<meta property="og:description" content="AI 价值链共振式杀跌：出口管制落地 + 英伟达 CEO 真空 + 财报前避险三利空同向，纳指 −2.49%、SMH −5.16%、VIX +24%。等权跑赢市值权，失血锁在龙头内非全面恐慌。NVDA 11/17 财报、Anthropic 11/19 IPO 在即。">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="site.css?v=2026-11-16">
+</head>
+<body>
+<button id="calBtn" class="cal-btn" hidden>📅 <span id="calCur"></span></button>
+<div id="calPanel" class="cal-panel" hidden>
+  <div class="cal-head"><button id="calPrev" aria-label="上月">‹</button><span id="calTitle"></span><button id="calNext" aria-label="下月">›</button></div>
+  <div class="cal-week"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
+  <div class="cal-grid" id="calGrid"></div>
+  <div class="cal-foot" id="calFoot"></div>
+</div>
+
+<!-- ============ 封面 ============ -->
+<header class="hero">
+  <canvas id="heroFx" aria-hidden="true"></canvas>
+  <div class="hero-inner" style="--accent:var(--red)">
+    <div class="hero-kicker">US STOCK MARKET · DAILY BRIEF</div>
+    <div class="hero-title-row">
+      <div class="hero-bar"></div>
+      <div>
+        <h1 class="hero-title">美股日报</h1>
+        <div class="hero-date num">2026 年 11 月 16 日 · 周一</div>
+      </div>
+    </div>
+    <div class="hero-theme">
+      <div class="hero-theme-label">TODAY'S THEME · 今日定调</div>
+      <div class="hero-theme-text">出口管制落地撞上龙头治理真空与财报前避险，AI 价值链被同一股风险偏好收缩抽走流动性<br>半导体全链深度破位，恐慌对冲需求令波动率单日跳升<br>但失血集中在少数超大权重龙头，等权跑赢市值权——是共振式杀跌而非全面恐慌<br>防御板块逆势翻红，资金向必需消费与公用事业轮动</div>
+    </div>
+    <div class="hero-meta">
+      <span>数据截至美东时间 2026 年 11 月 16 日 16:00 收盘</span>
+    </div>
+  </div>
+</header>
+<div class="tape" id="tape" hidden><div class="tape-track" id="tapeTrack"></div></div>
+
+<!-- ============ 摘要 + 今日研判（上下结构：摘要两列在上，研判同宽在下）============ -->
+<div class="top-split">
+<section class="summary">
+  <div class="sec-head"><span class="sec-no">SUMMARY</span><h2 class="sec-title">今日摘要</h2></div>
+  <div class="sec-sub">TL;DR · 当日最重要的事</div>
+  <div class="summary-grid">
+    <div class="sum-card" style="--accent:var(--red)">
+      <h3>三利空净同向，AI 价值链共振式杀跌</h3>
+      <p>出口管制今日落地、英伟达 CEO 真空、龙头 11/17 盘后财报前避险三条利空同向叠加，把估值敏感的 AI 链整体抽走流动性：纳指 <strong class="num down">−2.49%</strong>、半导体 <strong class="num down">SMH −5.16%</strong> 领跌，追踪标的 61 只里 42 只跌≥5%。道指 <strong class="num down">−1.40%</strong> 因科技敞口最小而最抗跌。</p>
+    </div>
+    <div class="sum-card" style="--accent:var(--red)">
+      <h3>失血锁在龙头内，是共振不是全面恐慌</h3>
+      <p>盘面质地透露这非普跌恐慌：等权 <strong class="num down">RSP −1.04%</strong> 明显跑赢市值权 <strong class="num down">SPY −1.97%</strong>（0.9pp），下杀集中在权重极大的少数 AI/芯片龙头；11 大板块仅必需消费 <strong class="num up">XLP +0.29%</strong>、公用事业 <strong class="num up">XLU +0.17%</strong> 翻红，典型防御轮动。VIX 单日跳升 <strong class="num up">+24.04%</strong> 至 23.94、恐惧贪婪 29.8，情绪转冷未极端。</p>
+    </div>
+    <div class="sum-card" style="--accent:var(--red)">
+      <h3>出口管制点燃全链，存储与代工首当其冲</h3>
+      <p>商务部 AI 芯片出口新规今日生效——向新马印泰巴出口须许可、堵「远程使用海外数据中心」漏洞、废止 AI Diffusion Rule，直压全链需求预期。存储 <strong class="num down">MU −7.62%</strong>（叠加 DRAM 反垄断诉讼）、代工 <strong class="num down">TSM −6.34%</strong>（新马产能受许可冲击）、<strong class="num down">ARM −8.12%</strong> 直接受冲。多家本周 beat 的财报（CRWV/NBIS/AMAT）被板块杀跌淹没。</p>
+    </div>
+    <div class="sum-card" style="--accent:var(--red)">
+      <h3>高利率压估值，财报与 IPO 成本周钥匙</h3>
+      <p>10Y 美债 <strong class="num up">5.121%</strong> 高位、30Y <strong class="num up">5.467%</strong>，股市大跌中长端仅温和回落（约 <strong class="num">−3bp</strong>），避险力度有限、估值端压力未缓；黄金避险今日失灵同跌 <strong class="num down">−0.80%</strong>。方向钥匙在本周——NVDA <strong>11/17 盘后</strong>财报（Kress 代理任内首份）与 Anthropic <strong>11/19</strong> IPO 将裁决超卖链是反弹还是续跌。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 今日研判 ============ -->
+<section class="stance">
+  <div class="sec-head"><span class="sec-no">STANCE</span><h2 class="sec-title">今日研判</h2></div>
+  <div class="sec-sub stance-sub"><span>⚠️ 分析观点 · 非投资建议</span></div>
+  <!-- 框1：主线归因 -->
+  <div class="stance-card" style="margin-bottom:12px;">
+    <div class="stance-body">
+      <h3>主线归因</h3>
+      <div class="stance-tone">出口管制落地撞上龙头治理真空与重磅财报前的集体避险，AI 价值链被同一股风险偏好收缩抽走流动性——这是三四条利空净同向的共振式杀跌，而非全面恐慌。</div>
+      <ul class="stance-attr cols2">
+        <li><b>A 出口管制（主导）：</b>商务部中期最终规则今日生效，向新马印泰巴出口 AI 芯片须许可、堵「远程使用海外数据中心」漏洞、废止 AI Diffusion Rule——直接压全链需求预期，代工 <strong class="num down">TSM −6.34%</strong>、存储 <strong class="num down">MU −7.62%</strong> 首当其冲</li>
+        <li><b>B 龙头治理真空：</b>英伟达 CEO 11/11 辞任、CFO 代理，外部呼声与回归之声并存，治理不确定叠加在管制之上，放大了对 AI 龙头定价的折价</li>
+        <li><b>C 财报前避险：</b>龙头 11/17 盘后首份代理 CFO 任内财报在即，市场普遍轻仓过关，是今日放量下杀的结构性放大器</li>
+        <li><b>结构软肋：</b>下杀集中在权重极大的 AI/芯片龙头——等权 <strong class="num down">RSP −1.04%</strong> 小胜市值权 <strong class="num down">SPY −1.97%</strong>（0.9pp）、仅 XLP/XLU 翻红，失血锁在 AI 链内；最脆一环是 11/17 龙头财报指引——方向钥匙不在今天的盘面，而在明天盘后</li>
+      </ul>
+    </div>
+  </div>
+  <!-- 框2：情景反应 -->
+  <div class="stance-card" style="margin-bottom:12px;">
+    <div class="stance-body">
+      <h3>情景反应</h3>
+      <div class="crt-legend"><i style="background:var(--green)"></i>涨<i style="background:var(--bg);border:1px solid var(--line)"></i>横<i style="background:var(--red)"></i>跌 · 概率为「给定情景下」的反应倾向，非情景发生概率</div>
+      <div class="stance-grid3" style="grid-template-columns:repeat(2,1fr)">
+      <div class="stance-tbl">
+      <div class="crt-title">大盘反应表 <span class="tk">^IXIC · 横盘界 ±1% · 窗口 3 日或到 12/08-09 FOMC</span></div>
+      <div class="crt-item">
+        <div class="crt-trigger"><b>A 龙头财报营收 beat（>$108.8B）、FY27 展望未因管制下修，且 IPO 首日不破发</b></div>
+        <div class="crt-bar"><div class="crt-seg up modal" style="width:55%"><b>55%</b></div><div class="crt-seg flat" style="width:25%">25%</div><div class="crt-seg down" style="width:20%">20%</div></div>
+      </div>
+      <div class="crt-item">
+        <div class="crt-trigger"><b>B 营收 miss 或 FY27 指引因管制明确下修，或 CEO 真空/合规在电话会被放大</b></div>
+        <div class="crt-bar"><div class="crt-seg up" style="width:15%">15%</div><div class="crt-seg flat" style="width:25%">25%</div><div class="crt-seg down modal" style="width:60%"><b>60%</b></div></div>
+      </div>
+      <div class="crt-item">
+        <div class="crt-trigger"><b>C 财报基本符合、无明显 beat/miss，IPO 定价下沿或首日平淡，10Y 维持 >5.1%</b></div>
+        <div class="crt-bar"><div class="crt-seg up" style="width:25%">25%</div><div class="crt-seg flat modal" style="width:45%"><b>45%</b></div><div class="crt-seg down" style="width:30%">30%</div></div>
+      </div>
+      </div>
+      <div class="stance-tbl">
+      <div class="crt-title">板块反应表 · AI 半导体 <span class="tk">SMH · 横盘界 ±2% · 裁决点 11/17 龙头财报</span></div>
+      <div class="crt-item">
+        <div class="crt-trigger"><b>A 许可证机制被解读为可操作/影响可控，SMH 在 MA200(524)下方企稳、RSI 不破 30</b></div>
+        <div class="crt-bar"><div class="crt-seg up modal" style="width:50%"><b>50%</b></div><div class="crt-seg flat" style="width:25%">25%</div><div class="crt-seg down" style="width:25%">25%</div></div>
+      </div>
+      <div class="crt-item">
+        <div class="crt-trigger"><b>B 龙头指引证实管制压需求，或存储/代工链二次下修</b></div>
+        <div class="crt-bar"><div class="crt-seg up" style="width:15%">15%</div><div class="crt-seg flat" style="width:20%">20%</div><div class="crt-seg down modal" style="width:65%"><b>65%</b></div></div>
+      </div>
+      </div>
+      </div>
+    </div>
+  </div>
+  <!-- 框3：关键观察点 -->
+  <div class="stance-card">
+    <div class="stance-body">
+      <h3>关键观察点</h3>
+      <ul class="obs-grid">
+        <li>⭐ <b>11-17 盘后 ~4:20PM 龙头财报</b>——营收 vs 一致预期$108.8B、FY27 展望是否因出口管制措辞下修、代理 CFO 任内电话会对治理与合规的口径</li>
+        <li><b>11-18 IPO 定价 / 11-19 首日</b>——Anthropic 定价（区间 $70–78）落上沿还是下沿、首日是否破发，AI 情绪晴雨表</li>
+        <li><b>SMH 能否守住 MA200(524)</b>——现价 461.6 已深度破位，RSI14(35.6) 是否失守 30 进入超卖，决定超卖反弹 vs 破位深化</li>
+        <li><b>10Y 美债能否自 5.121% 回落</b>——叠加美元 DXY(103.58) 走向，高利率是贴现压制的持续变量</li>
+        <li><b>VIX 是否回落至 20 下方</b>——今日 23.94（+24%），回落确认恐慌出清、不回落则扩散风险</li>
+        <li>⚠️ <b>风险</b>——以上概率只回答「给定该情景、市场如何反应」，不预测哪个情景会发生；最大不确定项是 11/17 龙头财报指引——若其在管制与治理双重压力下明确转弱，整张表的上行分支将失效</li>
+      </ul>
+    </div>
+    <div class="stance-disc">本栏为基于公开信息的分析与教育性研究，不构成个性化投资建议；市场有风险，决策需自负。概率为研判的主观判断，用于表达条件下的反应倾向，不预测哪个情景会发生。</div>
+  </div>
+</section>
+</div>
+
+<!-- ============ 主体 ============ -->
+<div class="main">
+  <nav class="nav" aria-label="板块导航">
+    <div class="nav-label">SECTIONS · 板块</div>
+    <ul class="nav-list" id="navList">
+      <li><button class="nav-btn active" data-page="radar"><span class="n">I</span>未来事件雷达</button></li>
+      <li><button class="nav-btn" data-page="market"><span class="n">II</span>大盘总览</button></li>
+      <li><button class="nav-btn" data-page="tech"><span class="n">III</span>技术面与资金面</button></li>
+      <li><button class="nav-btn" data-page="macro"><span class="n">IV</span>宏观 · 地缘</button></li>
+      <li><button class="nav-btn" data-page="earnings"><span class="n">V</span>财报预告</button></li>
+      <li><button class="nav-btn" data-page="stocks"><span class="n">VI</span>重点个股</button></li>
+      <li><button class="nav-btn" data-page="people"><span class="n">VII</span>关键人物</button></li>
+    </ul>
+    <div class="nav-foot">点击标题切换板块</div>
+  </nav>
+
+  <main class="panel" id="panel">
+
+    <!-- ===== 未来事件雷达 ===== -->
+    <section class="page active" id="page-radar">
+      <div class="page-head">
+        <span class="sec-no">I / EVENT RADAR</span>
+        <h2>未来事件雷达</h2>
+        <div class="desc">未来 2 周关键事件 · 全部时间为美东时间（ET）</div>
+      </div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>日期 (ET)</th><th>距今</th><th>事件</th><th>预期 / 前值 / 看点</th></tr></thead>
+        <tbody>
+          <tr><td>11/17（周二）08:30</td><td class="nw">1 天</td><td>10 月零售销售</td><td>前值 +0.4%（预期存疑），关注消费韧性</td></tr>
+          <tr><td class="gtl-hot"><strong>11/17（周二·盘后 ~4:20PM）</strong></td><td class="nw">1 天</td><td><strong>NVDA 英伟达 Q3 FY2027 财报</strong></td><td>⭐ 营收共识$108.8B（官方指引 $108B±2%）/ adj EPS $2.47；Kress 代理 CEO 任内首份，FY27 展望是否因出口管制下修、数据中心收入、Blackwell 交付节奏</td></tr>
+          <tr><td>11/18（周三）14:00</td><td class="nw">2 天</td><td>FOMC 10/27–28 会议纪要</td><td>解读鹰/鸽倾向与降息路径措辞</td></tr>
+          <tr><td class="gtl-hot"><strong>11/18（周三·盘后）</strong></td><td class="nw">2 天</td><td><strong>Anthropic（ANT）IPO 定价</strong></td><td>⭐ 发行价区间 $70–78，825M 股（+超额配售 123.75M）</td></tr>
+          <tr><td class="gtl-hot"><strong>11/19（周四）</strong></td><td class="nw">3 天</td><td><strong>Anthropic（ANT）Nasdaq 首日交易</strong></td><td>⭐ 估值$1.0 万亿（摊薄 $1.4 万亿），史上第二大科技 IPO，AI 情绪晴雨表</td></tr>
+          <tr><td>11/19（周四）08:30</td><td class="nw">3 天</td><td>初请失业金（周度）</td><td>就业边际走势（预期存疑）</td></tr>
+          <tr><td>11/20（周五）</td><td class="nw">4 天</td><td>月度期权到期日（OpEx）</td><td>11 月第三个周五，或放大波动</td></tr>
+          <tr><td>11/24（周一·盘后）</td><td class="nw">8 天</td><td>DELL 戴尔财报</td><td>adj EPS 共识 $6.41，AI 服务器/PowerEdge 需求</td></tr>
+          <tr><td class="gtl-hot"><strong>11/25（周二）08:30</strong></td><td class="nw">9 天</td><td><strong>10 月核心 PCE + GDP Q3 二次修正</strong></td><td>⭐ Fed 最看重的通胀口径（预期存疑）</td></tr>
+          <tr><td>11/26（周四）</td><td class="nw">10 天</td><td>感恩节 · 美股休市</td><td>全天休市</td></tr>
+          <tr><td>11/27（周五）</td><td class="nw">11 天</td><td>黑色星期五 · 提前收市</td><td>美股 1:00PM ET 提前收市</td></tr>
+          <tr><td>12/01（周二·盘后）</td><td class="nw">15 天</td><td>MDB MongoDB 财报</td><td>Atlas + AI 向量数据库需求</td></tr>
+          <tr><td>12/02（周三·盘后）</td><td class="nw">16 天</td><td>SNOW Snowflake 财报</td><td>产品营收增速、AI 工作负载上云</td></tr>
+          <tr><td class="gtl-hot"><strong>12/08（周二）–12/09（周三）14:00</strong></td><td class="nw">22 天</td><td><strong>下次 FOMC 利率决议</strong></td><td>⭐ 12/09 下午 2:00 ET 公布；市场对降息预期偏低（偏鹰）</td></tr>
+          <tr><td>12/18（周五）</td><td class="nw">32 天</td><td>四巫日（Quad Witching）</td><td>季度股指期货/期权/个股期权集中到期</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout callout-gold"><strong>后市焦点</strong> · 11/17 NVDA 财报（Kress 代理首份）+ 零售销售 · 11/18 FOMC 纪要 + Anthropic 定价 · 11/19 Anthropic 首日 · 11/25 核心 PCE · 12/08-09 下次 FOMC</div>
+      <p class="src">来源：<a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" target="_blank" rel="noopener">FOMC 日历 - Fed</a> · <a href="https://www.bls.gov/" target="_blank" rel="noopener">BLS · 就业数据</a></p>
+    </section>
+
+    <!-- ===== 大盘总览 ===== -->
+    <section class="page" id="page-market">
+      <div class="page-head">
+        <span class="sec-no">II / MARKET OVERVIEW</span>
+        <h2>大盘总览</h2>
+        <div class="desc">纳指 24,510 −2.49% · 标普 7,417 −1.91% · 道指 51,616 −1.40% · 罗素 2,737 −1.91% · SMH 462 −5.16% · 黄金 $3,855 −0.80% · BTC −0.54% · VIX 23.94 +24.04% · 广度 RSP−SPY +0.93pp</div>
+      </div>
+
+      <div class="spark-grid" id="sparkGrid" hidden></div>
+
+      <div class="callout callout-gold"><strong>⭐ 核心读法：</strong>今日是一场<strong>结构高度集中的 AI 价值链 risk-off</strong>。三条利空同向叠加——① 商务部 AI 芯片出口管制中期最终规则今日落地，将许可要求扩展到新马印泰巴等转口节点、堵「远程使用海外数据中心」漏洞、废止 AI Diffusion Rule，直压 NVDA/TSM/MU 全链需求预期；② 英伟达 CEO 黄仁勋 11/11 辞任、CFO 代理，治理真空；③ 英伟达 11/17 盘后将发首份代理 CFO 任内财报，市场普遍轻仓避险。结果纳指 <strong class="down">−2.49%</strong>、半导体 <strong class="down">SMH −5.16%</strong> 领跌，追踪标的 61 只里 42 只跌≥5%。但盘面质地透露非全面恐慌：<strong>等权 RSP −1.04% 明显跑赢市值权 SPY −1.97%</strong>（0.9pp），失血集中在少数超大权重龙头；11 大板块仅必需消费 <strong class="up">XLP +0.29%</strong>、公用事业 <strong class="up">XLU +0.17%</strong> 翻红。VIX 单日跳 <strong class="up">+24.04%</strong> 至 23.94、恐惧贪婪 29.8，情绪转冷未极端。</div>
+
+      <div class="chart-card">
+        <div class="block-title">主追踪当日涨跌（%）</div>
+        <!-- 7 项主追踪；最大|涨跌|=SMH −5.16%；标尺 ±6%（向上取整）；data-w = |%| ÷ 6 × 50 = |%| × 8.333 -->
+        <div class="bar-row"><span class="lbl">比特币<span class="tk">BTC</span></span><span class="bar-track"><span class="bar neg" data-w="4.5"></span></span><span class="val down">−0.54%</span></div>
+        <div class="bar-row"><span class="lbl">黄金<span class="tk">GC=F</span></span><span class="bar-track"><span class="bar neg" data-w="6.67"></span></span><span class="val down">−0.80%</span></div>
+        <div class="bar-row"><span class="lbl">道琼斯<span class="tk">^DJI</span></span><span class="bar-track"><span class="bar neg" data-w="11.67"></span></span><span class="val down">−1.40%</span></div>
+        <div class="bar-row"><span class="lbl">标普 500<span class="tk">^GSPC</span></span><span class="bar-track"><span class="bar neg" data-w="15.92"></span></span><span class="val down">−1.91%</span></div>
+        <div class="bar-row"><span class="lbl">罗素 2000<span class="tk">^RUT</span></span><span class="bar-track"><span class="bar neg" data-w="15.92"></span></span><span class="val down">−1.91%</span></div>
+        <div class="bar-row"><span class="lbl">纳斯达克综合<span class="tk">^IXIC</span></span><span class="bar-track"><span class="bar neg" data-w="20.75"></span></span><span class="val down">−2.49%</span></div>
+        <div class="bar-row"><span class="lbl">半导体<span class="tk">SMH</span></span><span class="bar-track"><span class="bar neg" data-w="43"></span></span><span class="val down">−5.16%</span></div>
+        <div class="chart-note">最大变动 SMH −5.16%（标尺 ±6%）；七项主追踪当日全线下跌——半导体领跌、纳指次之（科技权重重），道指因科技敞口小而最抗跌。黄金避险今日失灵同跌 −0.80%、比特币微跌。波动核心在 AI 半导体链，而非指数层普跌。</div>
+      </div>
+
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>名称</th><th>代码</th><th>收盘</th><th>涨跌幅</th><th>备注 / 驱动</th></tr></thead>
+        <tbody>
+          <tr><td>纳斯达克综合</td><td class="num">^IXIC</td><td class="num"><strong>24,509.76</strong></td><td class="num down"><strong>−2.49%</strong></td><td>领跌；跌破 MA50(26,310) 与 MA200(25,143)，空头排列；RSI 37.1 接近超卖；距 52 周高（27,723）−11.6%</td></tr>
+          <tr><td>标普 500</td><td class="num">^GSPC</td><td class="num"><strong>7,417.12</strong></td><td class="num down"><strong>−1.91%</strong></td><td>跌破 MA50(7,661)，勉强守 MA200(7,343) 上方；RSI 40.2；距 52 周高（7,845）−5.45%</td></tr>
+          <tr><td>道琼斯</td><td class="num">^DJI</td><td class="num"><strong>51,615.99</strong></td><td class="num down"><strong>−1.40%</strong></td><td>最抗跌（科技敞口最小）；跌破 MA50(51,938)、守 MA200(50,771) 上方；RSI 45.5 四标的最高；距 52 周高（54,744）−5.71%</td></tr>
+          <tr><td>罗素 2000</td><td class="num">^RUT</td><td class="num"><strong>2,737.17</strong></td><td class="num down"><strong>−1.91%</strong></td><td>小盘随大势，高利率环境持续压制</td></tr>
+          <tr><td>半导体 SMH</td><td class="num">SMH</td><td class="num"><strong>461.62</strong></td><td class="num down"><strong>−5.16%</strong></td><td>全市场震中；深度破位、远低于 MA50(558)、MA200(524)；RSI 35.6 最接近超卖；距 52 周高（671.83）−31.3%</td></tr>
+          <tr><td>黄金期货</td><td class="num">GC=F</td><td class="num"><strong>$3,855.10</strong></td><td class="num down"><strong>−0.80%</strong></td><td>避险属性今日失灵，高利率 + 强美元压制，随股市同跌</td></tr>
+          <tr><td>比特币现货</td><td class="num">BTC/USD</td><td class="num"><strong>64,955.38</strong></td><td class="num down"><strong>−0.54%</strong></td><td>相对平稳，未接棒避险</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="block">
+        <div class="block-title">当日盘面综述</div>
+        <p>今日美股在 AI 价值链 risk-off 中全线收跌，纳指与半导体领跌、道指最抗跌，呈现"少数超大权重龙头集中失血"的结构。下杀驱动来自三条利空净同向共振：</p>
+        <p>① <strong>出口管制落地</strong>——商务部 AI 芯片出口管制中期最终规则今日生效，将许可要求扩展到新加坡、马来西亚、印尼、泰国、巴西等转口节点，堵「中国实体远程使用海外数据中心算力」漏洞、废止拜登 AI Diffusion Rule，直接冲击 NVDA/TSM/MU 全链需求预期。<br>② <strong>龙头治理真空</strong>——英伟达创始人黄仁勋 11/11 因丑闻辞任 CEO、CFO Colette Kress 代理，治理不确定叠加在管制之上，放大对 AI 龙头定价的折价。<br>③ <strong>重磅财报前避险</strong>——英伟达 11/17 盘后将发 Kress 代理任内首份财报，叠加 Anthropic 本周 IPO（估值$1.0 万亿（摊薄 $1.4 万亿）），市场普遍轻仓过关、放量下杀。<br>④ <strong>高利率背景未缓</strong>——10Y 美债 <strong class="up">5.121%</strong> 高位，股市大跌中长端仅温和回落（约 <strong class="num">−3bp</strong>），避险力度有限、估值端压力持续。板块层面仅必需消费 <strong class="up">+0.29%</strong>、公用事业 <strong class="up">+0.17%</strong> 翻红（防御轮动），科技 <strong class="down">−3.35%</strong> 领跌。广度上等权 RSP（<strong class="down">−1.04%</strong>）明显跑赢市值权 SPY（<strong class="down">−1.97%</strong>），差值 <strong class="up">+0.93pp</strong>——这是今日最重要的结构读数：下跌由少数超大权重 AI/芯片龙头主导，市场广度实际好于指数表观跌幅。</p>
+      </div>
+
+      <div class="block">
+        <div class="block-title">板块轮动 · 当日 GICS 主要板块 ETF 涨跌</div>
+        <div class="sector-grid">
+          <div class="sector-row">
+            <div class="sector-tile" style="--accent:var(--red)">
+              <div class="sc-name">科技</div>
+              <div class="sc-pct">−3.35%</div>
+              <div class="sc-desc">⚠️ 领跌：半导体 + AI 软件权重股集中杀跌</div>
+            </div>
+            <div class="sector-tile" style="--accent:var(--red)">
+              <div class="sc-name">能源</div>
+              <div class="sc-pct">−1.96%</div>
+              <div class="sc-desc">随 WTI 原油 −3.4% 回落</div>
+            </div>
+            <div class="sector-tile" style="--accent:var(--red)">
+              <div class="sc-name">工业</div>
+              <div class="sc-pct">−1.88%</div>
+              <div class="sc-desc">电气设备（GEV/ETN/VRT）AI 电力链拖累</div>
+            </div>
+            <div class="sector-tile" style="--accent:var(--red)">
+              <div class="sc-name">通信服务</div>
+              <div class="sc-pct">−1.75%</div>
+              <div class="sc-desc">GOOGL/META 回调拖累</div>
+            </div>
+          </div>
+          <div class="sector-row">
+            <div class="sector-tile" style="--accent:var(--red)">
+              <div class="sc-name">可选消费</div>
+              <div class="sc-pct">−1.58%</div>
+              <div class="sc-desc">TSLA/AMZN 回调</div>
+            </div>
+            <div class="sector-tile" style="--accent:var(--red)">
+              <div class="sc-name">医疗</div>
+              <div class="sc-pct">−0.55%</div>
+              <div class="sc-desc">相对抗跌，防御属性</div>
+            </div>
+            <div class="sector-tile" style="--accent:var(--green)">
+              <div class="sc-name">必需消费</div>
+              <div class="sc-pct">+0.29%</div>
+              <div class="sc-desc">⭐ 逆势翻红：避险资金流入防御板块</div>
+            </div>
+            <div class="sector-tile" style="--accent:var(--green)">
+              <div class="sc-name">公用事业</div>
+              <div class="sc-pct">+0.17%</div>
+              <div class="sc-desc">防御轮动翻红，但 AI 电力标的分化</div>
+            </div>
+          </div>
+        </div>
+        <p style="font-size:13px;color:var(--subink);margin-top:4px;">今日板块普跌、仅两防御板块翻红：科技 XLK −3.35% 领跌（半导体与 AI 软件集中杀跌），能源 XLE −1.96%（随油价）、工业 XLI −1.88%（AI 电力链）、通信服务 XLC −1.75% 跟随。另一端资金向防御轮动——必需消费 XLP +0.29%、公用事业 XLU +0.17% 逆势翻红；金融 XLF −0.89%、房地产 XLRE −0.30% 相对抗跌。</p>
+      </div>
+
+      <div class="chart-card" id="klineCard">
+        <div class="block-title" style="color:#fff;">日线 K 线 · 真实行情</div>
+        <div class="kline-tabs" id="klineTabs">
+          <button class="ktab active" data-k="GSPC">标普 500</button>
+          <button class="ktab" data-k="IXIC">纳斯达克</button>
+          <button class="ktab" data-k="DJI">道琼斯</button>
+          <button class="ktab" data-k="SMH">半导体 SMH</button>
+        </div>
+        <div id="kline" style="height:520px;"></div>
+        <div class="chart-fallback" id="klineFallback" hidden>📡 K 线图需联网加载（图表库未能从 CDN 获取）。本页文字与表格内容不受影响。</div>
+        <div class="chart-note">数据来源：Yahoo Finance · 截至 2026-11-16 收盘 · 拖动下方滑块缩放区间</div>
+      </div>
+
+      <p class="src">来源：Yahoo Finance v8 API（指数/SMH 11/16 收盘）· <a href="https://stockanalysis.com/etf/" target="_blank" rel="noopener">StockAnalysis 板块 ETF</a></p>
+    </section>
+
+    <!-- ===== 技术面与资金面 ===== -->
+    <section class="page" id="page-tech">
+      <div class="page-head">
+        <span class="sec-no">III / TECHNICALS &amp; FLOWS</span>
+        <h2>技术面与资金面</h2>
+        <div class="desc">纳指 24,510 −2.49% RSI 37.1 · 标普 7,417 −1.91% RSI 40.2 · 道指 51,616 −1.40% RSI 45.5 · SMH 462（−5.16%）RSI 35.6 · VIX 23.94（+24.04%）· 广度 RSP−SPY +0.93pp</div>
+      </div>
+
+      <div class="chart-card" id="cockpitCard" hidden>
+        <div class="block-title" style="color:#fff;">技术面仪表盘 · 情绪与动能</div>
+        <div class="cockpit-grid">
+          <div class="cockpit-cell"><div class="cp-gauge" id="gVIX"></div><div class="cp-label">VIX</div><div class="cp-note">23.94 · +24.04%——单日跳升，财报周 + 管制落地的对冲需求激增，但绝对水平仍属中性偏高、非极端恐慌</div></div>
+          <div class="cockpit-cell"><div class="cp-gauge" id="gFG"></div><div class="cp-label">恐惧贪婪指数</div><div class="cp-note">29.8 · 恐惧区间——情绪明显转冷，但尚未进入极度恐惧（&lt;25）</div></div>
+          <div class="cockpit-cell"><div class="cp-gauge" id="gRSI"></div><div class="cp-label">标普 RSI(14)</div><div class="cp-note">40.2 偏弱；SMH 35.6、纳指 37.1 最接近超卖（30），道指 45.5 最健康</div></div>
+          <div class="cockpit-cell"><div class="cp-gauge" id="gBR"></div><div class="cp-label">广度(RSP−SPY)</div><div class="cp-note">+0.93pp · RSP −1.04%，SPY −1.97%——等权跑赢，下跌由少数超大权重龙头主导</div></div>
+                </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat"><div class="k">VIX 恐慌指数</div><div class="v up">23.94</div><div class="d">+24.04%——单日暴涨，从 20 下方跳升至 24 上方，反映财报周 + 出口管制落地的事件性对冲需求激增；但绝对水平（24）仍属中性偏高、非极端恐慌（通常 &gt;30 才算恐慌），期限结构未见异常倒挂。</div></div>
+        <div class="stat"><div class="k">CNN 恐惧贪婪指数</div><div class="v down">29.8</div><div class="d">「恐惧」区间（29.8）——情绪明显转冷，但尚未进入极度恐惧（&lt;25）；与全链杀跌、VIX 跳升的盘面一致，风险偏好收缩但未恐慌性出清。</div></div>
+        <div class="stat"><div class="k">标普 RSI(14)</div><div class="v down">40.2</div><div class="d">偏弱；半导体 SMH（35.6）与纳指（37.1）最接近超卖线（30）但均未破，技术上处于"接近超卖、尚未极端"区间——这正是超卖反弹 vs 破位深化分叉的技术基础；道指 45.5 相对健康。</div></div>
+        <div class="stat"><div class="k">广度 RSP−SPY</div><div class="v up">+0.93pp</div><div class="d">等权重 RSP（−1.04%）明显跑赢市值加权 SPY（−1.97%），差值 +0.93pp——说明下跌由少数超大权重 AI/芯片龙头主导，市场广度实际好于指数表观跌幅，是今日最重要的结构读数。</div></div>
+            </div>
+
+      <div class="block">
+        <div class="block-title">A · 技术指标（各指数均线与 RSI 读数）</div>
+        <div class="techviz">
+
+          <div class="tcard">
+            <div class="tchart" id="tv-IXIC"></div>
+            <div class="tinfo">
+              <div class="tname">纳斯达克综合 <span class="ttk">^IXIC</span> <span class="tchg down">−2.49%</span></div>
+              <div class="tchips"><span><b>跌破 MA50（26,310）·空头</b></span><span>跌破 MA200（25,143）·死叉</span><span>RSI 37.1 接近超卖</span><span>距 52 周高（27,723）−11.6%</span></div>
+              <div class="ttxt">收 24,509.76，−2.49%；今日领跌，同时跌破 MA50（26,310）与 MA200（25,143），进入空头排列；RSI 37.1 最接近超卖线（30）但未破；距 52 周高（27,723）−11.6%，MA200 失守后下一参考位看 24,000 整数关。</div>
+            </div>
+          </div>
+
+          <div class="tcard">
+            <div class="tchart" id="tv-SMH"></div>
+            <div class="tinfo">
+              <div class="tname">半导体 <span class="ttk">SMH</span> <span class="tchg down">−5.16%</span></div>
+              <div class="tchips"><span><b>深度跌破 MA50（558）·空头</b></span><span>跌破 MA200（524）·死叉</span><span>RSI 35.6 最接近超卖</span><span>距 52 周高（671.83）−31.3%</span></div>
+              <div class="ttxt">收 461.62，−5.16%；全市场破位最深的一环，远低于 MA50（558）与 MA200（524）——现价较 MA200 低逾 12%、较 MA50 低逾 17%，空头排列；RSI 35.6 为四标的最弱、最接近超卖；跌破所有均线后缺乏明确近端支撑，需观察能否在 MA200 下方止跌企稳。</div>
+            </div>
+          </div>
+
+          <div class="tcard">
+            <div class="tchart" id="tv-GSPC"></div>
+            <div class="tinfo">
+              <div class="tname">标普 500 <span class="ttk">^GSPC</span> <span class="tchg down">−1.91%</span></div>
+              <div class="tchips"><span><b>跌破 MA50（7,661）</b></span><span>守 MA200（7,343）上方</span><span>RSI 40.2 偏弱</span><span>距 52 周高（7,845）−5.45%</span></div>
+              <div class="ttxt">收 7,417.12，−1.91%；跌破 MA50（7,661），但勉强守在 MA200（7,343）上方——中期结构未彻底转空，承压主要来自科技权重；RSI 40.2 偏弱；距 52 周高（7,845）−5.45%。</div>
+            </div>
+          </div>
+
+          <div class="tcard">
+            <div class="tchart" id="tv-DJI"></div>
+            <div class="tinfo">
+              <div class="tname">道琼斯 <span class="ttk">^DJI</span> <span class="tchg down">−1.40%</span></div>
+              <div class="tchips"><span><b>跌破 MA50（51,938）</b></span><span>守 MA200（50,771）上方</span><span>RSI 45.5 四标的最高</span><span>距 52 周高（54,744）−5.71%</span></div>
+              <div class="ttxt">收 51,615.99，−1.40%；四标的中最抗跌（科技敞口最小），跌破 MA50（51,938）但仍守在 MA200（50,771）上方；RSI 45.5 为四标的最高、相对健康；距 52 周高（54,744）−5.71%，MA50 是上方需收复的关键。</div>
+            </div>
+          </div>
+
+        </div>
+        <div class="tlegend"><span class="lg-px">━ 收盘价</span><span class="lg-50">━ MA50</span><span class="lg-200">━ MA200</span><span class="lg-cap">· 近 50 个交易日 · 悬停查值</span></div>
+      </div>
+
+      <div class="block">
+        <div class="block-title">B · 波动率与情绪</div>
+        <ul>
+          <li><strong>VIX</strong>：收 <strong>23.94</strong>（+24.04%）——单日暴涨，从 20 下方跳升至 24 上方，反映财报周 + 出口管制落地的事件性对冲需求激增；但绝对水平（24）仍属中性偏高、非极端恐慌（通常 &gt;30 才算恐慌），期限结构未见异常倒挂。</li>
+          <li><strong>CNN 恐惧贪婪指数</strong>：当日读数 <strong>29.8 · 恐惧区间</strong>——情绪明显转冷，但尚未进入极度恐惧（&lt;25）；与全链杀跌、VIX 跳升一致，风险偏好收缩但未恐慌性出清。</li>
+          <li><strong>Put/Call 比率、AAII 散户情绪</strong>：Put/Call 当日精确读数暂无；AAII 为周三发布的周度数据，今日周一不复述旧值。</li>
+          <li><strong>市场广度（RSP−SPY）</strong>：等权重 RSP（−1.04%）明显跑赢市值加权 SPY（−1.97%），差值 <strong>+0.93pp</strong>——下跌由少数超大权重 AI/芯片龙头主导，市场广度实际好于指数表观跌幅，是今日最重要的结构读数。</li>
+        </ul>
+      </div>
+
+      <div class="block">
+        <div class="block-title">C · 资金面与机构持仓</div>
+        <ul>
+          <li><strong>利率背景（当日资金面主线）</strong>：10Y 美债约 <strong class="down">−3bp</strong> 至 5.121%、30Y 约 <strong class="down">−1bp</strong> 至 5.467%，美元 DXY <strong class="up">+0.17%</strong> 至 103.58——股市大跌之际长端美债仅小幅回落，避险资金流入债市力度温和，10Y 仍牢牢站在 5.1% 上方高位，是今日压制高估值 AI 成长股的持续贴现变量；强美元叠加对出口型科技股亦非顺风。</li>
+          <li><strong>CTA / Dealer Gamma</strong>：高盛此前警告下跌行情中 CTA 趋势跟踪算法易形成正反馈抛售、做市商仓位由 long gamma 转向 flat/short gamma 从而放大波动（存疑）。当日无可核实的 prime/净敞口具体数字。</li>
+          <li><strong>机构观点分歧</strong>：摩根士丹利近日将全球股票评级上调至「maximum overweight」，理由为估值有吸引力 + 盈利韧性（存疑）。</li>
+          <li><strong>回购静默</strong>：英伟达等多家 AI 龙头财报季临近，进入财报静默期的成分公司回购托底力量本周减弱（定性，具体占比暂无）。</li>
+        </ul>
+      </div>
+
+      <div class="block">
+        <div class="block-title">D · 关键到期与交割日历</div>
+        <ul>
+          <li><strong>月度 OpEx</strong>：下一次月度期权到期为 11 月第三个周五（11/20），临近、可能在已高企的波动率上追加放大。</li>
+          <li><strong>季度四巫日（Quad Witching）</strong>：下一次季度四巫日在 12 月第三个周五（12/18），季度股指期货/期权/个股期权集中到期。</li>
+        </ul>
+      </div>
+      <p class="src">来源：Yahoo Finance v8 API（RSI/MA 实算）· RSP/SPY 真实收盘 · 11/16 · CNN 恐惧贪婪指数</p>
+    </section>
+
+    <!-- ===== 宏观·地缘 ===== -->
+    <section class="page" id="page-macro">
+      <div class="page-head">
+        <span class="sec-no">IV / MACRO &amp; GEOPOLITICS</span>
+        <h2>宏观 · 地缘</h2>
+        <div class="desc">⭐ AI 芯片出口管制中期最终规则今日落地（新马印泰巴须许可 · 堵远程算力漏洞 · 废止 AI Diffusion Rule）→ 半导体全链杀跌 · 10Y 美债 5.121% 高位压制估值 · 沃什（偏鹰）讲 AI 对经济影响未给利率信号 · 12 月 FOMC 12/08-09 降息预期偏低 · WTI 原油 −3.39%</div>
+      </div>
+
+      <div class="block" style="padding-bottom:8px;">
+        <div class="block-title">⭐ 宏观综述（当日主线：AI 芯片出口管制落地 + 高利率贴现压制）</div>
+        <div class="callout callout-gold"><strong>核心读法：</strong>今日宏观地缘的决定性变量是<strong>美国 AI 芯片出口管制中期最终规则落地</strong>——商务部要求企业向全球任何数据中心出口 AI 芯片时、若算力可能供中国或其他受限国家使用须申请许可证，新增许可覆盖马来西亚、新加坡、印尼、泰国、巴西，并废止拜登政府 AI Diffusion Rule。此规重塑全球算力出口逻辑，是今日半导体全链杀跌（代工 TSM、存储 MU、设备链）的政策导火索。背景是英伟达「芯片走私/间谍」事件（媒体报道24 万片受限芯片经新加坡转运中国，官方未证实具体数字）引发的管制升级。① <strong>高利率贴现逆风</strong>——10Y 美债 <strong class="up">5.121%</strong> 高位、30Y <strong class="up">5.467%</strong>，股市大跌中长端仅温和回落（约 <strong class="num">−3bp</strong>），避险力度有限、估值端压力未缓。② <strong>沃什讲话</strong>——美联储主席沃什（偏鹰）今日在旧金山联储讲 AI 对经济的潜在影响，未提利率路径、非政策信号。</div>
+
+        <div class="gtl">
+          <div class="gtl-item gtl-hot"><span class="gtl-dot"></span><div class="gtl-time">已证实 · 当日决定性事件</div><div class="gtl-body"><strong>AI 芯片出口管制中期最终规则今日落地</strong>——向新加坡/马来西亚/印尼/泰国/巴西出口 AI 芯片须申请许可证、堵「中国实体远程使用海外数据中心算力」漏洞、废止拜登 AI Diffusion Rule。直接冲击 NVDA/TSM/MU 全链需求预期，是半导体全链杀跌的政策导火索 <span class="tag tag-fact">已证实</span></div></div>
+          <div class="gtl-item gtl-hot"><span class="gtl-dot"></span><div class="gtl-time">已证实 · 管制背景</div><div class="gtl-body"><strong>英伟达「芯片走私/间谍」事件</strong>——媒体报道美方认定新加坡 Megaspeed 前高管为中国国安特工，涉嫌转运24 万片受限英伟达芯片至中国实体；黄仁勋 11/11 因丑闻辞任 CEO。走私细节数字为媒体口径、官方未证实 <span class="tag tag-rumor">骨干已证实·细节存疑</span></div></div>
+          <div class="gtl-item gtl-hot"><span class="gtl-dot"></span><div class="gtl-time">已证实 · 当日利率背景</div><div class="gtl-body"><strong>10Y 美债 5.121% 高位（约 −3bp）</strong>——股市大跌中长端仅温和回落、避险力度有限，10Y 仍牢牢站在 5.1% 上方，是今日压制高估值 AI 成长股的持续贴现变量 <span class="tag tag-fact">已证实</span></div></div>
+          <div class="gtl-item"><span class="gtl-dot"></span><div class="gtl-time">传闻 · 潜在反制</div><div class="gtl-body"><strong>中国潜在反制</strong>——分析师称若美方进一步升级，中国可能收紧稀土出口；中国已警告美方勿升级。为分析师预测、非官方行动。俄乌/中东今日无新鲜重大事件 <span class="tag tag-rumor">传闻·分析师预测</span></div></div>
+        </div>
+      </div>
+
+      <div class="block" style="padding-bottom:8px;">
+        <div class="block-title">经济数据 · 今日无清单内指标发布</div>
+        <p style="font-size:13px;color:var(--subink);margin-top:2px;">今日（11/16，周一）无 CPI/PCE/PPI/非农/零售/ISM 等清单内硬数据发布，为「美联储官员发言日」。未来一周密集：10 月零售销售 11/17、FOMC 纪要 11/18、初请 11/19、核心 PCE + GDP Q3 二次修正 11/25（详见未来事件雷达）。清单外指标即使当日公布亦不纳入。</p>
+      </div>
+
+      <div class="block" style="padding-bottom:8px;">
+        <div class="block-title">美联储 / 货币政策 · 利率维持 3.75%–4.00% · 沃什偏鹰 · 12 月 FOMC 降息预期偏低</div>
+        <div class="callout" style="margin-bottom:8px;"><strong>⭐ 高利率背景是压制 AI 成长股估值的持续逆风：</strong>上次 FOMC（10/27–28）维持联邦基金利率 <strong>3.75%–4.00%</strong> 不变、声明称"通胀仍偏高"。主席 <strong>Kevin Warsh（偏鹰）</strong>今日在旧金山联储"生产力与就业"会议讲 AI 对经济的潜在影响——称 AI 可能加速增长，但若投资回报令人失望将带来估值下跌、经济放缓与失业率上升；全程未提利率路径、非货币政策信号。副主席 Barr、纽约联储主席 Williams 今日亦有讲话（内容未取到）。下次 FOMC <strong>12/08–09</strong>（决议 12/09 下午 2:00 ET）；市场对 12 月降息预期偏低（存疑）。</div>
+        <div class="tbl-wrap" style="border:none;margin-bottom:6px;"><table>
+          <thead><tr><th>维度</th><th>内容</th></tr></thead>
+          <tbody>
+            <tr><td>利率决定</td><td>10/27–28 维持 <strong>3.75%–4.00%</strong>（声明：通胀仍偏高）</td></tr>
+            <tr><td>沃什今日</td><td>讲 AI 对经济影响（偏鹰），未给利率信号</td></tr>
+            <tr><td>CME FedWatch</td><td>12 月降息概率偏低（存疑）</td></tr>
+            <tr><td>下次 FOMC</td><td>12/08–09，决议 12/09 14:00 ET</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="block" style="padding-bottom:8px;">
+        <div class="block-title">利率与汇率 · 10Y 5.121%（约 −3bp）· 30Y 5.467%（约 −1bp）· DXY 103.58（+0.17%）</div>
+        <div class="tbl-wrap" style="border:none;margin-bottom:6px;"><table>
+          <thead><tr><th>标的</th><th>数值</th><th>变化</th></tr></thead>
+          <tbody>
+            <tr><td>10Y 美债</td><td class="num"><strong>5.121%</strong></td><td class="down">约 −3bp</td></tr>
+            <tr><td>30Y 美债</td><td class="num"><strong>5.467%</strong></td><td class="down">约 −1bp</td></tr>
+            <tr><td>美元指数 DXY</td><td class="num"><strong>103.58</strong></td><td class="up">+0.17%</td></tr>
+          </tbody>
+        </table></div>
+        <p style="font-size:13px;color:var(--subink);margin-top:2px;"><strong>股市大跌之际长端美债仅小幅回落（10Y 约 −3bp 至 5.121%、30Y 约 −1bp 至 5.467%）</strong>——避险资金流入债市的力度温和，10Y 仍牢牢站在 5.1% 上方的高位，是今日压制高估值 AI 成长股、公用/REIT、无近端现金流算力名的持续贴现变量，利率没有明显松动意味着估值端压力未缓解。美元 DXY 小幅走强 +0.17% 至 103.58，强美元对大宗商品与新兴市场构成压力，对美国出口型科技股亦非顺风。</p>
+      </div>
+
+      <div class="block" style="padding-bottom:8px;">
+        <div class="block-title">大宗商品（WTI −3.39% ⚠️ · Brent −3.64% · 黄金 −0.80% · 白银 −4.23% ⚠️）</div>
+        <div class="tbl-wrap" style="border:none;margin-bottom:6px;"><table>
+          <thead><tr><th>品种</th><th>价格</th><th>涨跌幅</th><th>驱动</th></tr></thead>
+          <tbody>
+            <tr><td><strong>原油 WTI</strong></td><td class="num"><strong>$85.56</strong></td><td class="num down"><strong>−3.39%</strong></td><td>⚠️ IEA 预告 Q4 全球供应过剩 + 中东出口回升 + 中国需求走弱</td></tr>
+            <tr><td><strong>原油 Brent</strong></td><td class="num"><strong>$92.35</strong></td><td class="num down"><strong>−3.64%</strong></td><td>供应过剩叙事压制</td></tr>
+            <tr><td><strong>黄金 (GC=F)</strong></td><td class="num"><strong>$3,855.10</strong></td><td class="num down"><strong>−0.80%</strong></td><td>避险属性今日失灵，加息预期 + 强美元 + 高收益率压制</td></tr>
+            <tr><td><strong>白银 (SI=F)</strong></td><td class="num"><strong>$46.96</strong></td><td class="num down"><strong>−4.23%</strong></td><td>⚠️ 随金价回落 + 工业金属需求疲软</td></tr>
+          </tbody>
+        </table></div>
+        <p style="font-size:13px;color:var(--subink);margin-top:2px;">今日<strong class="down">黄金避险属性失灵</strong>——股市大跌但金价同跌 <strong class="down">−0.80%</strong>，核心是高利率（10Y 5.12%）+ 强美元（DXY 103.58）的持有成本与估值压制压过了避险需求；白银跌幅更深 <strong class="down">−4.23%</strong>，叠加工业金属需求走弱逻辑。WTI 原油 <strong class="down">−3.39%</strong> 跌的是供应过剩叙事（IEA 预告 Q4 全球供应过剩），与股市 risk-off 关系较弱。整体商品面没有接棒避险，资金更多流向防御股与短端。（铜 −1.54%、天然气 −3.07% 从略。）</p>
+      </div>
+
+      <div class="block" style="padding-bottom:8px;">
+        <div class="block-title">地缘政治（AI 芯片出口管制 · 英伟达间谍案背景 · 中国潜在反制）</div>
+        <ul>
+          <li>⭐ <strong>AI 芯片出口管制新规（当日最大地缘开关）</strong>：美商务部中期最终规则今日生效，要求向全球任何数据中心出口 AI 芯片时若算力可能供中国或受限国家使用须申请许可证，新增许可覆盖马来西亚/新加坡/印尼/泰国/巴西，废止拜登 AI Diffusion Rule。重塑全球算力出口逻辑，是今日半导体全链杀跌的政策导火索 <span class="tag tag-fact">已证实·今日生效</span></li>
+          <li><strong>英伟达「芯片走私/间谍」事件（管制升级背景）</strong>：媒体报道美方认定新加坡 Megaspeed 前高管为中国国安特工，涉嫌转运24 万片受限英伟达芯片（75 亿美元）至中国实体；黄仁勋 11/11 因丑闻辞任 CEO。走私细节数字为媒体口径、官方未证实 <span class="tag tag-rumor">骨干已证实·细节存疑</span></li>
+          <li><strong>中国潜在反制 / 特习会面</strong>：分析师称若美方升级，中国可能收紧稀土出口；中国已警告勿升级。特朗普–习近平会面在筹备中（日期未核实）。俄乌/中东今日无新鲜重大事件 <span class="tag tag-rumor">传闻·分析师预测</span></li>
+        </ul>
+      </div>
+
+      <p class="src">来源：Yahoo Finance v8（商品/利率 11/16 收盘）· TechCrunch / CNN / CNBC（出口管制）· Euronews / PBS（英伟达事件）· Kitco / CNBC（商品）· SCMP（中国反制）</p>
+    </section>
+
+    <!-- ===== 财报 ===== -->
+    <section class="page" id="page-earnings">
+      <div class="page-head">
+        <span class="sec-no">V / EARNINGS</span>
+        <h2>财报</h2>
+        <div class="desc">今日（11/16）追踪标的无盘前/盘中/盘后财报 · 上一交易日（11/13）盘后亦无追踪标的财报 · 本周多家已报（CRWV/NBIS/AMAT/RKLB/ASTS）被板块杀跌淹没 · 下一重磅催化 NVDA 英伟达 11/17 盘后（Kress 代理任内首份，营收共识$108.8B / EPS $2.47）</div>
+      </div>
+
+      <div class="callout callout-gold"><strong>⭐ 今日财报核心：</strong>今日追踪标的<strong>无盘前/盘中/盘后财报</strong>、上一交易日（11/13）盘后亦无。本周已报的几家出现明显 <strong>beat 却跌</strong>背离——CRWV（营收 beat）、NBIS（营收大幅 beat）、AMAT（营收 beat、设备需求强劲）均在今日随 AI 链 risk-off 大跌，好消息被板块杀跌淹没。本部分重心转入前瞻：下一重磅催化为 <strong>NVDA 英伟达 11/17 盘后</strong>——既是 Colette Kress 代理任内首份财报，也是市场检验"出口管制究竟多大程度压需求"的第一张实盘底牌，其 FY27 指引措辞将直接决定今日超卖的 AI 链是反弹还是续跌。</div>
+
+      <!-- 近期已报 + 今日反应 -->
+      <div class="block">
+        <div class="block-title">近期已报（重点公司 · 覆盖至今日常规时段反应）</div>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>公司</th><th>财报时间</th><th>beat/miss</th><th>关键数据</th><th>今日收盘</th></tr></thead>
+          <tbody>
+            <tr><td><strong>CRWV</strong> CoreWeave</td><td>11-10 盘后</td><td class="up">营收 beat</td><td>$3.66B（vs $3.54B）；订单积压 $133B（+138% YoY）；净亏 $709M</td><td class="num down"><strong>−6.12%</strong></td></tr>
+            <tr><td><strong>NBIS</strong> Nebius</td><td>11-12 盘前</td><td class="up">营收大幅 beat</td><td>$980.8M（vs $907.2M，含 $325M 非经常）；全年指引降至下沿 $3.0B、建设延迟</td><td class="num down"><strong>−7.55%</strong></td></tr>
+            <tr><td><strong>AMAT</strong> 应用材料</td><td>11-12 盘后</td><td class="up">营收 beat</td><td>$10.41B（YoY +53%）；adj EPS $4.16；毛利率 50.6%（+250bp YoY）</td><td class="num down"><strong>−5.47%</strong></td></tr>
+            <tr><td><strong>RKLB</strong> Rocket Lab</td><td>11-09</td><td class="down">EPS miss</td><td>营收 $267.8B（YoY +72.7%，beat）；EPS −$0.12（预期 −$0.07）；Q4 指引上沿 beat</td><td class="num down"><strong>−6.76%</strong></td></tr>
+            <tr><td><strong>ASTS</strong> AST SpaceMobile</td><td>11-09</td><td class="down">营收 miss</td><td>$42.3M（vs $45.7M）；BlueBird 卫星目标延迟至 2027 中；BofA 目标价砍至 $45</td><td class="num down"><strong>−12.33%</strong></td></tr>
+          </tbody>
+        </table></div>
+        <p style="font-size:13px;color:var(--subink);margin-top:6px;"><strong>⚠️ beat 却跌背离</strong>：CRWV/NBIS/AMAT 营收均超预期却普遍大跌——典型的「好消息被板块 risk-off 淹没」。NBIS 虽营收大幅 beat，但含$325M 非经常性收入 + 全年指引降到下沿 + 建设延迟，叠加 neocloud 融资缺口叙事（IREN/NBIS/CRWV 被同一逻辑抛售），beat 未能托住股价；AMAT 设备需求强劲仍随链同跌，反映今日是情绪与政策面压倒基本面的一天。ASTS 虽有日本补贴/NASA 认证利好，但营收 miss + 卫星延迟 + 板块共振，领跌全池。</p>
+      </div>
+
+      <!-- 财报预告 -->
+      <div class="block">
+        <div class="block-title">财报预告（本周 + 未来 1–2 周 · 重点追踪公司）</div>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>日期 (ET)</th><th>公司</th><th>时点</th><th>看点</th></tr></thead>
+          <tbody>
+            <tr><td><strong>11/17（周二）</strong></td><td><strong>NVDA（英伟达）</strong></td><td>AMC ~4:20PM</td><td>⭐ 营收共识$108.8B（官方指引 $108B±2%）/ adj EPS $2.47；Kress 代理 CEO 任内首份，FY27 展望是否因出口管制下修、数据中心收入、Blackwell 交付节奏、电话会对治理与合规的口径——本周乃至本月绝对核心</td></tr>
+            <tr><td>11/24（周一）</td><td>DELL（戴尔）</td><td>AMC</td><td>adj EPS 共识 $6.41，AI 服务器/PowerEdge 需求，上季财报后曾大跌的修复预期</td></tr>
+            <tr><td>12/01（周二）</td><td>MDB（MongoDB）</td><td>AMC</td><td>Atlas + AI 向量数据库需求</td></tr>
+            <tr><td>12/02（周三）</td><td>SNOW（Snowflake）</td><td>AMC</td><td>产品营收增速、AI 工作负载上云</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <p class="src">来源：公司官方 IR · 财报电话会 · Yahoo Finance v8 真实收盘（11/16）· StockAnalysis / EarningsWhispers 日历</p>
+    </section>
+
+    <!-- ===== 重点个股 ===== -->
+    <section class="page" id="page-stocks">
+      <div class="page-head">
+        <span class="sec-no">VI / KEY STOCKS</span>
+        <h2>重点个股</h2>
+        <div class="desc">出口管制落地点燃 AI 价值链全链杀跌——存储 MU −7.62%、代工 TSM −6.34%、ARM −8.12% 直接受冲，光通信/设备/电力/算力/太空全链普跌；追踪标的 61 只里 42 只跌≥5%。ORCL −5.03% 为微软不续租 + 债务担忧的个股特定催化。<small>追踪标的 61 只当日 60 跌 1 平</small></div>
+      </div>
+
+      <div class="spot-strip">
+        <div class="spot-card"><div class="sp-num" style="color:var(--red)">−12.33%</div><div class="sp-cap">ASTS · 卫星通信 — 财报营收 miss + BlueBird 卫星延迟至 2027 中 + 板块共振，今日领跌全池</div></div>
+        <div class="spot-card"><div class="sp-num" style="color:var(--red)">−10.53%</div><div class="sp-cap">AEHR · 半导体测试 — 高 beta（Beta 5.14）随半导体测试链杀跌，11/12 财报大涨后高位回落</div></div>
+      </div>
+
+      <p style="font-size:12.5px;color:var(--subink);margin:-4px 2px 14px;">今日是 AI 价值链 risk-off，追踪标的几乎全军覆没——61 只里 42 只跌≥5%、仅个别收平。下杀主线是 <strong>出口管制 + 龙头治理真空 + 财报前避险</strong>三利空同向：存储 <strong class="down">MU −7.62%</strong>（叠加 DRAM 反垄断诉讼）、代工 <strong class="down">TSM −6.34%</strong>（新马产能受许可冲击）、<strong class="down">ARM −8.12%</strong>（IP 含高性能 AI 芯片、软银净值缩水叙事）直接受冲；光通信（<strong class="down">AAOI −9.48%</strong>/<strong class="down">LITE −8.48%</strong>）、设备（<strong class="down">LRCX −6.68%</strong>/<strong class="down">KLAC −5.49%</strong>）、电力（<strong class="down">BE −7.63%</strong>/<strong class="down">VRT −6.61%</strong>）、算力（<strong class="down">IREN −9.80%</strong>/<strong class="down">NBIS −7.55%</strong>）、太空（<strong class="down">ASTS −12.33%</strong>/<strong class="down">LUNR −9.77%</strong>）全链无一幸免。个股特定催化：<strong class="down">ORCL −5.03%</strong>（微软不续租 OCI + $200 亿发债，与管制关联弱）。</p>
+
+      <!-- 板块一：AI 超大厂（常驻） -->
+      <div class="stock-card">
+        <div class="stock-head"><span class="name">🤖 AI 超大厂 · 云与算力巨头<span>NVDA −4.12% / GOOGL −4.07% / AMZN −3.34% / META −2.38% / MSFT −1.12%</span></span></div>
+        <div class="stock-body">
+          <div class="callout callout-navy" style="margin:0 0 16px;"><strong>⭐ 核心：</strong><strong class="down">NVDA −4.12%</strong> 是今日全市场的叙事中心——出口管制、CEO 辞任（黄仁勋 11/11 辞、CFO Kress 代理）、11/17 盘后财报前避险三重压力集于一身。其余大厂跟随科技权重回调：<strong class="down">GOOGL −4.07%</strong>（通信板块领跌成分）、<strong class="down">AMZN −3.34%</strong>（云/可选消费双敞口）、<strong class="down">META −2.38%</strong>；<strong class="down">MSFT −1.12%</strong> 为云巨头里最抗跌。<strong class="down">AAPL −0.98%</strong> 硬件敞口、未达 ±2% 展开门槛，随大市窄幅波动。</div>
+          <div class="stock-tile-grid">
+            <div class="stock-tile"><div class="st-tkr">NVDA</div><div class="st-pct down">−4.12%</div><div class="st-desc">GPU/算力</div></div>
+            <div class="stock-tile"><div class="st-tkr">GOOGL</div><div class="st-pct down">−4.07%</div><div class="st-desc">搜索/云</div></div>
+            <div class="stock-tile"><div class="st-tkr">AMZN</div><div class="st-pct down">−3.34%</div><div class="st-desc">云/零售</div></div>
+            <div class="stock-tile"><div class="st-tkr">META</div><div class="st-pct down">−2.38%</div><div class="st-desc">社交/AI</div></div>
+            <div class="stock-tile"><div class="st-tkr">MSFT</div><div class="st-pct down">−1.12%</div><div class="st-desc">云/capex</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 板块二：AI 供电/互联/服务器获资金追捧 -->
+      <div class="stock-card">
+        <div class="stock-head"><span class="name">🔩 芯片 · 出口管制震中（CPU/GPU + 制造设备）<span>ARM −8.12% / INTC −7.07% / TSM −6.34% / AMD −5.58%</span></span></div>
+        <div class="stock-body">
+          <div class="callout callout-navy" style="margin:0 0 16px;"><strong>⭐ 核心：</strong>今日杀跌震中——出口管制新规直压全链需求预期。<strong class="down">ARM −8.12%</strong>（IP 授权含高性能 AI 芯片、直接受冲 + 软银净值缩水叙事，无减持公告）、<strong class="down">INTC −7.07%</strong>（半导体板块情绪传导，新规是否点名传统芯片存疑）、<strong class="down">TSM −6.34%</strong>（新加坡/马来西亚产能需新增出口许可、直接受冲，详见深读）、<strong class="down">AMD −5.58%</strong>（AI 算力替代供应商、恐失中国市场）领跌；设备链 <strong class="down">ASML −5.91%</strong>、<strong class="down">AMAT −5.47%</strong>（beat 却跌）、<strong class="down">LRCX −6.68%</strong>、<strong class="down">KLAC −5.49%</strong> 同步破位。QCOM −2.29% 未达展开门槛，作板块背景。</div>
+          <div class="stock-tile-grid">
+            <div class="stock-tile"><div class="st-tkr">ARM</div><div class="st-pct down">−8.12%</div><div class="st-desc">IP 授权</div></div>
+            <div class="stock-tile"><div class="st-tkr">INTC</div><div class="st-pct down">−7.07%</div><div class="st-desc">CPU/代工</div></div>
+            <div class="stock-tile"><div class="st-tkr">LRCX</div><div class="st-pct down">−6.68%</div><div class="st-desc">设备</div></div>
+            <div class="stock-tile"><div class="st-tkr">TSM</div><div class="st-pct down">−6.34%</div><div class="st-desc">晶圆代工</div></div>
+            <div class="stock-tile"><div class="st-tkr">ASML</div><div class="st-pct down">−5.91%</div><div class="st-desc">光刻设备</div></div>
+            <div class="stock-tile"><div class="st-tkr">AMD</div><div class="st-pct down">−5.58%</div><div class="st-desc">CPU/GPU</div></div>
+            <div class="stock-tile"><div class="st-tkr">KLAC</div><div class="st-pct down">−5.49%</div><div class="st-desc">量测设备</div></div>
+            <div class="stock-tile"><div class="st-tkr">AMAT</div><div class="st-pct down">−5.47%</div><div class="st-desc">设备</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TSM 深读卡 -->
+      <div class="deepdive dd-chart-layout">
+        <div class="dd-head"><span class="dd-tkr">TSM · <span class="dd-co">Taiwan Semiconductor 台积电</span> · 半导体制造/晶圆代工</span><span class="dd-pct down">−6.34%</span></div>
+        <div class="dd-top">
+          <div class="dd-chart" id="dd-TSM"></div>
+          <div class="dd-panel">
+            <div class="dv-title">技术位</div>
+            <div class="dv-row"><span class="dv-k">RSI</span><span class="dv-bar"><i style="width:39%"></i></span><span class="dv-v">38.7 偏弱</span></div>
+            <div class="dv-row"><span class="dv-k">MACD</span><span class="dv-bar"><i style="width:42%"></i></span><span class="dv-v">−12.05 / 信号 −11.41（死叉、空头）</span></div>
+            <div class="dv-row"><span class="dv-k">均线</span><span class="dv-bar"><i style="width:35%"></i></span><span class="dv-v">价 &lt; MA20/MA50/MA200（跌破）</span></div>
+            <div class="dv-sigs">
+              <div class="dv-sig down"><b>价 373.44 &lt; MA20(407) &lt; MA50(429)，跌破 MA200(403)</b> — 虽 MA50>200 金叉结构，但价格破位</div>
+              <div class="dv-sig down"><b>量能 1.21× 均量（放量下杀），MACD 死叉空头</b> — 动量 1 周 −3.9% / 1 月 −9.5% / 3 月 −9.7%</div>
+              <div class="dv-sig neutral"><b>近 20 日 swing 阻力 440.88 · 支撑 351.19</b> — 距 52 周高(487.47) −23.4%，Fib 50% 位 377.15</div>
+            </div>
+          </div>
+          <div class="dd-legend"><span style="color:#CADCFC">━ 收盘</span><span style="color:#9CC97A">━ MA20</span><span style="color:#E8B339">━ MA50</span><span style="color:#7E8FE6">━ MA200</span></div>
+        </div>
+        <div class="dd-body">
+          <div class="dd-lead">深读① · −6.34% 受出口管制直冲：新加坡/马来西亚产能节点被纳入新增出口许可范围，放量下杀；但回撤最浅（距 52 周高仅 −23.4%）、Beta 2.36 为全链最低，龙头稳定性仍在</div>
+          <div class="dd-sec">📊 <b>技术位</b>：收 $373.44，−6.34%。价跌破 MA20(407)/MA50(429) 及 MA200(403)，虽为 MA50>MA200 金叉结构但价格已破位；RSI 38.7 偏弱；MACD −12.05/信号 −11.41（死叉、空头）；量能 1.21× 20 日均量（放量下杀）；距 52 周高(487.47) 仅 −23.4%、是全链里回撤最浅的龙头之一；近 20 日 swing 阻力 440.88 / 支撑 351.19，Fib 50% 位 377.15。VAP 成交密集区 $412.5–433.0（日线粗略、非筹码分布）。</div>
+          <div class="dd-sec">🏢 <b>业务与独特性</b>：全球最大晶圆代工厂，先进制程（3nm/2nm）+ CoWoS 先进封装几乎垄断 AI 芯片代工，NVDA/AMD/AAPL 等核心客户高度依赖——这是其在管制风暴中回撤最浅的底气（需求端客户无替代）。</div>
+          <div class="dd-sec">🚀 <b>成长性</b>：AI 芯片代工与 CoWoS 封装产能是算力扩张最上游的瓶颈环节，先进制程订单能见度高；今日承压主因是新加坡/马来西亚等海外产能节点被纳入新增出口许可范围。</div>
+          <div class="dd-sec">⚠️ <b>风险 + 估值</b>：地缘（台海 + 出口管制转口节点受限）是最大尾部风险；风险画像相对温和——年化波动率 65.0%、Beta 2.36，是全链里最低的一档，反映龙头稳定性；相对 SMH 1 月 +5.0pp、3 月 +9.3pp 持续跑赢板块。AI 代工龙头估值享溢价但受地缘折价压制。</div>
+        </div>
+      </div>
+
+      <!-- 板块三：存储 · 光通信 · 定制互联 -->
+      <div class="stock-card">
+        <div class="stock-head"><span class="name">💾 存储 · 光通信 · 定制互联 · 全链破位<span>AAOI −9.48% / ALAB −8.79% / SNDK −8.58% / MU −7.62%</span></span></div>
+        <div class="stock-body">
+          <div class="callout callout-navy" style="margin:0 0 16px;"><strong>⭐ 核心：</strong>存储链与光通信链随出口管制 + 板块 risk-off 全线破位。存储：<strong class="down">MU −7.62%</strong>（出口管制直压内存需求 + DRAM 反垄断诉讼过关，详见深读）、<strong class="down">SNDK −8.58%</strong>、<strong class="down">STX −5.54%</strong>；定制芯片/互联：<strong class="down">ALAB −8.79%</strong>、<strong class="down">CRDO −8.21%</strong>、<strong class="down">MRVL −7.27%</strong>；光通信：<strong class="down">AAOI −9.48%</strong>、<strong class="down">LITE −8.48%</strong>、<strong class="down">CIEN −8.18%</strong>、<strong class="down">AXTI −8.08%</strong>、<strong class="down">POET −9.16%</strong>、<strong class="down">COHR −6.74%</strong>、<strong class="down">FN −5.23%</strong>；测试设备 <strong class="down">AEHR −10.53%</strong>（11/12 财报大涨后高位回落）。多为高 beta 名、放量/缩量不一，但方向一致。</div>
+          <div class="stock-tile-grid">
+            <div class="stock-tile"><div class="st-tkr">AEHR</div><div class="st-pct down">−10.53%</div><div class="st-desc">测试设备</div></div>
+            <div class="stock-tile"><div class="st-tkr">AAOI</div><div class="st-pct down">−9.48%</div><div class="st-desc">光模块</div></div>
+            <div class="stock-tile"><div class="st-tkr">POET</div><div class="st-pct down">−9.16%</div><div class="st-desc">光子集成</div></div>
+            <div class="stock-tile"><div class="st-tkr">ALAB</div><div class="st-pct down">−8.79%</div><div class="st-desc">定制互联</div></div>
+            <div class="stock-tile"><div class="st-tkr">SNDK</div><div class="st-pct down">−8.58%</div><div class="st-desc">存储</div></div>
+            <div class="stock-tile"><div class="st-tkr">LITE</div><div class="st-pct down">−8.48%</div><div class="st-desc">光模块</div></div>
+            <div class="stock-tile"><div class="st-tkr">CRDO</div><div class="st-pct down">−8.21%</div><div class="st-desc">定制互联</div></div>
+            <div class="stock-tile"><div class="st-tkr">CIEN</div><div class="st-pct down">−8.18%</div><div class="st-desc">光网络</div></div>
+            <div class="stock-tile"><div class="st-tkr">AXTI</div><div class="st-pct down">−8.08%</div><div class="st-desc">光上游材料</div></div>
+            <div class="stock-tile"><div class="st-tkr">MU</div><div class="st-pct down">−7.62%</div><div class="st-desc">存储/HBM</div></div>
+            <div class="stock-tile"><div class="st-tkr">MRVL</div><div class="st-pct down">−7.27%</div><div class="st-desc">定制芯片</div></div>
+            <div class="stock-tile"><div class="st-tkr">COHR</div><div class="st-pct down">−6.74%</div><div class="st-desc">光模块</div></div>
+            <div class="stock-tile"><div class="st-tkr">STX</div><div class="st-pct down">−5.54%</div><div class="st-desc">存储</div></div>
+            <div class="stock-tile"><div class="st-tkr">FN</div><div class="st-pct down">−5.23%</div><div class="st-desc">光模块代工</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MU 深读卡 -->
+      <div class="deepdive dd-chart-layout">
+        <div class="dd-head"><span class="dd-tkr">MU · <span class="dd-co">Micron Technology 美光科技</span> · 存储/HBM</span><span class="dd-pct down">−7.62%</span></div>
+        <div class="dd-top">
+          <div class="dd-chart" id="dd-MU"></div>
+          <div class="dd-panel">
+            <div class="dv-title">技术位</div>
+            <div class="dv-row"><span class="dv-k">RSI</span><span class="dv-bar"><i style="width:38%"></i></span><span class="dv-v">38.0 偏弱</span></div>
+            <div class="dv-row"><span class="dv-k">MACD</span><span class="dv-bar"><i style="width:40%"></i></span><span class="dv-v">−57.16 / 信号 −54.33（死叉、空头）</span></div>
+            <div class="dv-row"><span class="dv-k">均线</span><span class="dv-bar"><i style="width:33%"></i></span><span class="dv-v">价 &lt; MA20/MA50/MA200（跌破）</span></div>
+            <div class="dv-sigs">
+              <div class="dv-sig down"><b>价 719.02 &lt; MA20(829) &lt; MA50(938)，跌破 MA200(767)</b> — 虽 MA50>200 金叉结构，但价格深跌破位</div>
+              <div class="dv-sig down"><b>量能 0.83× 均量（常量，非恐慌放量），MACD 死叉空头</b> — 动量 1 周 −1.9% / 1 月 −18.2% / 3 月 −23.6%</div>
+              <div class="dv-sig neutral"><b>近 20 日 swing 阻力 990 · 支撑 650</b> — 距 52 周高(1255) −42.7%，Fib 50% 位 723.79</div>
+            </div>
+          </div>
+          <div class="dd-legend"><span style="color:#CADCFC">━ 收盘</span><span style="color:#9CC97A">━ MA20</span><span style="color:#E8B339">━ MA50</span><span style="color:#7E8FE6">━ MA200</span></div>
+        </div>
+        <div class="dd-body">
+          <div class="dd-lead">深读② · −7.62% 出口管制双杀：新规直压对华内存需求预期 + DRAM 反垄断集体诉讼悬顶；价深跌破所有均线、常量非恐慌放量；高 beta（3.66）、估值对需求预期极敏感</div>
+          <div class="dd-sec">📊 <b>技术位</b>：收 $719.02，−7.62%。价跌破 MA20(829)/MA50(938) 及 MA200(767)，虽 MA50>MA200 金叉结构但价格深跌破位；RSI 38.0 偏弱接近超卖；MACD −57.16/信号 −54.33（死叉、空头）；量能 0.83× 20 日均量（常量、非恐慌放量）；距 52 周高(1255) −42.7%；近 20 日 swing 阻力 990 / 支撑 650，Fib 50% 位 723.79。VAP 成交密集区 $892–982（日线粗略、非筹码分布）。</div>
+          <div class="dd-sec">🏢 <b>业务与独特性</b>：全球三大 DRAM + NAND 存储厂之一，是 AI 服务器 HBM（高带宽内存）核心供应商；HBM 在 AI 训练/推理中与 GPU 强绑定、是算力扩张的刚性配套，这是其区别于传统存储周期股的护城河。</div>
+          <div class="dd-sec">🚀 <b>成长性</b>：AI 内存需求旺盛，行业普遍反映 HBM/高端 DRAM 供需紧张、近乎售罄至 2027 年，是存储超级周期的受益者。</div>
+          <div class="dd-sec">⚠️ <b>风险 + 估值</b>：今日双杀——出口管制压制对华长期需求预期 + DRAM 反垄断诉讼悬顶；风险画像为高波动（年化波动率 103.3%、Beta 3.66），典型 AI 高 beta 存储股；相对 SMH 1 月 −3.7pp、3 月 −4.6pp。周期顶部盈利弹性大但估值对需求预期极敏感。</div>
+        </div>
+      </div>
+
+      <!-- 板块四：电力·算力·数据中心·太空·AI软件（合并多主题） -->
+      <div class="stock-card">
+        <div class="stock-head"><span class="name">⚡ 电力 · 算力 · 数据中心 · 太空 · AI 软件<span>ASTS −12.33% / IREN −9.80% / LUNR −9.77% / ORCL −5.03%</span></span></div>
+        <div class="stock-body">
+          <div class="callout callout-navy" style="margin:0 0 16px;"><strong>⭐ 核心：</strong>AI 链下游全线共振杀跌，多为高 beta 名。<strong>算力/数据中心</strong>：<strong class="down">IREN −9.80%</strong>、<strong class="down">APLD −8.70%</strong>、<strong class="down">NBIS −7.55%</strong>、<strong class="down">CRWV −6.12%</strong>、<strong class="down">WULF −5.86%</strong>——neocloud 融资缺口叙事 + 英伟达危机传导；<strong class="down">ORCL −5.03%</strong> 是个股特定催化（微软不续租 OCI AI 服务器 + $200 亿发债债务担忧，与管制关联弱）。<strong>电力/元件</strong>：<strong class="down">BE −7.63%</strong>、<strong class="down">MRAAY −7.52%</strong>、<strong class="down">VRT −6.61%</strong>、<strong class="down">MPWR −5.50%</strong>、<strong class="down">SMR −8.15%</strong>。<strong>服务器/网络</strong>：<strong class="down">DELL −6.95%</strong>、<strong class="down">SMCI −6.87%</strong>、<strong class="down">ANET −5.16%</strong>。<strong>太空</strong>：<strong class="down">ASTS −12.33%</strong>（领跌全池，财报 miss + 卫星延迟）、<strong class="down">LUNR −9.77%</strong>、<strong class="down">RKLB −6.76%</strong>。<strong>AI 软件</strong>：<strong class="down">MDB −5.17%</strong>（12/01 财报前）。</div>
+          <div class="stock-tile-grid">
+            <div class="stock-tile"><div class="st-tkr">ASTS</div><div class="st-pct down">−12.33%</div><div class="st-desc">卫星通信</div></div>
+            <div class="stock-tile"><div class="st-tkr">IREN</div><div class="st-pct down">−9.80%</div><div class="st-desc">矿转 AI</div></div>
+            <div class="stock-tile"><div class="st-tkr">LUNR</div><div class="st-pct down">−9.77%</div><div class="st-desc">太空</div></div>
+            <div class="stock-tile"><div class="st-tkr">APLD</div><div class="st-pct down">−8.70%</div><div class="st-desc">矿转 AI</div></div>
+            <div class="stock-tile"><div class="st-tkr">SMR</div><div class="st-pct down">−8.15%</div><div class="st-desc">核电</div></div>
+            <div class="stock-tile"><div class="st-tkr">BE</div><div class="st-pct down">−7.63%</div><div class="st-desc">燃料电池</div></div>
+            <div class="stock-tile"><div class="st-tkr">NBIS</div><div class="st-pct down">−7.55%</div><div class="st-desc">云算力</div></div>
+            <div class="stock-tile"><div class="st-tkr">MRAAY</div><div class="st-pct down">−7.52%</div><div class="st-desc">MLCC</div></div>
+            <div class="stock-tile"><div class="st-tkr">DELL</div><div class="st-pct down">−6.95%</div><div class="st-desc">AI 服务器</div></div>
+            <div class="stock-tile"><div class="st-tkr">SMCI</div><div class="st-pct down">−6.87%</div><div class="st-desc">AI 整机</div></div>
+            <div class="stock-tile"><div class="st-tkr">RKLB</div><div class="st-pct down">−6.76%</div><div class="st-desc">太空</div></div>
+            <div class="stock-tile"><div class="st-tkr">VRT</div><div class="st-pct down">−6.61%</div><div class="st-desc">散热/供电</div></div>
+            <div class="stock-tile"><div class="st-tkr">CRWV</div><div class="st-pct down">−6.12%</div><div class="st-desc">云算力</div></div>
+            <div class="stock-tile"><div class="st-tkr">WULF</div><div class="st-pct down">−5.86%</div><div class="st-desc">矿转 AI</div></div>
+            <div class="stock-tile"><div class="st-tkr">MPWR</div><div class="st-pct down">−5.50%</div><div class="st-desc">电源芯片</div></div>
+            <div class="stock-tile"><div class="st-tkr">MDB</div><div class="st-pct down">−5.17%</div><div class="st-desc">数据库</div></div>
+            <div class="stock-tile"><div class="st-tkr">ANET</div><div class="st-pct down">−5.16%</div><div class="st-desc">网络交换</div></div>
+            <div class="stock-tile"><div class="st-tkr">ORCL</div><div class="st-pct down">−5.03%</div><div class="st-desc">云算力</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-gold"><strong>📅 板块尾部 · 近期重要事件</strong>：11/17 NVDA 英伟达财报盘后 · 11/24 DELL 戴尔财报 · 12/01 MDB · 12/02 SNOW · 11/19 Anthropic IPO 首日</div>
+      <p class="src">来源：Yahoo Finance v8 真实收盘（重点公司 + 指数/板块，方向逐一核准）· 数据截至 2026 年 11 月 16 日收盘</p>
+    </section>
+
+    <!-- ===== 关键人物 ===== -->
+    <section class="page" id="page-people">
+      <div class="page-head">
+        <span class="sec-no">VII / KEY VOICES</span>
+        <h2>关键人物</h2>
+        <div class="desc">特朗普赴华前推出 AI 芯片出口新规（废止 AI Diffusion Rule、新马泰印尼巴西须申请许可）· 马斯克支持管制、与商务部长 Lutnick 立场对立 · 奥特曼称黄仁勋「英雄有缺点」· 财长 Bessent 呼吁 NVDA 任命外部 CEO 确保合规 · 国会 Khanna 减持 NVDA、Gottheimer 买入 AMAT</div>
+      </div>
+
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>人物</th><th>平台 / 场合</th><th>核心内容</th><th>涉及板块</th><th>市场影响</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Donald Trump</strong></td><td>11/16 赴华前（已证实）</td><td>推出 AI 芯片出口新规、废止 AI Diffusion Rule，要求新加坡/马来西亚/泰国/印尼/巴西申请出口许可</td><td>AI 芯片 / 出口 / 关税</td><td>今日半导体全链杀跌的政策导火索</td></tr>
+          <tr><td><strong>马斯克</strong></td><td>近期立场（已证实）</td><td>支持 AI 芯片出口管制，与商务部长 Lutnick 立场对立（后者警告将引发对华贸易战）</td><td>NVDA / AI 政策</td><td>AI 政策内部分歧公开化</td></tr>
+          <tr><td><strong>奥特曼（OpenAI）</strong></td><td>近期表态（已证实）</td><td>称黄仁勋是「英雄」「英雄有缺点」，表达同情未支持复职；OpenAI 与 Anthropic 共同支持更严出口管制</td><td>NVDA / AI 整链</td><td>AI 龙头舆论场微妙</td></tr>
+          <tr><td><strong>财长 Bessent</strong></td><td>11/10（已证实）</td><td>呼吁美中「更平衡关系」、赴华谈判前定调；呼吁 NVDA 任命外部 CEO 以确保合规</td><td>NVDA / 中美贸易</td><td>施压英伟达治理</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="block">
+        <div class="block-title">关键人物持仓变化 · 国会/政界（STOCK Act）+ 机构</div>
+        <p style="font-size:13.5px;color:var(--subink);">国会议员：Ro Khanna（D-CA，交易禁令支持者）及配偶于 9/10 月高点附近减持 NVDA（已披露）；Josh Gottheimer 11/7 披露买入应用材料（AMAT）等 AI 关联股。机构：今日（11/16）为 Q3 2026 13F 报告截止日，大量机构将集中披露——伯克希尔 Q3 预计小额净卖出（AI 链头寸待 EDGAR 实际文件确认，存疑）；Bessemer Group 11/16 披露减持 TSM。实时查询：<a href="https://www.capitoltrades.com/" target="_blank" rel="noopener">Capitol Trades</a> · <a href="https://quiverquant.com/" target="_blank" rel="noopener">Quiver Quantitative</a></p>
+      </div>
+      <p class="src">来源：公开媒体（ET）· 官方文字记录 · <a href="https://www.capitoltrades.com/" target="_blank" rel="noopener">Capitol Trades</a> · 11/16</p>
+    </section>
+
+  </main>
+</div>
+
+<!-- ============ 底部定调 ============ -->
+<footer class="finale">
+  <div class="finale-inner" style="--accent:var(--red)">
+    <div class="finale-row">
+      <div class="finale-bar"></div>
+      <div>
+        <div class="finale-label">THE BOTTOM LINE · 一句话定调</div>
+        <div class="finale-title">出口管制落地点燃 AI 价值链共振式杀跌</div>
+        <div class="finale-lines">
+          <span><b class="hl">后市焦点</b> · 11/17 NVDA 财报（Kress 代理首份）· 11/18 FOMC 纪要 + Anthropic 定价 · 11/19 Anthropic 首日 · 11/25 核心 PCE · 12/08-09 FOMC</span>
+        </div>
+      </div>
+    </div>
+    <div class="finale-src">
+      数据来源：Yahoo Finance v8 真实收盘 ·
+      <a href="https://stockanalysis.com/etf/" target="_blank" rel="noopener">StockAnalysis 板块 ETF</a> ·
+      CNBC/Bloomberg/Reuters
+      <div class="finale-gen">美股日报 · 2026-11-16 · Claude Code 生成</div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+<script src="market_data.js"></script>
+<script src="dd-series-2026-11-16.js"></script>
+<script>
+// MARKET_DATA 为共享多年序列，按本页日期截断
+(function(){
+  var CUTOFF="2026-11-16";
+  if(typeof MARKET_DATA!=="undefined"){
+    Object.keys(MARKET_DATA).forEach(function(k){
+      MARKET_DATA[k]=MARKET_DATA[k].filter(function(r){return r[0]<=CUTOFF;});
+    });
+  }
+})();
+</script>
+<script>
+(function(){
+  var btns=document.querySelectorAll(".nav-btn");
+  var pages=document.querySelectorAll(".page");
+  var panel=document.getElementById("panel");
+
+  function show(id,scroll){
+    btns.forEach(function(b){b.classList.toggle("active",b.dataset.page===id);});
+    pages.forEach(function(p){p.classList.toggle("active",p.id==="page-"+id);});
+    if(history.replaceState){history.replaceState(null,"","#"+id);}
+    if(scroll){
+      var top=panel.getBoundingClientRect().top+window.pageYOffset-90;
+      if(Math.abs(window.pageYOffset-top)>40){window.scrollTo({top:top,behavior:"smooth"});}
+    }
+    animateBars();
+  }
+  btns.forEach(function(b){b.addEventListener("click",function(){show(b.dataset.page,true);});});
+
+  function animateBars(){
+    document.querySelectorAll(".page.active .bar").forEach(function(bar){
+      bar.style.width="0";
+      requestAnimationFrame(function(){requestAnimationFrame(function(){bar.style.width=bar.dataset.w+"%";});});
+    });
+  }
+
+  var h=location.hash.replace("#","");
+  if(h&&document.getElementById("page-"+h)){show(h,false);}else{animateBars();}
+})();
+</script>
+<script>
+(function(){
+  var GREEN="#2FB344", RED="#E03B42", ICE="#CADCFC", GOLD="#E8B339", MUTED="#8A93B2";
+  var hasLib = typeof echarts!=="undefined" && typeof MARKET_DATA!=="undefined";
+  var fallback=document.getElementById("klineFallback"), klineEl=document.getElementById("kline");
+  if(!hasLib){
+    if(fallback){fallback.hidden=false;} if(klineEl){klineEl.style.display="none";}
+    return;
+  }
+  var chart=null, gauge=null, current="GSPC";
+  var MARKS={
+    GSPC:[{yAxis:7844.52,label:"52 周高 7,844.5"},{yAxis:7342.71,label:"MA200(7,343) 支撑"}],
+    SMH:[{yAxis:671.83,label:"52 周高 671.83"},{yAxis:524.18,label:"MA200(524) 阻力"}]
+  };
+  function ma(rows,n){
+    var out=[],s=0;
+    for(var i=0;i<rows.length;i++){
+      s+=rows[i][4]; if(i>=n)s-=rows[i-n][4];
+      out.push(i>=n-1? +(s/n).toFixed(2):"-");
+    }
+    return out;
+  }
+  function option(key){
+    var rows=MARKET_DATA[key];
+    var dates=rows.map(function(r){return r[0];});
+    var k=rows.map(function(r){return [r[1],r[4],r[3],r[2]];});
+    var vol=rows.map(function(r){return {value:r[5],itemStyle:{color:r[4]>=r[1]?"rgba(47,179,68,.45)":"rgba(224,59,66,.45)"}};});
+    var marks=(MARKS[key]||[]).map(function(m){
+      return {yAxis:m.yAxis,lineStyle:{color:GOLD,type:"dashed",width:1.5},
+        label:{formatter:m.label,color:GOLD,fontSize:11,position:"insideEndTop"}};
+    });
+    var zs=Math.max(0,100-90/rows.length*100);
+    return {
+      backgroundColor:"transparent",
+      animation:true,
+      axisPointer:{link:[{xAxisIndex:"all"}]},
+      tooltip:{trigger:"axis",axisPointer:{type:"cross"},
+        backgroundColor:"rgba(16,22,54,.92)",borderColor:"rgba(202,220,252,.3)",
+        textStyle:{color:ICE,fontSize:12},
+        formatter:function(ps){
+          var p=null,i;
+          for(i=0;i<ps.length;i++){if(ps[i].seriesType==="candlestick"){p=ps[i];break;}}
+          if(!p)return "";
+          var d=p.data;
+          var lines=[p.name,"开 "+d[1]+"  收 "+d[2],"低 "+d[3]+"  高 "+d[4]];
+          for(i=0;i<ps.length;i++){if(ps[i].seriesType==="line"&&ps[i].data!=="-")lines.push(ps[i].seriesName+" "+ps[i].data);}
+          return lines.join("<br>");
+        }},
+      legend:{data:["MA50","MA200"],textStyle:{color:MUTED,fontSize:11},top:0,right:8},
+      grid:[{left:64,right:20,top:28,height:330},{left:64,right:20,top:392,height:70}],
+      xAxis:[
+        {type:"category",data:dates,boundaryGap:true,axisLine:{lineStyle:{color:"rgba(202,220,252,.3)"}},axisLabel:{color:MUTED,fontSize:10.5}},
+        {type:"category",gridIndex:1,data:dates,axisLabel:{show:false},axisTick:{show:false},axisLine:{lineStyle:{color:"rgba(202,220,252,.3)"}}}
+      ],
+      yAxis:[
+        {scale:true,splitLine:{lineStyle:{color:"rgba(202,220,252,.12)"}},axisLabel:{color:MUTED,fontSize:10.5}},
+        {gridIndex:1,scale:true,splitNumber:2,axisLabel:{show:false},splitLine:{show:false}}
+      ],
+      dataZoom:[
+        {type:"inside",xAxisIndex:[0,1],start:zs,end:100},
+        {type:"slider",xAxisIndex:[0,1],bottom:6,height:18,start:zs,end:100,
+         borderColor:"rgba(202,220,252,.25)",fillerColor:"rgba(232,179,57,.15)",textStyle:{color:MUTED,fontSize:10}}
+      ],
+      series:[
+        {name:key,type:"candlestick",data:k,
+         itemStyle:{color:GREEN,color0:RED,borderColor:GREEN,borderColor0:RED},
+         markLine:marks.length?{symbol:"none",data:marks}:undefined},
+        {name:"MA50",type:"line",data:ma(rows,50),symbol:"none",lineStyle:{width:1.2,color:ICE},emphasis:{disabled:true}},
+        {name:"MA200",type:"line",data:ma(rows,200),symbol:"none",lineStyle:{width:1.2,color:GOLD},emphasis:{disabled:true}},
+        {name:"成交量",type:"bar",xAxisIndex:1,yAxisIndex:1,data:vol}
+      ]
+    };
+  }
+  function initKline(){
+    if(!klineEl)return;
+    if(!chart){chart=echarts.init(klineEl);}
+    chart.setOption(option(current),true);
+  }
+  document.getElementById("klineTabs").addEventListener("click",function(e){
+    var b=e.target.closest(".ktab"); if(!b)return;
+    current=b.dataset.k;
+    this.querySelectorAll(".ktab").forEach(function(t){t.classList.toggle("active",t===b);});
+    initKline();
+  });
+  function initGauge(){
+    var el=document.getElementById("fgGauge");
+    if(!el||gauge)return;
+    gauge=echarts.init(el);
+    gauge.setOption({series:[{type:"gauge",startAngle:200,endAngle:-20,min:0,max:100,
+      radius:"100%",center:["50%","72%"],
+      axisLine:{lineStyle:{width:10,color:[[0.25,RED],[0.45,"#E8B339"],[0.55,MUTED],[0.75,"#9CC97A"],[1,GREEN]]}},
+      pointer:{length:"58%",width:4,itemStyle:{color:"#1E2761"}},
+      axisTick:{show:false},splitLine:{show:false},
+      axisLabel:{distance:-32,fontSize:9,color:MUTED,formatter:function(v){return {0:"极恐",50:"中性",100:"贪婪"}[v]||"";}},
+      detail:{show:false},
+      data:[{value:59.5}]}]});
+  }
+  function maybeInit(page){
+    if(page==="market")setTimeout(initKline,60);
+    if(page==="tech")setTimeout(initGauge,60);
+  }
+  document.addEventListener("click",function(e){
+    var b=e.target.closest(".nav-btn"); if(b)maybeInit(b.dataset.page);
+  });
+  maybeInit(location.hash.replace("#",""));
+  window.addEventListener("resize",function(){
+    if(chart)chart.resize(); if(gauge)gauge.resize();
+  });
+})();
+</script>
+<script>
+(function(){
+  if(typeof THREE==="undefined")return;
+  var canvas=document.getElementById("heroFx"), hero=document.querySelector(".hero");
+  if(!canvas||!hero)return;
+  var renderer;
+  try{ renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:false}); }
+  catch(e){ return; }
+  var W=hero.clientWidth,H=hero.clientHeight,mobile=W<700;
+  renderer.setSize(W,H,false);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  var scene=new THREE.Scene();
+  var cam=new THREE.PerspectiveCamera(55,W/H,1,400);
+  cam.position.set(0,20,56); cam.lookAt(0,-6,0);
+  var COLS=mobile?90:160, ROWS=mobile?38:60, SP=1.6;
+  var N=COLS*ROWS, pos=new Float32Array(N*3), col=new Float32Array(N*3);
+  var ice=[0.55,0.72,0.99], gold=[0.91,0.70,0.22];
+  for(var i=0;i<N;i++){
+    var x=i%COLS, z=Math.floor(i/COLS);
+    pos[i*3]=(x-COLS/2)*SP; pos[i*3+1]=0; pos[i*3+2]=(z-ROWS/2)*SP;
+    var r=Math.random(), c=r>0.96?gold:ice, dim=0.3+0.6*Math.random();
+    col[i*3]=c[0]*dim; col[i*3+1]=c[1]*dim; col[i*3+2]=c[2]*dim;
+  }
+  var geo=new THREE.BufferGeometry();
+  geo.setAttribute("position",new THREE.BufferAttribute(pos,3));
+  geo.setAttribute("color",new THREE.BufferAttribute(col,3));
+  var pts=new THREE.Points(geo,new THREE.PointsMaterial({size:mobile?1.4:1.1,vertexColors:true,transparent:true,opacity:0.5,sizeAttenuation:true}));
+  pts.position.y=-12; scene.add(pts);
+  var mx=0,my=0;
+  window.addEventListener("pointermove",function(e){
+    mx=(e.clientX/window.innerWidth-0.5)*2; my=(e.clientY/window.innerHeight-0.5)*2;
+  },{passive:true});
+  var running=true,t=0;
+  new IntersectionObserver(function(es){running=es[0].isIntersecting;},{threshold:0.02}).observe(hero);
+  window.addEventListener("resize",function(){
+    W=hero.clientWidth;H=hero.clientHeight;
+    renderer.setSize(W,H,false);cam.aspect=W/H;cam.updateProjectionMatrix();
+  });
+  (function loop(){
+    requestAnimationFrame(loop);
+    if(!running)return;
+    t+=0.008;
+    var p=geo.attributes.position.array;
+    for(var i=0;i<N;i++){
+      var x=p[i*3],z=p[i*3+2];
+      p[i*3+1]=Math.sin(x*0.18+t)*1.6
+              +Math.cos(z*0.22+t*1.4)*1.4
+              +Math.sin((x+z)*0.08+t*0.7)*2.2
+              +Math.sin(x*0.045-t*0.5)*Math.cos(z*0.05+t*0.3)*2.8;
+    }
+    geo.attributes.position.needsUpdate=true;
+    pts.rotation.y+=(mx*0.05-pts.rotation.y)*0.04;
+    cam.position.y+=((20+my*3)-cam.position.y)*0.04;
+    cam.lookAt(0,-6,0);
+    renderer.render(scene,cam);
+  })();
+})();
+</script>
+<script>
+(function(){
+  /* 行情跑马灯 */
+  var track=document.getElementById("tapeTrack"), tape=document.getElementById("tape");
+  if(track && typeof MARKET_DATA!=="undefined"){
+    var NAMES={GSPC:"标普 500",IXIC:"纳斯达克",DJI:"道琼斯",SMH:"半导体 SMH"};
+    var html='<span class="tape-item"><span class="tk" style="color:#E8B339">2026-11-16 美东收盘</span></span>';
+    ["GSPC","IXIC","DJI","SMH"].forEach(function(k){
+      var rows=MARKET_DATA[k], a=rows[rows.length-1], b=rows[rows.length-2];
+      var pc=(a[4]-b[4])/b[4]*100, up=pc>=0, col=up?"#2FB344":"#E03B42";
+      html+='<span class="tape-item"><span class="tk">'+NAMES[k]+'</span><span class="num">'
+           +a[4].toLocaleString("en-US")+'</span><span class="pc" style="color:'+col+'">'
+           +(up?"+":"")+pc.toFixed(2)+'%</span></span>';
+    });
+    html+='<span class="tape-item"><span class="tk">VIX</span><span class="num">14.73</span><span class="pc" style="color:#E03B42">−6.00%</span></span>';
+    html+='<span class="tape-item"><span class="tk">恐惧贪婪指数</span><span class="pc" style="color:#E03B42">37 · 恐惧</span></span>';
+    track.innerHTML=html+html;
+    tape.hidden=false;
+  }
+  /* 统计卡数字滚动 */
+  var seen=new WeakSet();
+  function countUp(el){
+    var txt=el.textContent, m=txt.match(/-?\d[\d,]*\.?\d*/);
+    if(!m)return;
+    var raw=m[0], target=parseFloat(raw.replace(/,/g,"")), dec=(raw.split(".")[1]||"").length;
+    var comma=raw.indexOf(",")>=0, t0=null;
+    function fmt(v){return comma? v.toLocaleString("en-US",{minimumFractionDigits:dec,maximumFractionDigits:dec}) : v.toFixed(dec);}
+    (function step(ts){
+      if(t0===null){t0=ts||performance.now();}
+      var now=ts||performance.now();
+      var k=Math.min(1,(now-t0)/700), e=1-Math.pow(1-k,3);
+      el.textContent=txt.replace(raw,fmt(target*e));
+      if(k<1)requestAnimationFrame(step); else el.textContent=txt;
+    })();
+  }
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(en){
+      if(en.isIntersecting&&!seen.has(en.target)){seen.add(en.target);countUp(en.target);}
+    });
+  },{threshold:0.4});
+  document.querySelectorAll(".stat .v").forEach(function(el){io.observe(el);});
+  /* 大盘总览表格行点击联动 K 线 */
+  var MAP={"^GSPC":"GSPC","^IXIC":"IXIC","^DJI":"DJI","SMH":"SMH"};
+  var card=document.getElementById("klineCard");
+  if(card && typeof MARKET_DATA!=="undefined"){
+    document.querySelectorAll("#page-market tbody tr").forEach(function(tr){
+      var code=tr.cells[1]?tr.cells[1].textContent.trim():"";
+      var key=MAP[code]; if(!key)return;
+      tr.classList.add("rowlink"); tr.title="点击查看 "+code+" 日线 K 线";
+      tr.addEventListener("click",function(){
+        var tab=document.querySelector('.ktab[data-k="'+key+'"]');
+        if(tab)tab.click();
+        card.scrollIntoView({behavior:"smooth",block:"center"});
+        card.classList.remove("flash"); void card.offsetWidth; card.classList.add("flash");
+      });
+    });
+  }
+})();
+</script>
+<script>
+(function(){
+  /* 活倒计时 */
+  var tbl=document.querySelector("#page-radar table tbody");
+  if(tbl){
+    var fmt=new Intl.DateTimeFormat("en-CA",{timeZone:"America/New_York"});
+    var today=new Date(fmt.format(new Date())+"T00:00:00");
+    Array.prototype.forEach.call(tbl.rows,function(tr){
+      var m=(tr.cells[0]?tr.cells[0].textContent:"").match(/(\d{1,2})\/(\d{1,2})/);
+      if(!m||!tr.cells[1])return;
+      var d=Math.round((new Date(2026,+m[1]-1,+m[2])-today)/864e5), b;
+      if(d<0)b='<span class="cd-badge cd-past">已过</span>';
+      else if(d===0)b='<span class="cd-badge cd-today"><span class="cd-dot"></span>今日</span>';
+      else if(d<=2)b='<span class="cd-badge cd-soon"><span class="cd-dot"></span>'+(d===1?"明日":"还有 2 天")+'</span>';
+      else b='<span class="cd-badge cd-future">还有 '+d+' 天</span>';
+      tr.cells[1].innerHTML=b;
+    });
+  }
+  /* 巨型编号水印 */
+  document.querySelectorAll(".page-head").forEach(function(h){
+    var n=h.querySelector(".sec-no");
+    if(n)h.setAttribute("data-no",n.textContent.trim().split(" /")[0]);
+  });
+  if(typeof echarts==="undefined"||typeof MARKET_DATA==="undefined")return;
+  var GREEN="#2FB344",RED="#E03B42",ICE="#CADCFC",GOLD="#E8B339",MUTED="#8A93B2";
+  var charts=[];
+  function mk(el,opt){var c=echarts.init(el);c.setOption(opt);charts.push(c);return c;}
+
+  /* ① Sparkline 迷你卡 */
+  var sparkBuilt=false;
+  function buildSparks(){
+    if(sparkBuilt)return; sparkBuilt=true;
+    var g=document.getElementById("sparkGrid"); if(!g)return;
+    g.hidden=false;
+    var NAMES={GSPC:"标普 500",IXIC:"纳斯达克",DJI:"道琼斯",SMH:"半导体 SMH"};
+    ["GSPC","IXIC","DJI","SMH"].forEach(function(k){
+      var rows=MARKET_DATA[k].slice(-30), a=rows[rows.length-1], b=rows[rows.length-2];
+      var pc=(a[4]-b[4])/b[4]*100, up=pc>=0;
+      var card=document.createElement("div"); card.className="spark-card";
+      card.title="点击查看 "+NAMES[k]+" 日线 K 线";
+      card.innerHTML='<div class="sk-name">'+NAMES[k]+'</div>'
+        +'<div class="sk-close">'+a[4].toLocaleString("en-US")
+        +'<span class="sk-badge" style="background:'+(up?"rgba(47,179,68,.18)":"rgba(224,59,66,.18)")+';color:'+(up?GREEN:RED)+'">'+(up?"+":"")+pc.toFixed(2)+'%</span></div>'
+        +'<div class="sk-chart"></div><div class="sk-cap">近 30 个交易日 · 悬停查价</div>';
+      g.appendChild(card);
+      var col=up?GREEN:RED;
+      mk(card.querySelector(".sk-chart"),{
+        grid:{left:0,right:0,top:4,bottom:0},
+        xAxis:{type:"category",show:false,data:rows.map(function(r){return r[0];})},
+        yAxis:{type:"value",show:false,scale:true},
+        tooltip:{trigger:"axis",confine:true,backgroundColor:"rgba(16,22,54,.92)",borderColor:"rgba(202,220,252,.3)",textStyle:{color:ICE,fontSize:11},
+          formatter:function(p){return p[0].name+"<br>收盘 "+p[0].value.toLocaleString("en-US");}},
+        series:[{type:"line",data:rows.map(function(r){return r[4];}),symbol:"none",smooth:true,
+          lineStyle:{width:1.6,color:col},
+          areaStyle:{color:{type:"linear",x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:col+"55"},{offset:1,color:col+"00"}]}}}]
+      });
+      card.addEventListener("click",function(){
+        var tab=document.querySelector('.ktab[data-k="'+k+'"]'); if(tab)tab.click();
+        var kc=document.getElementById("klineCard");
+        if(kc){kc.scrollIntoView({behavior:"smooth",block:"center"});kc.classList.remove("flash");void kc.offsetWidth;kc.classList.add("flash");}
+      });
+    });
+  }
+
+  /* ② 技术面驾驶舱：四联仪表盘 */
+  var cockBuilt=false;
+  function gaugeOpt(val,min,max,zones,suffix){
+    return {series:[{type:"gauge",startAngle:205,endAngle:-25,min:min,max:max,radius:"95%",center:["50%","62%"],
+      axisLine:{lineStyle:{width:9,color:zones}},
+      pointer:{length:"60%",width:4,itemStyle:{color:ICE}},
+      axisTick:{show:false},splitLine:{show:false},axisLabel:{show:false},
+      detail:{valueAnimation:true,fontSize:17,fontWeight:700,fontFamily:"SF Mono,Menlo,monospace",color:"#fff",offsetCenter:[0,"34%"],formatter:"{value}"+suffix},
+      data:[{value:val}]}]};
+  }
+  function buildCockpit(){
+    if(cockBuilt)return; cockBuilt=true;
+    var card=document.getElementById("cockpitCard"); if(!card)return;
+    card.hidden=false;
+    mk(document.getElementById("gVIX"),gaugeOpt(23.94,0,40,[[0.375,GREEN],[0.5,GOLD],[0.75,RED],[1,"#8C2328"]],""));
+    mk(document.getElementById("gFG"), gaugeOpt(29.8,0,100,[[0.25,RED],[0.45,GOLD],[0.55,MUTED],[0.75,"#9CC97A"],[1,GREEN]],""));
+    mk(document.getElementById("gRSI"),gaugeOpt(40.2,0,100,[[0.3,GREEN],[0.7,MUTED],[1,RED]],""));
+    mk(document.getElementById("gBR"), gaugeOpt(0.93,-3,3,[[0.333,RED],[0.667,GOLD],[1,GREEN]],"pp"));
+  }
+
+  /* ④ 技术分析 · 三线小图（收盘价 / MA50 / MA200，近 50 交易日） */
+  var MA200_COL="#7E8FE6", techBuilt=false;
+  function maSeries(close,n){
+    var out=[],sum=0;
+    for(var i=0;i<close.length;i++){
+      sum+=close[i];
+      if(i>=n)sum-=close[i-n];
+      out.push(i>=n-1?sum/n:null);
+    }
+    return out;
+  }
+  function buildTech(){
+    if(techBuilt)return; techBuilt=true;
+    if(typeof MARKET_DATA==="undefined")return;
+    [["IXIC","tv-IXIC"],["SMH","tv-SMH"],["GSPC","tv-GSPC"],["DJI","tv-DJI"]].forEach(function(d){
+      var k=d[0],el=document.getElementById(d[1]); if(!el||!MARKET_DATA[k])return;
+      var rows=MARKET_DATA[k], close=rows.map(function(r){return r[4];});
+      var ma50=maSeries(close,50), ma200=maSeries(close,200);
+      var N=Math.min(50,rows.length), s=rows.length-N;
+      var dates=rows.slice(s).map(function(r){return r[0];});
+      mk(el,{
+        grid:{left:48,right:10,top:10,bottom:18},
+        tooltip:{trigger:"axis",backgroundColor:"rgba(16,22,54,.92)",borderColor:"rgba(202,220,252,.3)",textStyle:{color:ICE,fontSize:11},
+          formatter:function(p){var t=p[0].name;p.forEach(function(x){if(x.value!=null)t+="<br>"+x.marker+x.seriesName+" "+(+x.value).toLocaleString("en-US",{maximumFractionDigits:2});});return t;}},
+        xAxis:{type:"category",data:dates,boundaryGap:false,
+          axisLabel:{color:MUTED,fontSize:9,interval:Math.floor(N/4),formatter:function(v){return v.slice(5);}},
+          axisLine:{lineStyle:{color:"rgba(202,220,252,.2)"}},axisTick:{show:false}},
+        yAxis:{type:"value",scale:true,
+          axisLabel:{color:MUTED,fontSize:9,formatter:function(v){return v>=1000?(v/1000).toFixed(1)+"k":v.toFixed(0);}},
+          splitLine:{lineStyle:{color:"rgba(202,220,252,.1)"}}},
+        series:[
+          {name:"收盘",type:"line",data:close.slice(s),symbol:"none",lineStyle:{width:2,color:ICE},z:3},
+          {name:"MA50",type:"line",data:ma50.slice(s),symbol:"none",smooth:true,lineStyle:{width:1.4,color:GOLD},z:2},
+          {name:"MA200",type:"line",data:ma200.slice(s),symbol:"none",smooth:true,lineStyle:{width:1.4,color:MA200_COL},z:1}
+        ]
+      });
+    });
+  }
+
+  /* ⑤ 个股深读卡：价格 + MA20/MA50/MA200 + 支撑阻力横线，近 50 个交易日 */
+  var ddBuilt=false;
+  function buildDD(){
+    if(ddBuilt)return; ddBuilt=true;
+    if(typeof DD_SERIES==="undefined")return;
+    [["TSM","dd-TSM",351.19,440.88],["MU","dd-MU",650,990]].forEach(function(d){
+      var sym=d[0],id=d[1],sup=d[2],res=d[3];
+      var el=document.getElementById(id); if(!el||!DD_SERIES[sym])return;
+      var ser=DD_SERIES[sym], close=ser.closes, dates=ser.dates;
+      var ma20=maSeries(close,20), ma50=maSeries(close,50), ma200=maSeries(close,200);
+      var N=Math.min(50,close.length), s=close.length-N;
+      mk(el,{
+        grid:{left:50,right:14,top:10,bottom:18},
+        tooltip:{trigger:"axis",backgroundColor:"rgba(16,22,54,.92)",borderColor:"rgba(202,220,252,.3)",textStyle:{color:ICE,fontSize:11},
+          formatter:function(p){var t=p[0].name;p.forEach(function(x){if(x.value!=null)t+="<br>"+x.marker+x.seriesName+" $"+(+x.value).toLocaleString("en-US",{maximumFractionDigits:2});});return t;}},
+        xAxis:{type:"category",data:dates.slice(s),boundaryGap:false,
+          axisLabel:{color:MUTED,fontSize:9,interval:Math.floor(N/4),formatter:function(v){return v.slice(5);}},
+          axisLine:{lineStyle:{color:"rgba(202,220,252,.2)"}},axisTick:{show:false}},
+        yAxis:{type:"value",scale:true,
+          axisLabel:{color:MUTED,fontSize:9,formatter:function(v){return "$"+v.toFixed(0);}},
+          splitLine:{lineStyle:{color:"rgba(202,220,252,.1)"}}},
+        series:[
+          {name:"收盘",type:"line",data:close.slice(s),symbol:"none",lineStyle:{width:2,color:ICE},itemStyle:{color:ICE},z:3,
+            markLine:{symbol:"none",lineStyle:{type:"dashed",width:1},
+              label:{position:"insideStartTop",fontSize:10,fontFamily:"SF Mono,Menlo,monospace"},
+              data:[
+                {yAxis:sup,lineStyle:{color:GREEN},label:{color:GREEN,formatter:"支撑 $"+sup}},
+                {yAxis:res,lineStyle:{color:RED},label:{color:RED,formatter:"阻力 $"+res}}
+              ]}},
+          {name:"MA20",type:"line",data:ma20.slice(s),symbol:"none",smooth:true,lineStyle:{width:1.2,color:"#9CC97A"},itemStyle:{color:"#9CC97A"},z:2},
+          {name:"MA50",type:"line",data:ma50.slice(s),symbol:"none",smooth:true,lineStyle:{width:1.4,color:GOLD},itemStyle:{color:GOLD},z:2},
+          {name:"MA200",type:"line",data:ma200.slice(s),symbol:"none",smooth:true,lineStyle:{width:1.4,color:MA200_COL},itemStyle:{color:MA200_COL},z:1}
+        ]
+      });
+    });
+  }
+
+  /* ③ 初请失业金：实际 vs 预期 vs 前值（好于预期） */
+  var cpiBuilt=false;
+  function go(page){
+    if(page==="market")setTimeout(buildSparks,80);
+    if(page==="tech"){setTimeout(buildCockpit,80);setTimeout(buildTech,90);}
+    if(page==="stocks")setTimeout(buildDD,80);
+  }
+  document.addEventListener("click",function(e){var b=e.target.closest(".nav-btn");if(b)go(b.dataset.page);});
+  go(location.hash.replace("#","")||"radar");
+  window.addEventListener("resize",function(){charts.forEach(function(c){c.resize();});});
+})();
+</script>
+<script src="dates.js"></script>
+<script>
+(function(){
+  if(typeof REPORT_DATES==="undefined"||!REPORT_DATES.length)return;
+  var btn=document.getElementById("calBtn"),panel=document.getElementById("calPanel"),
+      grid=document.getElementById("calGrid"),title=document.getElementById("calTitle"),
+      foot=document.getElementById("calFoot"),cur=document.getElementById("calCur");
+  var m=document.title.match(/\d{4}-\d{2}-\d{2}/);
+  var PAGE_DATE=m?m[0]:REPORT_DATES[REPORT_DATES.length-1];
+  var LATEST=REPORT_DATES[REPORT_DATES.length-1];
+  var has=new Set(REPORT_DATES);
+  var d0=new Date(PAGE_DATE+"T00:00:00"), view={y:d0.getFullYear(),m:d0.getMonth()};
+  cur.textContent=PAGE_DATE;
+  foot.innerHTML='金色日期有日报，点击查看 · 最新一期：<b style="color:var(--gold)">'+LATEST+"</b>";
+  function render(){
+    title.textContent=view.y+" 年 "+(view.m+1)+" 月";
+    grid.innerHTML="";
+    var start=new Date(view.y,view.m,1).getDay(), days=new Date(view.y,view.m+1,0).getDate();
+    for(var i=0;i<start;i++){var e=document.createElement("span");e.className="cal-day";grid.appendChild(e);}
+    for(var d=1;d<=days;d++){
+      var iso=view.y+"-"+String(view.m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");
+      var e=document.createElement("span");
+      e.className="cal-day"+(has.has(iso)?" has":"")+(iso===PAGE_DATE?" cur":"");
+      e.textContent=d;
+      if(has.has(iso)){
+        (function(iso){e.addEventListener("click",function(){location.href=pageURL(iso);});})(iso);
+        e.title="查看 "+iso+" 日报";
+      }
+      grid.appendChild(e);
+    }
+  }
+  document.getElementById("calPrev").addEventListener("click",function(){view.m--;if(view.m<0){view.m=11;view.y--;}render();});
+  document.getElementById("calNext").addEventListener("click",function(){view.m++;if(view.m>11){view.m=0;view.y++;}render();});
+  btn.addEventListener("click",function(e){e.stopPropagation();panel.hidden=!panel.hidden;});
+  document.addEventListener("click",function(e){if(!panel.hidden&&!panel.contains(e.target))panel.hidden=true;});
+  render(); btn.hidden=false;
+})();
+</script>
+</body>
+</html>
