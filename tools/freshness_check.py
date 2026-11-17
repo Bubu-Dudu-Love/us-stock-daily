@@ -328,7 +328,7 @@ def _chk_macro_wti(date, html, md, prices, prev, plabel):
     # 匹配 WTI 表格行中价格列之后的涨跌幅列
     html_pct = _snap(
         r'原油 WTI.*?<td class="num[^"]*"><strong>\$[^<]+</strong></td>'
-        r'<td class="num[^"]*"><strong>([+\-\d.]+%)',
+        r'<td class="num[^"]*"><strong>([+\-−\d.]+%)',
         html
     )
     if html_pct and not _pct_close(html_pct, pct):
